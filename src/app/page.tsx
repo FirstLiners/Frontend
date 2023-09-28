@@ -1,17 +1,19 @@
-import { options } from "./api/auth/[...nextauth]/options"
-import { getServerSession } from "next-auth/next"
-import UserCard from "./components/UserCard"
+import { options } from "./api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth/next";
+import UserNameCard from "./components/UserNameCard";
 
 export default async function Home() {
-  const session = await getServerSession(options)
+  const session = await getServerSession(options);
 
   return (
     <>
       {session ? (
-        <UserCard user={session?.user} pagetype={"Home"} />
+        // если залогинен, то карточка с юзер
+        <UserNameCard user={session?.user} pagetype={"Home"} />
       ) : (
-        <h1 className="text-5xl">You Shall Not Pass!</h1>
+        // если нет то показываем
+        <h1 className="text-5xl">Залогиньтесь!</h1>
       )}
     </>
-  )
+  );
 }
