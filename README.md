@@ -1,19 +1,26 @@
 
-## With Next.js App Router
+## Frontend docker image
 
-### Development: 
-    with pnpm (see https://pnpm.io/installation)
-    ...
-    pnpm install
-    создайте в папке проекта файлы .env.local и/или .env.production
-    pnp run dev
-    open browser http://localhost:3000
-    работайте с проектом. Элементы интерфейса брать отсюда -- https://tailwindui.com/components
+убедится, что env.local на верхнем уровне проекта содержит переменные окружения для фронтенда
 
-### 📚 References
-- 🔗 [Tailwindcss ui components](https://tailwindui.com/components)
-- 🔗 [Tailwindcss docs](https://tailwindcss.com/docs/utility-first)
-- 🔗 [NextAuth.js Official Site](https://next-auth.js.org/)
-- 🔗 [Next.js Official Site](https://nextjs.org/)
+сбилдить образ
+```bash
+docker build -t nextjs13-firstliners-frontend-dev . 
+````
+запустить контейнер
+```bash
+docker run -p 3000:3000 -d nextjs13-firstliners-frontend-dev
+```
+проверить, что контейнер запущен
+```bash
+docker ps
+```
+вывод команды - это список container_id запущенных контейнеров, в котором нужно найти контейнер с именем nextjs13-firstliners-frontend-dev 
 
+проверить, что приложение доступно по адресу http://localhost:3000
+
+остановить контейнер
+```bash
+docker stop <container_id>
+```
 
