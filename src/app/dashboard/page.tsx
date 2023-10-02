@@ -1,6 +1,6 @@
 import { options } from "../api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth/next";
-import UserCard from "../components/UserCard";
+import SimpleLineChart from "./ExampleLineChart";
 import { redirect } from "next/navigation";
 import UserNameCard from "../components/UserNameCard";
 
@@ -14,6 +14,7 @@ export default async function DasboardPage() {
   return (
     <section className="flex flex-col gap-6">
       <UserNameCard user={session?.user} pagetype={"Dashbord"} />
+      <SimpleLineChart />
     </section>
   );
 }
