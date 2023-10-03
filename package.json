@@ -27,7 +27,10 @@
   },
   "dependencies": {
     "@builder.io/partytown": "0.8.1",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-switch": "^1.0.3",
     "@tabler/icons-react": "^2.36.0",
     "@types/node": "20.7.1",
     "@types/react": "18.2.23",
