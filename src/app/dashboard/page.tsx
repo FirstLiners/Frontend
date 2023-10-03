@@ -9,10 +9,11 @@ export default async function DasboardPage() {
 
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/dashboard");
+    
   }
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-6 " >
       <UserNameCard user={session?.user} pagetype={"Dashbord"} />
     </section>
   );

@@ -40,3 +40,7 @@
     float: right;
     right: 2;
 }
+
+.filter__button{
+    margin-left: 0;
+}

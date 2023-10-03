@@ -1,6 +1,8 @@
 "use client"
 import * as React from "react"
 import styles from "./MainPage.module.css"
+import { ChevronDown } from 'lucide-react';
+import { Search } from 'lucide-react';
 import {
     Select,
     SelectContent,
@@ -13,19 +15,61 @@ import {
 import { Button } from "@/components/ui/button"
 import SimpleLineChart from "./ExampleLineChart"
 import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
-
-
+import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 //import data from "../../../mocdata/forecast.json"
+type Checked = DropdownMenuCheckboxItemProps["checked"]
+ 
+function BlockFilter() {
+  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true)
+  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false)
+  const [showPanel, setShowPanel] = React.useState<Checked>(false)
+ 
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="ml-2 justify-between ">Название ТК <ChevronDown className="right-2"/></Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56 w-[200px]">
+        <div className="flex items-center border rounded-lg">
+        <Input />  
+        <Search className="mr-1" color="#003C96"/>
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuCheckboxItem
+          checked={showStatusBar}
+          onCheckedChange={setShowStatusBar}
+        >
+          Status Bar
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          checked={showActivityBar}
+          onCheckedChange={setShowActivityBar}
+          //disabled
+        >
+          Activity Bar
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          checked={showPanel}
+          onCheckedChange={setShowPanel}
+        >
+          Panel
+        </DropdownMenuCheckboxItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 
 
-
-function BlockFilter(){
-    const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
-    const handleSelectChange = (selectedValues: string[]) => {
-        setSelectedItems(selectedValues);
-      };
+/*function BlockFilter(){
     /* React.useEffect ( () => {
     let stores = [];
     let skus = [];
@@ -44,7 +88,7 @@ function BlockFilter(){
       } 
     //   @ts-ignore
         console.log(units);
-    }, []); */
+    }, []); 
     
 
         
@@ -72,7 +116,7 @@ function BlockFilter(){
       </SelectContent>
     </Select>
     )
-}
+}*/
 
 export default function MainPage() {
 
