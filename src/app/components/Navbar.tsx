@@ -2,6 +2,7 @@ import Link from "next/link";
 import ThemeSwitch from "./ThemeSwitch";
 
 export default function Navbar() {
+  
   return (
     <nav className="bg-gray-300 p-4">
       <ul className="flex justify-evenly text-2xl font-bold">

@@ -1,4 +1,5 @@
 
+'use client'
 import styles from './about.module.css'
 import Link from "next/link";
 import type { RootState } from  '../../redux/store';
@@ -13,7 +14,7 @@ function ButtonAsChild({ ...props }) {
     </Button>
   )
 }
-export default async function AboutPage() {
+export default function Page() {
 
 
   const count = useSelector((state: RootState) => state.counter.value);
