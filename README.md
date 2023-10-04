@@ -15,5 +15,3 @@
 - 🔗 [Tailwindcss docs](https://tailwindcss.com/docs/utility-first)
 - 🔗 [NextAuth.js Official Site](https://next-auth.js.org/)
 - 🔗 [Next.js Official Site](https://nextjs.org/)
-
-
