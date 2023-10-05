@@ -11,7 +11,7 @@ import { Mutex } from "async-mutex";
 // create a new mutex
 const mutex = new Mutex();
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://192.168.1.87:7000/api/v1",
+  baseUrl: "http://localhost:8000/api/v1",
   credentials: "include",
 });
 const baseQueryWithReauth: BaseQueryFn<

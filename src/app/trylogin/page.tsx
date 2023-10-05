@@ -21,12 +21,15 @@ const Login = () => {
       };
       const config = {
         method: 'POST',
+        mode: 'no-cors',
+        refferer: 'http://localhost:3000',
         maxBodyLength: Infinity,
-        url: 'http://192.168.1.87:7000/api/v1/users/token',
-        // add headers 'Access-Control-Allow-Origin', '*'
+        url: 'http://localhost:8000/api/v1/users/token/',
+        ContentType: 'application/json',  
+        Accept: 'application/vnd.api+json',
+         
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/x-www-form-urlencoded',
+        //  'Content-Type': 'application/x-www-form-urlencoded',
         },
         data: qs.stringify(data),
       };
