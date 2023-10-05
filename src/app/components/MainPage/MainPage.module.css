@@ -1,0 +1,46 @@
+.block__filter {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow: hidden;
+    padding-bottom: 5px;
+    margin-bottom: 80px;
+}
+
+.block__button {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.shift {
+    margin: 0 0 0 -8px;
+}
+
+.h1 {
+    margin-left: 8px;
+    margin-bottom: 4px;
+}
+
+.h1_first {
+    margin-left: 0;
+    margin-bottom: 4px;
+}
+
+.block__title_h1 {
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+.select__checbox {
+    text-align: right;
+    float: right;
+    right: 2;
+}
+
+.filter__button{
+    margin-left: 0;
+}
