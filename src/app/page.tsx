@@ -13,7 +13,7 @@ export default async function Home() {
         <MainPage/>
       ) : (
         // если нет то показываем
-        <h1 className="text-5xl">Залогиньтесь!</h1>
+        <h1 className="text-5xl">Пользователь не авторизован</h1>
       )}
     </>
   );

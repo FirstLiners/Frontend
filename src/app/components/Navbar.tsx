@@ -1,9 +1,16 @@
 "use client"
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../shared/lenta_logo.svg";
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
 
 export default function Navbar() {
+
+  const { data: session } = useSession()
+  const labelSign = session ?  "Выйти" : "Войти"
+  const hrefSign = session ?  "/api/auth/signout" : "/api/auth/signin"
   return (
     <nav className="bg-[#003C96] pr-4 pl-36 flex h-[64px]">
       <div>
@@ -15,7 +22,7 @@ export default function Navbar() {
         </li>
         <li className="ml-5 h-[64px] items-center flex">
           {/* dashboard/page.tsx */}
-          <Link href="/dashboard">Прогноз</Link>
+          <Link href="/dashboard">Данные по прогнозу</Link>
         </li>
         <li className="ml-5 h-[64px] items-center flex">
           {/* statistic/page.tsx */}
@@ -23,15 +30,7 @@ export default function Navbar() {
         </li>
         <li className="ml-5 h-[64px] items-center flex">
           {/* для этого линка нужно сделать кастомную страницу, сейчас ее нет. */}
-          <Link href="/api/auth/signin">Sign In</Link>
-        </li>
-        <li className="ml-5 h-[64px] items-center flex">
-          {/* для этого линка нужно сделать кастомную страницу, сейчас ее нет. */}
-          <Link href="/api/auth/signout">Sign Out</Link>
-        </li>
-        <li className="ml-5 h-[64px] items-center flex">
-          {/* about/page.tsx */}
-          <Link href="/about">О проекте</Link>
+          <Link href={hrefSign}>{labelSign}</Link>
         </li>
       </ul>
       <style jsx>{`

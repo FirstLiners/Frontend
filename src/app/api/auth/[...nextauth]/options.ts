@@ -5,26 +5,26 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const options: NextAuthOptions = {
   providers: [
-    GitHubProvider({
+    /*GitHubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
     YandexProvider({
       clientId: process.env.YANDEX_ID as string,
       clientSecret: process.env.YANDEX_SECRET as string,
-    }),
+    }),*/
     CredentialsProvider({
-      name: "Credentials",
+      name: "",
       credentials: {
         username: {
-          label: "Username:",
+          label: "Введите свой логин:",
           type: "text",
-          placeholder: "your-cool-username",
+          placeholder: "Логин",
         },
         password: {
-          label: "Password:",
+          label: "Введите свой пароль:",
           type: "password",
-          placeholder: "your-awesome-password",
+          placeholder: "Пароль",
         },
       },
       async authorize(credentials) {
@@ -44,6 +44,9 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
+  theme: {
+    colorScheme: "light",
+  },
   pages: {
     //  signIn:"/"
   },
