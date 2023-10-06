@@ -47,6 +47,7 @@ const authApiSlice = apiSlice.injectEndpoints({
         url: "token/",
         method: "POST",
         body: { email, password },
+        
       }),
     }),
 

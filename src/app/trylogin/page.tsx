@@ -1,4 +1,10 @@
 "use client";
+// эту страничку набираю в браузере ручками localhost:3000/trylogin это заготовка для /login
+// здесь получаю токен и сохраняю его в локалсторадже хотя лучше бы сразу в сторе, но пока не
+// написан getTokenSlice.tsx потому что вроде этот же функционал есть в authApiSlice.tsx это чисто списал
+// с доки RTK Query и его пробую использовать параллелльно - useLoginMutation, и по отдельности резутаты не очень
+// данные тяну в Sceleton.tsx который вызывается как лоадер даты с главной страницы.
+
 import React, { useEffect, useState } from "react";
 
 import { useLoginMutation } from "../../redux/features/authApiSlice";
@@ -12,11 +18,11 @@ const Login = () => {
   }
 
   const [token, setToken] = useState<Token | undefined>();
-
+  // так советуют делать в доке RTK Query
   const [login, { isLoading, error }] = useLoginMutation();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-
+  // моя функция которая делает запрос на получение токена и сохраняет его в стейт
   function handToken(email?: string | any, password?: string | any) {
     try {
       const data = {
@@ -54,21 +60,19 @@ const Login = () => {
     }
   }
 
-  React.useEffect(() => {
-    !token
-      ? handToken("prostome2@prosto.me", "222")
-      : console.log("alredy token", token);
-  }, []);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    console.log(email, password);
-    // call function handToken with useEffect wrapper
-    handToken(email, password);
+    console.log("with : ", email, password);
+    login({ email, password });
+    handToken({ email, password });
   };
 
   React.useEffect(() => {
-    // if token changed save it to localstorage
+    !token ? console.log("no token") : console.log("alredy token", token);
+  }, []);
+
+  React.useEffect(() => {
+    //  token changed -> save it to localstorage
     console.log("token changed", token);
     localStorage.setItem("access_token", JSON.stringify(token));
   }, [token]);
@@ -91,7 +95,7 @@ const Login = () => {
       {error && (
         <p>
           {/* @ts-ignore */}
-          {JSON.stringify(error, null, 2)}
+          {JSON.stringify(error, null, 2).concat("---------error---------")}
         </p>
       )}
     </form>

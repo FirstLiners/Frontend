@@ -46,7 +46,7 @@ export default function Sceleton({
         mode: "no-cors",
         refferer: "127.0.0.1:3000",
         maxBodyLength: Infinity,
-        url: `http:"//127.0.0.1:8000/api/v1/${apiEndpoint}`,
+        url: `http://127.0.0.1:8000/api/v1/${apiEndpoint}`,
         ContentType: "application/json",
         headers: {
           Authorization: `Bearer ${String(token)}`,
@@ -88,7 +88,7 @@ export default function Sceleton({
         console.log(
           `axios request "getData" is done for endpoint - ${apiEndpoint}`
         );
-      }, 1000); // 1 sec
+      }, 10000); // 1 sec
     }
   }
 
