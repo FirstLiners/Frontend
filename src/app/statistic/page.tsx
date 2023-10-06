@@ -4,7 +4,8 @@ import styles from "../components/MainPage/MainPage.module.css"
 import BlockFilter from '../components/MainPage/FilterComponent';
 import DasTable2 from './DashboardTable2';
 import { Button } from "@/components/ui/button"
-import { Sheet } from 'lucide-react';
+import Image from "next/image";
+import Excel from "../shared/excel.svg";
 import SimpleBarChart from './SimpleBarChart'
 
 type CheckedState = boolean;
@@ -213,14 +214,14 @@ const handleFilterChangeAll6 = (updatedFilters: { label: string; checked: Checke
     </div>
     <div className='flex justify-between mb-[10px]'>
       <div>
-      <h1 className='mb-2'>Торговый Комплекс</h1>  
+      <h1 className='mb-2'>Длительность</h1>  
       <div className='items-end justify-center flex'>
-      <Button variant="dropdownMenuButton2" className='w-[49px] h-[24px] rounded-md' size="tpr3">День</Button>
+      <Button variant="dropdownMenuButton2" className='w-[70px] h-[40px] rounded-md text-sm' size="tpr3">День</Button>
       <Button variant="dropdownMenuButton3" size="tpr3">Неделя</Button>
       <Button variant="dropdownMenuButton3" size="tpr3">Месяц</Button>
       </div>
       </div>
-    <Button variant="exel" size="tpr3" className='h-[42px]'><Sheet color="#003C96" className='mr-2'/>Экспорт в Excel</Button>
+      <Button variant="exel" size="tpr3" className='h-[40px]'><Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" />Экспорт в Excel</Button>
     </div>
     
     <div className='rounded-lg ring-offset-background border flex flex-col justify-center'>

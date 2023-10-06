@@ -4,8 +4,8 @@ import styles from "../components/MainPage/MainPage.module.css"
 import BlockFilter from '../components/MainPage/FilterComponent';
 import DasTable from './DashboardTable/DashboardTable';
 import { Button } from "@/components/ui/button"
-import { Sheet } from 'lucide-react';
-
+import Image from "next/image";
+import Excel from "../shared/excel.svg";
 type CheckedState = boolean;
 
 export default function MainPage() {
@@ -209,12 +209,12 @@ const handleFilterChangeAll6 = (updatedFilters: { label: string; checked: Checke
         </div>
     </div>
     <div className='flex justify-end mb-[10px]'>
-    <Button variant="exel" size="tpr3"><Sheet color="#003C96" className='mr-2'/>Экспорт в Excel</Button>
+    <Button variant="exel" size="tpr3" className='h-[40px]'><Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" />Экспорт в Excel</Button>
     </div>
-    <div className='flex space-x-[660px] bg-[#E0E3F1] h-14 text-center rounded-t-lg align-middle'>
+    {/* <div className='flex space-x-[660px] bg-[#E0E3F1] h-14 text-center rounded-t-lg align-middle'>
       <h1 className='ml-4 pt-4 text-sm'>Товар</h1>
       <h1 className='pt-4 text-sm'>Прогнозирование спроса по дням</h1>
-    </div>
+    </div> */}
     <DasTable/>
     </section>
   )

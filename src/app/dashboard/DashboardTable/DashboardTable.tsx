@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
     return (
         <section>
   <Table className="max-w-[1600px] text-xs">
-  <ScrollArea className="h-[638px] w-[1600px] border">
+  <ScrollArea className="h-[638px] w-[1600px] border rounded-lg">
   <TableHeader>
     <TableRow className="bg-[#E0E3F1]">
       <TableHead className="pr-8">ТК</TableHead>  
@@ -23,7 +23,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableHead className="pr-8">Категория</TableHead>
       <TableHead className="pr-8">Подкатегория</TableHead>
       <TableHead className="pr-8">Товар</TableHead>
-      <TableHead className="pr-8">Период</TableHead>
       <TableHead className="pr-8">Ед. измерения</TableHead>
       <TableHead>16.09</TableHead>
       <TableHead>17.09</TableHead>
@@ -67,7 +66,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
       
     </TableRow>
     <TableRow>
@@ -91,34 +89,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
     </TableRow>
     <TableRow>
       <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
@@ -160,34 +133,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
     </TableRow>
     <TableRow>
       <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
@@ -229,34 +177,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
     </TableRow>
     <TableRow>
       <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
@@ -298,34 +221,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
     </TableRow>
     <TableRow>
       <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
@@ -367,34 +265,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
     </TableRow>
     <TableRow>
       <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-      <TableCell>1</TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell className="font-medium">1</TableCell>
-      <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
@@ -436,6 +309,27 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-medium">1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
       <TableCell>1</TableCell>
     </TableRow>
     <TableRow>
@@ -459,11 +353,97 @@ import { ScrollArea } from "@/components/ui/scroll-area";
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-medium">1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
       <TableCell>1</TableCell>
     </TableRow>
     <TableRow>
       <TableCell className="font-medium">1</TableCell>
       <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-medium">1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-medium">1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>1</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-medium">1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>
       <TableCell>1</TableCell>

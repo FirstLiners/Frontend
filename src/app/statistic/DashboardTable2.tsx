@@ -23,12 +23,12 @@ import { ScrollArea } from "@/components/ui/scroll-area"
       <TableHead className="pr-8">Категория</TableHead>
       <TableHead className="pr-8">Подкатегория</TableHead>
       <TableHead className="pr-8">Товар</TableHead>
+      <TableHead className="pr-8">Период</TableHead>
       <TableHead className="pr-8">Ед. измерения</TableHead>
-      <TableHead className="pr-8">Неделя</TableHead>
       <TableHead className="pr-8">Продажи факт</TableHead>
-      <TableHead className="pr-8">Прогноз</TableHead>
-      <TableHead className="pr-8">Разница факт и план</TableHead>
-      <TableHead className="pr-8">Качество по wape</TableHead>
+      <TableHead className="pr-8">Продажи прогноз</TableHead>
+      <TableHead className="pr-8">Разница факт/прогноз</TableHead>
+      <TableHead className="pr-8">Качество прогноза по WAPE</TableHead>
     </TableRow>
   </TableHeader>
   

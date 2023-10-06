@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const { data: session } = useSession()
   const labelSign = session ?  "Выйти" : "Войти"
-  const hrefSign = session ?  "/api/auth/signout" : "/api/auth/signin"
+  const hrefSign = session ?  "/api/auth/signout" : "api/auth/signin"
   return (
     <nav className="bg-[#003C96] pr-40 pl-40 flex h-[64px] justify-between">
       <ul className="flex text-white items-center h-[64px]">
