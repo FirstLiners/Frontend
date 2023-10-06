@@ -3,6 +3,7 @@ import styles from "./sceleton.module.css";
 import React, { Fragment, useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import axios, { AxiosResponse } from "axios";
+import qs from "qs";
 
 interface Props {
   apiEndpoint: string;
@@ -100,9 +101,51 @@ export default function Sceleton({
     }
   }
 
+  async function hardcodedGetData(apiEndpoint = "skus") {
+    console.log("HardcodgetData");
+    let data = qs.stringify({});
+
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "http://localhost:8000/api/v1/skus",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2NjMwNDMzLCJpYXQiOjE2OTY2MjQ0MzMsImp0aSI6IjNhOTA1ZjAzNjNmZjQzNjRhMzA0YzVkYWYxOWQzZmU0IiwidXNlcl9pZCI6Mn0.7Vmy_m9VDyvCPdd6fBCoU-emvWmRjHAMvURmh_zEbBM",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        setDataSKUS(response.data);
+        response.data[0] !== undefined &&
+        response.data[0] !== null &&
+        response.data[0] !== ""
+          ? setSuccessData(true)
+          : setSuccessData(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    //finnaly
+    setTimeout(() => {
+      setLoading(false);
+
+      console.log(
+        `axios request "getData" is done for endpoint - ${apiEndpoint}`
+      );
+    }, 10000); // 1 sec
+  }
+
   useEffect(() => {
+    apiEndpoint = apiEndpoint || "skus";
     console.log(`-= data ${apiEndpoint} =-`);
-    getData();
+    // getData();
+
+    hardcodedGetData();
   }, []);
 
   function TheColumn() {
