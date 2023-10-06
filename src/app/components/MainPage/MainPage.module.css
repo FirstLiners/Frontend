@@ -8,6 +8,16 @@
     margin-bottom: 80px;
 }
 
+.block__filter2 {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow: hidden;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
 .block__button {
     display: flex;
     position: relative;
