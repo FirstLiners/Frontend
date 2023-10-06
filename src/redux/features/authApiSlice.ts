@@ -37,14 +37,14 @@ const authApiSlice = apiSlice.injectEndpoints({
     }),
     login: builder.mutation({
       query: ({ email, password }) => ({
-        url: "users/token/",
+        url: "/token/",
         method: "POST",
         body: { email, password },
       }),
     }),
     register: builder.mutation({
       query: ({ email, password }) => ({
-        url: "token",
+        url: "token/",
         method: "POST",
         body: { email, password },
       }),

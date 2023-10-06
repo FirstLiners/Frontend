@@ -2,11 +2,15 @@
 import styles from "./sceleton.module.css";
 import React, { Fragment, useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-
 import axios, { AxiosResponse } from "axios";
-import qs from "qs";
 
-export default function Sceleton() {
+interface Props {
+  apiEndpoint: string;
+}
+
+export default function Sceleton({
+  apiEndpoint,
+}: Props & { apiEndpoint?: string }) {
   interface Item {
     id: number;
     sku_id: string;
@@ -21,122 +25,76 @@ export default function Sceleton() {
     data: Item[];
   }
 
-  interface Token {
-    access?: string;
-    refresh?: string;
-  }
+  const [dataSKUS, setDataSKUS] = useState<Data>(); //is () or ({}) is better
+  const [dataSALES, setDataSALES] = useState<Data>();
+  const [dataFORECASTS, setDataFORECASTS] = useState<Data>();
 
-  const [token, setToken] = useState<Token | undefined>();
-  const [data, setData] = useState<Data>(); //is () or ({}) is better
-
+  const [isLoading, setLoading] = useState(true);
+  const [isError, setError] = useState(false);
   // function that do post request to get token from backend localhost:8000/api/v1/users/token using axios
   // and post method body email and password
 
-  async function getData() {
+  async function getData(apiEndpoint = "skus") {
+    console.log("getData");
+    let token = process.env.FETCH_TOKEN;
+    // let token =   (await localStorage.getItem("access_token"))
+    console.log(token);
     try {
-      // const body = { email: "prostome2@prosto.me", password: "222" };
       const config = {
         method: "GET",
-        autorization: `Bearer ${String(token?.access)}`,
-
-        // Authorization: `Bearer ${token?.access}`,
-        //   mode: "no-cors",
-        //   refferer: "http://localhost:3000",
-        //   maxBodyLength: Infinity,
-
-        url: "http://localhost:8000/api/v1/skus",
-        //   params: { email: "prostome2@prosto.me", password: "222" },
-
-        //  ContentType: "application/json",
-        //
-        // use body to send email and password
-        data: qs.stringify('Accept: "*/*"'),
-      };
-      axios(config)
-        .then((response) => {
-          console.log(`getData - ${response.status}`);
-          // convert to JSON
-          setData(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log(token);
-    }
-  }
-
-  async function handToken() {
-    try {
-      const data = {
-        email: "prostome2@prosto.me",
-        password: "222",
-      };
-      const config = {
-        method: "POST",
+        // Autorization: `Bearer ${token}`,
         mode: "no-cors",
-        refferer: "http://localhost:3000",
+        refferer: "127.0.0.1:3000",
         maxBodyLength: Infinity,
-        url: "http://localhost:8000/api/v1/users/token/",
+        url: `http:"//127.0.0.1:8000/api/v1/${apiEndpoint}`,
         ContentType: "application/json",
-        Accept: "application/vnd.api+json",
-
-        headers: {},
-        data: qs.stringify(data),
+        headers: {
+          Authorization: `Bearer ${String(token)}`,
+        },
       };
       axios(config)
         .then((response) => {
-          // response data contains accessToken and refreshToken as concatenated string
-          // accessToken begins with access: and refreshToken begins with refresh:
-          // need to extract accessToken and refreshToken from response.data
-          //  const accessToken = String(response.data).split('access:')[1].split('refresh:')[0];
-          //  const refreshToken = String(response.data).split('refresh:')[1];
+          console.log(`${axios.defaults}`);
+          console.log(`getData - ${response.status} for ${apiEndpoint}`);
+          // convert to JSON
 
-          // create token object with accessToken and refreshToken
-          //@ts-ignore
-          const newtoken = {
-            access: response.data.access,
-            refresh: response.data.refresh,
-          };
-          // @ts-ignore
-          setToken(newtoken);
-          console.log(`handToken - ${response.data.access}`);
+          // case of each endpoint - skus, sales, forecasts
+          switch (apiEndpoint) {
+            case "skus":
+              setDataSKUS(response.data);
+              break;
+            case "stores":
+              setDataSKUS(response.data);
+              break;
+            case "sales":
+              setDataSALES(response.data);
+              break;
+            case "forecasts":
+              setDataFORECASTS(response.data);
+              break;
+            default:
+              break;
+          }
         })
         .catch((error) => {
           console.log(error);
         });
     } catch (error) {
+      setError(true);
       console.log(error);
     } finally {
-      console.log(token?.refresh);
-      getData();
+      setTimeout(() => {
+        setLoading(false);
+        console.log(
+          `axios request "getData" is done for endpoint - ${apiEndpoint}`
+        );
+      }, 1000); // 1 sec
     }
   }
-
-  /*   
-
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2NTM0NTE2LCJpYXQiOjE2OTY1Mjg1MTYsImp0aSI6IjA5MjI3ZWNkMjllMzQ2YzVhNjkwYzlmMWU3ZDhhYTFhIiwidXNlcl9pZCI6MzR9.OOnktA2JQBXPGqT5gwLNf-Im-PygJDYd-vzOCk6p6Pk
-  User-Agent: PostmanRuntime/7.33.0
-  Accept: *\*
-  Postman-Token: 89e63a50-0adb-401a-8947-c361f62f3901
-  Host: localhost:8000
-  Accept-Encoding: gzip, deflate, br
-  Connection: keep-alive
-   
-
-
-
-  
-  */
 
   useEffect(() => {
-    console.log("-=token=-");
-    handToken();
-    console.log("-=data=-");
-
-    console.log(token?.access);
+    console.log(`-= data ${apiEndpoint} =-`);
+    getData();
   }, []);
   function TheColumn() {
     return (
@@ -151,17 +109,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
   }
   return (
     <Fragment>
-      <div className="flex flex-row gap-4">
-        {/* tailwindcss width 50% */}
-        <TheColumn />
-        <TheColumn />
-        <TheColumn />
-        <TheColumn />
-        <TheColumn />
-        <TheColumn />
-        <TheColumn />
-        <TheColumn />
-      </div>
+      {isLoading && !isError ? (
+        <div className="flex flex-row gap-4">
+          {/* tailwindcss width 50% */}
+          <TheColumn />
+          <TheColumn />
+          <TheColumn />
+          <TheColumn />
+          <TheColumn />
+          <TheColumn />
+          <TheColumn />
+          <TheColumn />
+        </div>
+      ) : !isLoading && !isError ? (
+        <div className="ml-44  grid grid-cols-3 align-middle">
+          {" "}
+          data {apiEndpoint} загружено <p className="grid-cols col-auto "></p>{" "}
+        </div>
+      ) : (
+        <div>Error here!</div>
+      )}
     </Fragment>
   );
 }
