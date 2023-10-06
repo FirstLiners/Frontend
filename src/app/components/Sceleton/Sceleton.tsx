@@ -29,6 +29,8 @@ export default function Sceleton({
   const [dataSALES, setDataSALES] = useState<Data>();
   const [dataFORECASTS, setDataFORECASTS] = useState<Data>();
 
+  const [isSuccessData, setSuccessData] = useState(false);
+
   const [isLoading, setLoading] = useState(true);
   const [isError, setError] = useState(false);
   // function that do post request to get token from backend localhost:8000/api/v1/users/token using axios
@@ -73,6 +75,12 @@ export default function Sceleton({
               setDataFORECASTS(response.data);
               break;
             default:
+              response.data[0] !== undefined &&
+              response.data[0] !== null &&
+              response.data[0] !== ""
+                ? setSuccessData(true)
+                : setSuccessData(false);
+              console.log(response.data[0]);
               break;
           }
         })
@@ -96,6 +104,7 @@ export default function Sceleton({
     console.log(`-= data ${apiEndpoint} =-`);
     getData();
   }, []);
+
   function TheColumn() {
     return (
       <div className="flex flex-col gap-4">
@@ -122,9 +131,13 @@ export default function Sceleton({
           <TheColumn />
         </div>
       ) : !isLoading && !isError ? (
-        <div className="ml-44  grid grid-cols-3 align-middle">
+        <div className="ml-20  grid grid-cols-3 align-middle">
           {" "}
-          data {apiEndpoint} загружено <p className="grid-cols col-auto "></p>{" "}
+          <p className="min-w-max break-before-left">
+            {" "}
+            data {apiEndpoint} {isSuccessData ? "" : "не "} загружено{" "}
+          </p>
+          <p className="grid-cols col-auto "></p>{" "}
         </div>
       ) : (
         <div>Error here!</div>
