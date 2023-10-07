@@ -1,9 +1,0 @@
-/* Стили для активной ссылки */
-.active-link {
-    border-bottom: 2px solid #ffffff; /* Добавьте ваш стиль border */
-  }
-  
-  /* Стили для ховера */
-  li:hover {
-    border-bottom: 2px solid #ffffff; /* Добавьте ваш стиль border */
-  }

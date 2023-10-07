@@ -1,32 +1,56 @@
-"use client"
-import { useSession } from "next-auth/react";
+"use client";
+import styles from "./Navbar.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../shared/lenta_logo.svg";
-import { getServerSession } from "next-auth/next";
-import { redirect } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { logout as SetLogout } from "@/redux/features/authSlice";
+import { useRouter, usePathname } from "next/navigation";
+import { useLogoutMutation } from "@/redux/features/authApiSlice";
 
 export default function Navbar() {
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const router = useRouter();
+  const pathname = usePathname();
+  const dispatch = useAppDispatch();
+  const [logout] = useLogoutMutation();
 
-  const { data: session } = useSession()
-  const labelSign = session ?  "Выйти" : "Войти"
-  const hrefSign = session ?  "/api/auth/signout" : "api/auth/signin"
+  const labelSign = isAuthenticated ? "Выйти" : "Войти";
+  const hrefSign = isAuthenticated ? "/logout" : "/login";
   return (
     <nav className="bg-[#003C96] pr-40 pl-40 flex h-[64px] justify-between">
       <ul className="flex text-white items-center h-[64px]">
-      <div>
-        <Image src={Logo} alt="Логотип" width={101} height={40} className="pt-[12px] pb-[12px]" />
-      </div>
+        <div>
+          <Image
+            src={Logo}
+            alt="Логотип"
+            width={101}
+            height={40}
+            className="pt-[12px] pb-[12px]"
+          />
+        </div>
         <li className="ml-10 h-[64px] items-center flex">
-          <Link href="/">Главная</Link>
+          <Link className={pathname == "/" ? styles.active_link : ""} href="/">
+            Главная
+          </Link>
         </li>
         <li className="ml-8 h-[64px] items-center flex">
           {/* dashboard/page.tsx */}
-          <Link href="/dashboard">Данные по прогнозу</Link>
+          <Link
+            className={pathname == "/dashboard" ? styles.active_link : ""}
+            href="/dashboard"
+          >
+            Данные по прогнозу
+          </Link>
         </li>
         <li className="ml-8 h-[64px] items-center flex">
           {/* statistic/page.tsx */}
-          <Link href="/statistic">Статистика</Link>
+          <Link
+            className={pathname == "/statistic" ? styles.active_link : ""}
+            href="/statistic"
+          >
+            Статистика
+          </Link>
         </li>
       </ul>
       <ul className="flex text-white items-center ml-9 h-[64px]">
@@ -34,7 +58,7 @@ export default function Navbar() {
           {/* для этого линка нужно сделать кастомную страницу, сейчас ее нет. */}
           <Link href={hrefSign}>{labelSign}</Link>
         </li>
-        </ul>
+      </ul>
       <style jsx>{`
         li {
           /* Ваш стиль без рамки */
@@ -42,8 +66,8 @@ export default function Navbar() {
 
         li:active,
         li:focus {
-          border-bottom: 2px solid #FFB900; 
-          color: #FFB900;
+          border-bottom: 2px solid #ffb900;
+          color: #ffb900;
         }
       `}</style>
     </nav>
