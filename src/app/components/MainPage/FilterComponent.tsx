@@ -22,10 +22,10 @@ interface FilterProps {
     onFilterChangeAll: (updatedFilters: { label: string; checked: boolean }[]) => void;
   }
    
-function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeAll }: FilterProps) {
+  function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeAll }: FilterProps) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
-
+  
     const handleFilterChange = (index: number, checked: boolean) => {
       if (checked) {
         setSelectedItems((prevSelected) => [...prevSelected, index]);
@@ -36,7 +36,7 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
       }
       onFilterChange(index, checked);
     };
-
+  
     const handleSelectAll = () => {
       const updatedFilters = filterItems.map((item, index) => ({
         ...item,
@@ -45,7 +45,7 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
       setSelectedItems(updatedFilters.map((_, index) => index));
       onFilterChangeAll(updatedFilters);
     };
-
+  
     const handleClearAll = () => {
       const updatedFilters = filterItems.map((item, index) => ({
         ...item,
@@ -54,28 +54,33 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
       setSelectedItems([]);
       onFilterChangeAll(updatedFilters);
     };
-
+  
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchText(e.target.value);
     };
-
+  
+    // Фильтруем элементы по поисковому запросу
+    const filteredItems = filterItems.filter((item) =>
+      item.label.toLowerCase().includes(searchText.toLowerCase())
+    );
+  
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="ml-2 justify-between overflow-hidden max-w-[200px]">
-  {selectedItems.length === 0 ? (
-    // Если нет выбранных элементов, отображаем текст фильтра
-    <>
-      {filterLabel} <ChevronDown className="right-2" />
-    </>
-  ) : (
-    // Если есть выбранные элементы, отображаем их
-    <span className="block whitespace-nowrap overflow-hidden overflow-ellipsis">
-      {selectedItems.map((index) => filterItems[index].label).join(", ")}
-    </span>
-  )}
-</Button>
-
+          <Button variant="outline" className="ml-2 justify-between overflow-hidden max-w-[200px]">
+            {/* Отображаем текст фильтра или выбранные элементы */}
+            {selectedItems.length === 0 ? (
+              // Если нет выбранных элементов, отображаем текст фильтра
+              <>
+                {filterLabel} <ChevronDown className="right-2" />
+              </>
+            ) : (
+              // Если есть выбранные элементы, отображаем их
+              <span className="block whitespace-nowrap overflow-hidden overflow-ellipsis">
+                {selectedItems.map((index) => filterItems[index].label).join(", ")}
+              </span>
+            )}
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56 w-[200px]">
           <div className="flex items-center rounded-lg bg-gray-50">
@@ -86,14 +91,15 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
             />
             <Search className="mr-2" color="#003C96" />
           </div>
-
+  
           <DropdownMenuSeparator />
           <ScrollArea className="h-[200px] w-[190px] rounded-md border p-2">
-            {filterItems
-              .filter((item) =>
-                item.label.toLowerCase().includes(searchText.toLowerCase())
-              )
-              .map((item, index) => (
+            {filteredItems.length === 0 ? (
+              // Если не найдено ни одного элемента, отображаем уведомление
+              <div className='ml-7 text-xs'>Ничего не найдено</div>
+            ) : (
+              // В противном случае, отображаем чекбоксы для найденных элементов
+              filteredItems.map((item, index) => (
                 <DropdownMenuCheckboxItem
                   key={index}
                   checked={selectedItems.includes(index)}
@@ -103,10 +109,11 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
                 >
                   {item.label}
                 </DropdownMenuCheckboxItem>
-              ))}
+              ))
+            )}
           </ScrollArea>
           <DropdownMenuSeparator />
-
+  
           <div className="flex justify-between mt-2">
             <Button
               variant="dropdownMenuButton1"
@@ -133,5 +140,6 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
       </DropdownMenu>
     );
   }
-
-export default BlockFilter;
+  
+  export default BlockFilter;
+  
