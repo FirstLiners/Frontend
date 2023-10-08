@@ -15,8 +15,8 @@ export default function Home() {
         <>
           <MainPage />
           {
-            //"sales", очень большой объем данных, поэтому ... не показываем
-            ["skus", "stores", "forecasts"].map((element) => (
+            //"sales",  "stores", "forecasts" очень большой объем данных, поэтому ... не показываем
+            ["skus"].map((element) => (
               <Sceleton key={element} apiEndpoint={element} />
             ))
           }

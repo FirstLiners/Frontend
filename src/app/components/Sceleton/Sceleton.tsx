@@ -41,7 +41,9 @@ export default function Sceleton({
   async function getData(apiEndpoint = "skus") {
     console.log("getData");
     let token = localStorage.getItem("access_token");
-    // let token =   (await localStorage.getItem("access_token"))
+    if (token) {
+      token = token.replace(/^"(.*)"$/, "$1"); // Remove quotes from token start/end. This is a temp fix?!
+    }
     let data = qs.stringify({});
     console.log(token);
     try {
@@ -146,7 +148,7 @@ export default function Sceleton({
   useEffect(() => {
     apiEndpoint = apiEndpoint || "skus";
     console.log(`-= data ${apiEndpoint} =-`);
-    getData();
+    getData(apiEndpoint);
   }, []);
 
   // useEffect for call toast() if isSuccessData

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import styles from "./MainPage.module.css";
 import BlockFilter from "./FilterComponent";
 import SimpleLineChart from "./ExampleLineChart";
-import Sceleton from "../Sceleton/Sceleton";
 import { Button } from "@/components/ui/button";
 
 type CheckedState = boolean;
