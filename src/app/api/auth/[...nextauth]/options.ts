@@ -45,7 +45,8 @@ export const options: NextAuthOptions = {
     }),
   ],
   theme: {
-    colorScheme: "light",
+    colorScheme: "auto",
+    brandColor: "#002296",
   },
   pages: {
     //  signIn:"/"

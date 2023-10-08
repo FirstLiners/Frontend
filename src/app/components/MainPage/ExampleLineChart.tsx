@@ -12,33 +12,62 @@ import {
 
 const data = [
     {
-        name: "Sun",
-        value: 10
+        name: "1",
+        спрос: 10
     },
     {
-        name: "Mon",
-        value: 30
+        name: "2",
+        спрос: 30
     },
     {
-        name: "Tue",
-        value: 100
+        name: "3",
+        спрос: 100
     },
     {
-        name: "Wed",
-        value: 30
+        name: "4",
+        спрос: 30
     },
     {
-        name: "Thu",
-        value: 23
+        name: "5",
+        спрос: 23
     },
     {
-        name: "Fri",
-        value: 34
+        name: "6",
+        спрос: 34
     },
     {
-        name: "Sat",
-        value: 11
+        name: "7",
+        спрос: 11
+    },
+    {
+        name: "8",
+        спрос: 1000
+    },
+    {
+        name: "9",
+        спрос: 11
+    },
+    {
+        name: "10",
+        спрос: 11
+    },
+    {
+        name: "11",
+        спрос: 11
+    },
+    {
+        name: "12",
+        спрос: 11
+    },
+    {
+        name: "13",
+        спрос: 11
+    },
+    {
+        name: "14",
+        спрос: 11
     }
+
 ];
 
 const SimpleLineChart = () => {
@@ -84,7 +113,7 @@ const SimpleLineChart = () => {
     return (
         <div className="flex caption2 flex-col ui-chart rounded-2xl outline outline-1 outline-gray-300">
             <div className="flex justify-center flex-col items-center w-56 ml-11 mt-10 mb-20">
-                <p className="caption2 font-bold">Прогноз спроса за 14 дней</p>
+                <p className="caption2 font-bold text-[#003C96]">Прогноз спроса за 14 дней</p>
                 
             </div>
             <LineChart width={1560} height={454} data={data}>
@@ -102,7 +131,7 @@ const SimpleLineChart = () => {
                     tickLine={false}
                     tick={{ fill: "black" }}
                     type="number"
-                    domain={[0, 100]}
+                    domain={[0, 1000]}
                 />
                 <Tooltip
                     // @ts-ignore
@@ -114,11 +143,11 @@ const SimpleLineChart = () => {
                     wrapperStyle={{ display: "hidden" }}
                 />
                 <Line
-                    fill="#40C0C0"
-                    stroke="#40C0C0"
+                    fill="#003C96"
+                    stroke="#003C96"
                     dot={true}
                     type="monotone"
-                    dataKey="value"
+                    dataKey="спрос"
                     // @ts-ignore
                     activeDot={(e) => {
                         onChartMouseMove(e);
