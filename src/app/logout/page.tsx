@@ -14,8 +14,10 @@ const Page: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h1>bye...</h1>
+    <div
+      className={`p-0 flex justify-center  items-center w-screen h-screen bg-[#003C96]`}
+    >
+      <h1 className="text-white">bye...</h1>
     </div>
   );
 };

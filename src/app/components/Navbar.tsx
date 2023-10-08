@@ -30,27 +30,36 @@ export default function Navbar() {
           />
         </div>
         <li className="ml-10 h-[64px] items-center flex">
-          <Link className={pathname == "/" ? styles.active_link : ""} href="/">
-            Главная
-          </Link>
+          {isAuthenticated && (
+            <Link
+              className={pathname == "/" ? styles.active_link : ""}
+              href="/"
+            >
+              Главная
+            </Link>
+          )}
         </li>
         <li className="ml-8 h-[64px] items-center flex">
           {/* dashboard/page.tsx */}
-          <Link
-            className={pathname == "/dashboard" ? styles.active_link : ""}
-            href="/dashboard"
-          >
-            Данные по прогнозу
-          </Link>
+          {isAuthenticated && (
+            <Link
+              className={pathname == "/dashboard" ? styles.active_link : ""}
+              href="/dashboard"
+            >
+              Данные по прогнозу
+            </Link>
+          )}
         </li>
         <li className="ml-8 h-[64px] items-center flex">
           {/* statistic/page.tsx */}
-          <Link
-            className={pathname == "/statistic" ? styles.active_link : ""}
-            href="/statistic"
-          >
-            Статистика
-          </Link>
+          {isAuthenticated && (
+            <Link
+              className={pathname == "/statistic" ? styles.active_link : ""}
+              href="/statistic"
+            >
+              Статистика
+            </Link>
+          )}
         </li>
       </ul>
       <ul className="flex text-white items-center ml-9 h-[64px]">

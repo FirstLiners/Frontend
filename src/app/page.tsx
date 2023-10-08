@@ -1,5 +1,6 @@
 "use client";
 // import { options } from "./api/auth/[...nextauth]/options";
+import styles from "./page.module.css";
 import Sceleton from "./components/Sceleton/Sceleton";
 import React, { useEffect, useState } from "react";
 import NavButton from "./components/NavButton/Navbutton";
@@ -8,6 +9,7 @@ import { useAppSelector } from "@/redux/hooks";
 
 export default function Home() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+
   return (
     <>
       {isAuthenticated ? (
@@ -24,11 +26,15 @@ export default function Home() {
       ) : // if not logged in, show login button with link to login page
       !isAuthenticated ? (
         <>
-          <h1 className="text-5xl">
-            <NavButton link="/login" label="" />
-            Пользователь не авторизован
-            {/* login button with nextjs navlink  */}
-          </h1>
+          <main
+            className={`p-0 flex justify-center  items-center w-screen h-screen bg-[#003C96] `}
+          >
+            <h1 className={` text-5xl text-white`}>
+              <NavButton link="/login" label="" />
+              Пользователь не авторизован
+              {/* login button with nextjs navlink  */}
+            </h1>
+          </main>
         </>
       ) : (
         <h1></h1>

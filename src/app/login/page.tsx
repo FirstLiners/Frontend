@@ -42,27 +42,31 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value || "prostome2@prosto.me")}
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value || "222")}
-      />
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? "Logging in..." : "Log in"}
-      </button>
-      {error && (
-        <p>
-          {/* @ts-ignore */}
-          {JSON.stringify(error, null, 2).concat("---------error---------")}
-        </p>
-      )}
-    </form>
+    <main
+      className={`p-0 flex justify-center  items-center w-screen h-screen bg-[#003C96]`}
+    >
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value || "prostome2@prosto.me")}
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value || "222")}
+        />
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Logging in..." : "Log in"}
+        </button>
+        {error && (
+          <p>
+            {/* @ts-ignore */}
+            {JSON.stringify(error, null, 2).concat("---------error---------")}
+          </p>
+        )}
+      </form>
+    </main>
   );
 };
 export default Login;
