@@ -26,7 +26,7 @@ export default function RootLayout({
           <AuthProvider>
             <StoreProvider>
               <Navbar />
-              <main className="p-0  flex justify-center items-start p-6 min-h-screen h-full w-full">
+              <main className="flex justify-center items-start py-0 min-h-screen h-full w-full">
                 {children}
               </main>
               <Toaster />
