@@ -13,7 +13,7 @@ type CheckedState = boolean;
 export default function MainPage() {
   const { push } = useRouter();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  if (!isAuthenticated) {
+  if (typeof window !== "undefined" && !isAuthenticated) {
     push("/login");
   }
   const [filterItems1, setFilterItems1] = useState([

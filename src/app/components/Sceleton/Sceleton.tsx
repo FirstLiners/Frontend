@@ -1,8 +1,12 @@
 "use client";
 import styles from "./sceleton.module.css";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, use, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setJsonData as setStores } from "@/redux/features/storesSlice";
+import { setJsonData as setSkus } from "@/redux/features/skuSlice";
+import { setJsonData as setForecasts } from "@/redux/features/forecastsSlice";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/components/ui/use-toast";
+
 import axios, { AxiosResponse } from "axios";
 import qs from "qs";
 
@@ -26,10 +30,17 @@ export default function Sceleton({
     // consist of array of Items - from interface Item
     data: Item[];
   }
+  const dispatch = useAppDispatch();
+  const { forecastsItems: dataForecasts } = useAppSelector(
+    (state) => state.forecasts
+  );
+  const { storeItems: dataStores } = useAppSelector((state) => state.stores);
+  const { skuItems: dataSkus } = useAppSelector((state) => state.skus);
 
   const [dataSKUS, setDataSKUS] = useState<Data>(); //is () or ({}) is better
   const [dataSALES, setDataSALES] = useState<Data>();
   const [dataFORECASTS, setDataFORECASTS] = useState<Data>();
+  const [dataSTORES, setDataSTORES] = useState<Data>();
 
   const [isSuccessData, setSuccessData] = useState(false);
 
@@ -62,31 +73,32 @@ export default function Sceleton({
       axios
         .request(config)
         .then((response) => {
-          console.log(`${axios.defaults}`);
           console.log(`getData - ${response.status} for ${apiEndpoint}`);
-          // convert to JSON
-
-          // case of each endpoint - skus, sales, forecasts
+          // add .then before switch
+          return response.data;
+        })
+        .then((data) => {
           switch (apiEndpoint) {
             case "skus":
-              setDataSKUS(response.data);
+              setDataSKUS(data);
+              dispatch(setSkus(data));
               break;
             case "stores":
-              setDataSKUS(response.data);
-              break;
-            case "sales":
-              setDataSALES(response.data);
+              setDataSTORES(data);
+              dispatch(setStores(data));
               break;
             case "forecasts":
-              setDataFORECASTS(response.data);
+              setDataFORECASTS(data);
+              dispatch(setForecasts(data));
+              break;
+            case "sales":
+              setDataSALES(data);
               break;
             default:
-              response.data[0] !== undefined &&
-              response.data[0] !== null &&
-              response.data[0] !== ""
+              data[0] !== undefined && data[0] !== null && data[0] !== ""
                 ? setSuccessData(true)
                 : setSuccessData(false);
-              console.log(response.data[0]);
+              console.log(data[0]);
               break;
           }
         })
@@ -106,50 +118,29 @@ export default function Sceleton({
     }
   }
 
-  async function hardcodedGetData(apiEndpoint = "skus") {
-    console.log("HardcodgetData");
-    let data = qs.stringify({});
-
-    let config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: "http://localhost:8000/api/v1/skus",
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2NjMwNDMzLCJpYXQiOjE2OTY2MjQ0MzMsImp0aSI6IjNhOTA1ZjAzNjNmZjQzNjRhMzA0YzVkYWYxOWQzZmU0IiwidXNlcl9pZCI6Mn0.7Vmy_m9VDyvCPdd6fBCoU-emvWmRjHAMvURmh_zEbBM",
-      },
-      data: data,
-    };
-
-    axios
-      .request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-        setDataSKUS(response.data);
-        response.data[0] !== undefined &&
-        response.data[0] !== null &&
-        response.data[0] !== ""
-          ? setSuccessData(true)
-          : setSuccessData(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    //finnaly
-    setTimeout(() => {
-      setLoading(false);
-
-      console.log(
-        `axios request "getData" is done for endpoint - ${apiEndpoint}`
-      );
-    }, 10000); // 1 sec
-  }
-
   useEffect(() => {
-    apiEndpoint = apiEndpoint || "skus";
+    // apiEndpoint = apiEndpoint || "skus";
     console.log(`-= data ${apiEndpoint} =-`);
     getData(apiEndpoint);
-  }, []);
+  }, [apiEndpoint]);
+
+  useEffect(() => {
+    console.log(
+      `-= data ${Object.keys(dataForecasts || {}).length} : ${
+        Object.values(dataForecasts || {}).length
+      } =-`
+    );
+    console.log(
+      `-= data ${Object.keys(dataStores || {}).length} : ${
+        Object.values(dataStores || {}).length
+      } =-`
+    );
+    console.log(
+      `-= data ${Object.keys(dataSkus || {}).length} : ${
+        Object.values(dataSKUS || {}).length
+      } =-`
+    );
+  }, [dataForecasts, dataStores, dataSkus]);
 
   // useEffect for call toast() if isSuccessData
 
@@ -169,30 +160,7 @@ export default function Sceleton({
 
   return (
     <Fragment>
-      {isLoading && !isError ? (
-        <div className="flex flex-row gap-4">
-          {/* tailwindcss width 50% */}
-          <TheColumn />
-          <TheColumn />
-          <TheColumn />
-          <TheColumn />
-          <TheColumn />
-          <TheColumn />
-          <TheColumn />
-          <TheColumn />
-        </div>
-      ) : !isLoading && !isError ? (
-        <div className="grid grid-cols-3 align-middle">
-          {" "}
-          <p className="break-before-left">
-            {/* здесь про результат */}
-            {titletoast} {texttoast}
-          </p>
-          <p className="grid-cols col-auto "></p>{" "}
-        </div>
-      ) : (
-        <div>Error here!</div>
-      )}
+   
     </Fragment>
   );
 }
