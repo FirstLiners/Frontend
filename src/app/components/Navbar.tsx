@@ -29,6 +29,7 @@ export default function Navbar() {
             className="pt-[12px] pb-[12px]"
           />
         </div>
+        
         <li className="ml-10 h-[64px] items-center flex">
           {isAuthenticated && (
             <Link
@@ -39,6 +40,19 @@ export default function Navbar() {
             </Link>
           )}
         </li>
+
+
+
+        
+
+
+
+
+
+
+
+
+
         <li className="ml-8 h-[64px] items-center flex">
           {/* dashboard/page.tsx */}
           {isAuthenticated && (

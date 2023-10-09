@@ -38,7 +38,7 @@ const Login = () => {
         localStorage.setItem("access_token", JSON.stringify(access));
         dispatch(finishInitialLoad());
         if (typeof window !== "undefined") {
-          router.push("/login");
+          router.push("/");
         }
       });
   };

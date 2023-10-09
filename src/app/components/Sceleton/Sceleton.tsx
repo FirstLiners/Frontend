@@ -158,25 +158,25 @@ export default function Sceleton({
   const texttoast = isSuccessData ? "" : ` не загружено ${apiEndpoint} `;
   const titletoast = isSuccessData ? " Успешно " : " Ошибка ";
 
-  return (
-    <Fragment>
-      {isLoading && !isError ? (
-        <div className="flex flex-row gap-4">
-          {/* tailwindcss width 50% */}
-          <TheColumn />
-        </div>
-      ) : !isLoading && !isError ? (
-        <div className="grid grid-cols-3 align-middle">
-          {" "}
-          <p className="break-before-left">
-            {/* здесь про результат */}
-            {titletoast} {texttoast}
-          </p>
-          <p className="grid-cols col-auto "></p>{" "}
-        </div>
-      ) : (
-        <div>Error here!</div>
-      )}
-    </Fragment>
-  );
+  // return (
+  //   <Fragment>
+  //     {isLoading && !isError ? (
+  //       <div className="flex flex-row gap-4">
+  //         {/* tailwindcss width 50% */}
+  //         <TheColumn />
+  //       </div>
+  //     ) : !isLoading && !isError ? (
+  //       <div className="grid grid-cols-3 align-middle">
+  //         {" "}
+  //         <p className="break-before-left">
+  //           {/* здесь про результат */}
+  //           {titletoast} {texttoast}
+  //         </p>
+  //         <p className="grid-cols col-auto "></p>{" "}
+  //       </div>
+  //     ) : (
+  //       <div>Error here!</div>
+  //     )}
+  //   </Fragment>
+  // );
 }
