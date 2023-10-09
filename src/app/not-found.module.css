@@ -1,0 +1,28 @@
+/* Стили для активной ссылки */
+.active_link {
+    color: #ffff;
+    display: flex;
+    align-items: center;
+    height: 20px;
+    animation: bounce 0.5s;
+    margin: 0;
+}
+
+.active_link:hover {
+    border-bottom: solid #ffb900;
+    border-width: 0 0 4px 0;
+    margin: 0;
+    height: 20px;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
