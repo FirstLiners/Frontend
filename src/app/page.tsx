@@ -6,9 +6,15 @@ import React, { useEffect, useState } from "react";
 import NavButton from "./components/NavButton/Navbutton";
 import MainPage from "@/app/components/MainPage/MainPage";
 import { useAppSelector } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const isLocalStorage = localStorage.getItem("access_token") !== "" && localStorage.getItem("access_token") !== null && localStorage.getItem("access_token") !== undefined;
+  const {push} = useRouter();
+  if (!isLocalStorage) {
+    push('/login');
+  }
 
   return (
     <>
@@ -24,16 +30,12 @@ export default function Home() {
           }
         </>
       ) : // if not logged in, show login button with link to login page
-      !isAuthenticated ? (
+      !isAuthenticated ? ( 
         <>
           <main
             className={`p-0 flex justify-center  items-center w-screen h-screen bg-[#003C96] `}
           >
-            <h1 className={` text-5xl text-white`}>
-              <NavButton link="/login" label="" />
-              Пользователь не авторизован
-              {/* login button with nextjs navlink  */}
-            </h1>
+            
           </main>
         </>
       ) : (

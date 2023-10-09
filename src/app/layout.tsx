@@ -5,9 +5,18 @@ import AuthProvider from "./context/AuthProvider";
 import ThemeProvider from "./context/ThemeProvider";
 import StoreProvider from "../redux/provider";
 import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/toaster";
+import localFont from "next/font/local"
 
-const inter = Inter({ subsets: ["latin"] });
+const myFont = localFont({
+  src: [
+    {
+  path:'../fonts/Gilroy-Regular.woff2',
+  style: 'normal',
+  weight: '600',
+    },
+    
+]
+})
 
 export const metadata: Metadata = {
   title: "Hackaton Lenta",
@@ -20,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={myFont.className}>
+      <body>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <AuthProvider>
             <StoreProvider>
@@ -29,7 +38,6 @@ export default function RootLayout({
               <main className="flex justify-center items-start py-0 min-h-screen h-full w-full">
                 {children}
               </main>
-              <Toaster />
             </StoreProvider>
           </AuthProvider>
         </ThemeProvider>
