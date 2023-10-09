@@ -10,6 +10,9 @@ import { useRouter } from "next/navigation";
 import { useLoginMutation } from "../../redux/features/authApiSlice";
 import { finishInitialLoad, setAuth } from "../../redux/features/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
+import Image from "next/image";
+import Logo from "../shared/lenta_logo.svg";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -28,6 +31,7 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     console.log("with : ", email, password);
+    localStorage.removeItem("access_token");
     login({ email, password })
       .unwrap()
       .then(({ access }) => {
@@ -37,32 +41,86 @@ const Login = () => {
 
         localStorage.setItem("access_token", JSON.stringify(access));
         dispatch(finishInitialLoad());
-        router.push("/");
+        if (typeof window !== "undefined") {
+          router.push("/");
+        }
       });
   };
 
+  const [showPassword, setShowPassword] = React.useState(false);
+  const errstyle = "flex rounded-lg flex-colum border-[#EF4545]";
+  const okstyle = "w-[316px] h-[56px] text-[16px] pl-2";
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value || "prostome2@prosto.me")}
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value || "222")}
-      />
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? "Logging in..." : "Log in"}
-      </button>
-      {error && (
-        <p>
-          {/* @ts-ignore */}
-          {JSON.stringify(error, null, 2).concat("---------error---------")}
-        </p>
-      )}
-    </form>
+    <main
+      className={`p-0 flex justify-center flex-col items-center w-screen h-screen bg-[#003C96]`}
+    >
+      <div>
+        <Image src={Logo} alt="Логотип" width={453} height={180} />
+      </div>
+      <h1 className="text-white text-[32px] max-w-[557px] text-center pb-[20px]">
+        Инструмент прогноза по товарам собственного производства
+      </h1>
+      <form
+        onSubmit={handleSubmit}
+        className="flex-col flex justify-center w-[560px] h-[486px] bg-white rounded-[20px]"
+        autoComplete="off"
+      >
+        <h1 className="text-black text-[24px] text-center pb-[40px]">
+          Вход в учетную запись
+        </h1>
+        <div className="mx-auto pb-4">
+          <h2 className="pb-2">Введите свой логин</h2>
+          <input
+            type="email"
+            value={email}
+            placeholder="prostome2@prosto.me"
+            onChange={(e) => setEmail(e.target.value || "prostome2@prosto.me")}
+            className="w-[340px] border pl-2 text-[16px] h-[56px] rounded-lg"
+          />
+        </div>
+        <div className="mx-auto pb-4">
+          {!error && <h2 className="pb-2">Введите свой пароль</h2>}
+          {error && (
+            <h2 className="pb-2 border-[#EF4545] text-[#EF4545]">
+              Неверный пароль
+            </h2>
+          )}
+          <div className="flex rounded-lg flex-colum border">
+            <input
+              type={showPassword ? "text" : "password"} // Обновленный тип поля
+              value={password}
+              onChange={(e) => setPassword(e.target.value || "")}
+              className="w-[316px] h-[56px] text-[16px] pl-2"
+            />
+            <div // Добавлено: иконка "глаз" для переключения видимости пароля
+              className="my-auto cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                // Если пароль виден, показываем иконку "глаза с перечеркнутым"
+                <EyeOff />
+              ) : (
+                // Если пароль скрыт, показываем иконку "глаза"
+                <Eye />
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-[340px] h-[56px] text-white rounded-lg bg-[#003C96]"
+          >
+            {isLoading ? "Вход..." : "Войти"}
+          </button>
+          <p className="text-[12px] text-gray-400">
+            Забыли пароль или логин? Обратитесь к администратору
+          </p>
+        </div>
+      </form>
+    </main>
   );
 };
 export default Login;
