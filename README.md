@@ -1,7 +1,7 @@
 откройте два терминала, один для запуска Frontend, другой для запуска Backend
 
 ## для работы Frontend требуется запустить Backend 
-перейдите в папку backend (FL-B)
+перейдите в папку backend (FL-B в архиве релиза) 
 выполните команду
 ```bash
 docker-compose up build
@@ -17,7 +17,7 @@ docker-compose exec backend python manage.py createsuperuser --email <email> --u
 создайте пользователя для тестирования приложения с помощью веб интерфейса задав ему email и password под которым он будет пользоваться приложением Frontend
 
 ## Frontend docker image
-в другом терминале перейдите в папку frontend (FL-F)
+в другом терминале перейдите в папку frontend (FL-F в архиве релиза)
 создайте контейнер и запустите его
 ```bash
 docker build -t firstliners-frontend-dev .
