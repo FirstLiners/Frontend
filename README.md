@@ -9,9 +9,9 @@
 - React 18.2
 - Redux Toolkit/RTK Query
 - Axios
-- Recharts
-- Tailwindcss
-- Shadcn-ui
+- Recharts  
+- Tailwindcss 
+- Shadcn-ui  
 
 ## Для разработчиков:
 ```bash
@@ -102,7 +102,7 @@ docker ps
 ```bash
 docker stop <container_id>
 ```
-или cntrl+c в терминале, где запущен контейнер
+или <kbd>Ctrl</kbd> + <kbd>C</kbd>в терминале, где запущен контейнер
 
 ## Фронтенд команда проекта:
 - Алексей (github: https://github.com/LEH1CH)
