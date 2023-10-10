@@ -8,11 +8,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "../../redux/features/authApiSlice";
-import {
-  finishInitialLoad,
-  setAuth,
-  logout,
-} from "../../redux/features/authSlice";
+import { setAuth, finishInitialLoad } from "../../redux/features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { Eye, EyeOff } from "react-feather";
 import Image from "next/image";
@@ -20,9 +16,7 @@ import Logo from "../shared/lenta_logo.svg";
 import useStorage from "../hook";
 
 const Login = () => {
-  const { isAuthenticated, finishInitialLoad } = useAppSelector(
-    (state) => state.auth
-  );
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
