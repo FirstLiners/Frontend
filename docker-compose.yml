@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: firstliners-frontend-dev
+    container_name: frontend
+    ports:
+      - "3000:3000"
