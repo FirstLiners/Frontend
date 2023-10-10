@@ -1,6 +1,5 @@
 
 # Фронтенд веб-приложения Hackathon Lenta
-[![Build Status](https://github.com/FirstLiners/Backend/actions/workflows/hackathon_lenta_workflow.yaml/badge.svg)](https://github.com/FirstLiners/Backend/actions/workflows/hackathon_lenta_workflow.yaml/)
 
 ## Описание:
 Веб приложение проекта по созданию предсказательной модели и интерфейса по прогнозированию спроса на товары заказчика собственного производства ООО “Лента”.
