@@ -1,22 +1,92 @@
-откройте два терминала, один для запуска Frontend, другой для запуска Backend
 
-## для работы Frontend требуется запустить Backend 
+# Фронтенд веб-приложения Hackathon Lenta
+[![Build Status](https://github.com/FirstLiners/Backend/actions/workflows/hackathon_lenta_workflow.yaml/badge.svg)](https://github.com/FirstLiners/Backend/actions/workflows/hackathon_lenta_workflow.yaml/)
+
+## Описание:
+Веб приложение проекта по созданию предсказательной модели и интерфейса по прогнозированию спроса на товары заказчика собственного производства ООО “Лента”.
+
+## Технологии:
+- NextJS 13.5
+- React 18.2
+- Redux Toolkit/RTK Query/
+- Axios
+- Recharts
+- Tailwindcss
+- Shadcn-ui
+
+## Для разработчиков:
+```bash
+gh repo clone FirstLiners/Frontend
+cd Frontend ; pnpm install
+pnpm run dev
+```
+
+#### Пример файла с переменными среды:
+".example.env.local"
+
+#### Приложения:
+- _api_: API;
+- _config_: настройки проекта.
+- users
+- skus
+- stores
+- sales
+- forecasts
+
+#### Линтер:
+- eslint
+
+#### Форматер:
+- prettier
+
+## Запуск приложения вне среды разработки:
+
+Скачайте последний доступный [релиз](https://github.com/FirstLiners/Frontend/releases) распакуйте архив zip
+
+Для запуска приложения необходим `Docker`. Для операционной системы Windows необходимо установить и активировать WSL2 (https://docs.docker.com/desktop/wsl/).
+
+## для работы Frontend требуется сначала запустить Backend (также информация о запуске доступна на странице https://github.com/FirstLiners/Backend) 
+
+откройте два терминала, один для запуска Frontend, другой для запуска Backend
 перейдите в папку backend (FL-B FL-B в архиве релиза)
 выполните команду
-```bash
-docker-compose up build
-docker-compose up
-```
-последовательно  выполните команды для популяции базы данных
-```bash
+
+```команды для настройки проекта
 docker-compose exec backend python manage.py migrate
+docker-compose exec backend python manage.py collectstatic --noinput
+docker-compose exec backend python manage.py createsuperuser
+```
+
+Для загрузки данных необходимо выполнить следующие команды:
+Загрузка данных о товарной иерархии:
+```
+docker-compose exec backend python manage.py import_skus
+```
+Загрузка данных о магазинах:
+```
+docker-compose exec backend python manage.py import_stores
+```
+Загрузка исторических данных о продажах:
+```
+docker-compose exec backend python manage.py import_sales
+```
+Загрузка уникальных пар товар-магазин:
+```
+docker-compose exec backend python manage.py upload_pairs
+
+```
+
+Авторизация пользователей веб-приложения происходит на backend, стартовав докер при первом запуске нужно выполнить команду создания администратора Джанго:
+
+```bash
 docker-compose exec backend python manage.py createsuperuser --email <email> --username <username>
 
 ```
+далее, 
 откройте браузер и перейдите по адресу http://localhost:8000/admin и введите логин и пароль созданного пользователя администратора
-создайте пользователя для тестирования приложения с помощью веб интерфейса задав ему email и password под которым он будет пользоваться приложением Frontend
+создайте пользователя для веб-приложения с помощью веб интерфейса укажите email и password под которым он будет пользоваться веб-приложением Frontend
 
-## Frontend docker image
+## Запуск Frontend docker image
 в другом терминале перейдите в папку frontend (FL-F FL-B в архиве релиза)
 установите зависимости node_modules
 
@@ -26,9 +96,6 @@ pnpm install
 создайте контейнер и запустите его
 
 ```bash
-``` 
-```bash
-```bash
 docker build -t firstliners-frontend-dev .
 docker run -p 3000:3000 -d firstliners-frontend-dev
 ```
@@ -36,9 +103,9 @@ docker run -p 3000:3000 -d firstliners-frontend-dev
 ```bash
 docker ps
 ```
-вывод команды - это список container_id запущенных контейнеров, в котором нужно найти контейнер с именем nextjs13-firstliners-frontend-dev 
+вывод команды - это список container_id запущенных контейнеров, в котором можно увидеть контейнер с именем nextjs13-firstliners-frontend-dev 
 
-проверить, что приложение доступно по адресу http://localhost:3000
+проверьте, что приложение доступно по адресу http://localhost:3000
 откройте браузер и перейдите по адресу http://localhost:3000 
 
 остановить контейнер
@@ -46,3 +113,7 @@ docker ps
 docker stop <container_id>
 ```
 или cntrl+c в терминале, где запущен контейнер
+
+## Фронтенд команда проекта:
+- Алексей (github: https://github.com/LEH1CH)
+- Юрий (github: https://github.com/uyriq)
