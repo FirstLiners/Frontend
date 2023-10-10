@@ -23,7 +23,9 @@ const Login = () => {
     refresh?: string;
   }
 
-  // так советуют делать в доке RTK Query
+  // Изменения внесены здесь
+  const [passwordError, setPasswordError] = React.useState(""); // Состояние для ошибки пароля
+
   const [login, { isLoading, error }] = useLoginMutation();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -37,19 +39,25 @@ const Login = () => {
       .then(({ access }) => {
         dispatch(setAuth());
         console.log("access_token", access);
-        //stringify and store in localstorage
-
         localStorage.setItem("access_token", JSON.stringify(access));
         dispatch(finishInitialLoad());
         if (typeof window !== "undefined") {
           router.push("/");
         }
+      })
+      .catch((error) => {
+        if (error.status === 401) {
+          setPasswordError("Неверный пароль или логин");
+        } else {
+          // Обработка других возможных ошибок
+        }
       });
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
+
   const errstyle = "flex rounded-lg flex-colum border-[#EF4545]";
-  const okstyle = "w-[316px] h-[56px] text-[16px] pl-2";
+  const okstyle = "w-[340px] h-[56px] text-[16px]";
   return (
     <main
       className={`p-0 flex justify-center flex-col items-center w-screen h-screen bg-[#003C96]`}
@@ -78,34 +86,35 @@ const Login = () => {
             className="w-[340px] border pl-2 text-[16px] h-[56px] rounded-lg"
           />
         </div>
-        <div className="mx-auto pb-4">
+        <div className="mx-auto w-[340px] pb-4">
           {!error && <h2 className="pb-2">Введите свой пароль</h2>}
           {error && (
             <h2 className="pb-2 border-[#EF4545] text-[#EF4545]">
               Неверный пароль
             </h2>
           )}
-          <div className="flex rounded-lg flex-colum border">
-            <input
-              type={showPassword ? "text" : "password"} // Обновленный тип поля
-              value={password}
-              onChange={(e) => setPassword(e.target.value || "")}
-              className="w-[316px] h-[56px] text-[16px] pl-2"
-            />
-            <div // Добавлено: иконка "глаз" для переключения видимости пароля
-              className="my-auto cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                // Если пароль виден, показываем иконку "глаза с перечеркнутым"
-                <EyeOff />
-              ) : (
-                // Если пароль скрыт, показываем иконку "глаза"
-                <Eye />
-              )}
-            </div>
+          <div className={`flex rounded-lg flex-column border  ${passwordError ? errstyle : okstyle}`}>
+          <input
+          type={showPassword ? "text" : "password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value || "")}
+          className="w-[316px] h-[56px] text-[16px] ml-2"
+          />
+          <div
+          className="my-auto cursor-pointer"
+          onClick={() => setShowPassword(!showPassword)}
+          >
+          {showPassword ? (
+          <EyeOff />
+          ) : (
+          <Eye />
+          )}
+          </div>
           </div>
         </div>
+
+
+
 
         <div className="mx-auto">
           <button
@@ -123,4 +132,5 @@ const Login = () => {
     </main>
   );
 };
+
 export default Login;
