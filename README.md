@@ -24,15 +24,6 @@ pnpm run dev
 #### Пример файла с переменными среды:
 ".example.env.local"
 
-#### Приложения:
-- _api_: API;
-- _config_: настройки проекта.
-- users
-- skus
-- stores
-- sales
-- forecasts
-
 #### Линтер:
 - eslint
 
