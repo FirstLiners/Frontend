@@ -83,12 +83,19 @@ docker-compose exec backend python manage.py createsuperuser --email <email> --u
 ```bash
 pnpm install
 ``` 
-создайте контейнер и запустите его
+создайте контейнер и запустите его с помощью комманд docker или docker-compose
 
 ```bash
 docker build -t firstliners-frontend-dev .
 docker run -p 3000:3000 -d firstliners-frontend-dev
 ```
+или 
+
+```bash
+docker-compose build
+docker-compose up
+```
+
 проверить, что контейнер запущен
 ```bash
 docker ps
