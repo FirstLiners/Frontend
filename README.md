@@ -8,7 +8,7 @@
 ## Технологии:
 - NextJS 13.5
 - React 18.2
-- Redux Toolkit/RTK Query/
+- Redux Toolkit/RTK Query
 - Axios
 - Recharts
 - Tailwindcss
