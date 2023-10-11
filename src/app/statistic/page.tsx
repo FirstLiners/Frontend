@@ -123,42 +123,42 @@ export default function MainPage() {
 
   // Функция для обновления состояния всех чекбоксов в фильтре 1
   const handleFilterChangeAll1 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems1(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 2
   const handleFilterChangeAll2 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems2(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 3
   const handleFilterChangeAll3 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems1(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 4
   const handleFilterChangeAll4 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems2(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 5
   const handleFilterChangeAll5 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems1(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 6
   const handleFilterChangeAll6 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems2(updatedFilters);
   };
