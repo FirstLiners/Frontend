@@ -5,18 +5,17 @@ import AuthProvider from "./context/AuthProvider";
 import ThemeProvider from "./context/ThemeProvider";
 import StoreProvider from "../redux/provider";
 import type { Metadata } from "next";
-import localFont from "next/font/local"
+import localFont from "next/font/local";
 
 const myFont = localFont({
   src: [
     {
-  path:'../fonts/Gilroy-Regular.woff2',
-  style: 'normal',
-  weight: '600',
+      path: "../fonts/Gilroy-Regular.woff2",
+      style: "normal",
+      weight: "600",
     },
-    
-]
-})
+  ],
+});
 
 export const metadata: Metadata = {
   title: "Hackaton Lenta",

@@ -31,7 +31,7 @@ const skuSlice = createSlice({
     calculateTotals: (state, action) => {
       const skuId = action.payload;
       const filteredItems = state.skuItems.filter(
-        (item) => item.sku_id === skuId
+        (item) => item.sku_id === skuId,
       );
       const total = filteredItems.length;
       state.total = total;

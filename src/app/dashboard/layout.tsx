@@ -13,8 +13,6 @@ export default function DashboardLayout({
     <section>
       {children}
       {/*  футер баннер для дашборда */}
-
-      
     </section>
   );
 }
