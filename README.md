@@ -1,4 +1,6 @@
 
+[![auto-format](https://github.com/FirstLiners/Frontend/actions/workflows/autoformat_on_pull_req.yml/badge.svg)](https://github.com/FirstLiners/Frontend/actions/workflows/autoformat_on_pull_req.yml)
+
 # Фронтенд веб-приложения Hackathon Lenta
 
 ## Описание:
