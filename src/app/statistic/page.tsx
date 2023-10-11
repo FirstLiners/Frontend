@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../components/MainPage/MainPage.module.css";
 import BlockFilter from "../components/MainPage/FilterComponent";
 import DasTable2 from "./DashboardTable2";
@@ -15,9 +15,10 @@ type CheckedState = boolean;
 export default function MainPage() {
   const { push } = useRouter();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  if (!isAuthenticated) {
-    push("/login");
-  }
+
+  useEffect(() => {
+    isAuthenticated && push("/login");
+  }, [isAuthenticated, push]);
 
   const [filterItems1, setFilterItems1] = useState([
     { label: "Яблоко", checked: false },
@@ -122,42 +123,42 @@ export default function MainPage() {
 
   // Функция для обновления состояния всех чекбоксов в фильтре 1
   const handleFilterChangeAll1 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems1(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 2
   const handleFilterChangeAll2 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems2(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 3
   const handleFilterChangeAll3 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems1(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 4
   const handleFilterChangeAll4 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems2(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 5
   const handleFilterChangeAll5 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems1(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 6
   const handleFilterChangeAll6 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: { label: string; checked: CheckedState }[],
   ) => {
     setFilterItems2(updatedFilters);
   };

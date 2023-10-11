@@ -8,13 +8,17 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "../../redux/features/authApiSlice";
-import { finishInitialLoad, setAuth } from "../../redux/features/authSlice";
-import { useAppDispatch } from "../../redux/hooks";
+import { setAuth, finishInitialLoad } from "../../redux/features/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { Eye, EyeOff } from "react-feather";
 import Image from "next/image";
 import Logo from "../shared/lenta_logo.svg";
-import { Eye, EyeOff } from "lucide-react";
+import useStorage from "../hook";
 
 const Login = () => {
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -23,7 +27,6 @@ const Login = () => {
     refresh?: string;
   }
 
-  // Изменения внесены здесь
   const [passwordError, setPasswordError] = React.useState(""); // Состояние для ошибки пароля
 
   const [login, { isLoading, error }] = useLoginMutation();
@@ -33,13 +36,14 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     console.log("with : ", email, password);
-    localStorage.removeItem("access_token");
+
     login({ email, password })
       .unwrap()
       .then(({ access }) => {
-        dispatch(setAuth());
         console.log("access_token", access);
-        localStorage.setItem("access_token", JSON.stringify(access));
+        //   localStorage.setItem("access_token", JSON.stringify(access));
+        setAccessToken(access);
+        dispatch(setAuth());
         dispatch(finishInitialLoad());
         if (typeof window !== "undefined") {
           router.push("/");
@@ -58,6 +62,10 @@ const Login = () => {
 
   const errstyle = "flex rounded-lg flex-colum border-[#EF4545]";
   const okstyle = "w-[340px] h-[56px] text-[16px]";
+  if (isAuthenticated) {
+    router.replace("/");
+  }
+
   return (
     <main
       className={`p-0 flex justify-center flex-col items-center w-screen h-screen bg-[#003C96]`}
@@ -93,28 +101,25 @@ const Login = () => {
               Неверный пароль
             </h2>
           )}
-          <div className={`flex rounded-lg flex-column border  ${passwordError ? errstyle : okstyle}`}>
-          <input
-          type={showPassword ? "text" : "password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value || "")}
-          className="w-[316px] h-[56px] text-[16px] ml-2"
-          />
           <div
-          className="my-auto cursor-pointer"
-          onClick={() => setShowPassword(!showPassword)}
+            className={`flex rounded-lg flex-column border  ${
+              passwordError ? errstyle : okstyle
+            }`}
           >
-          {showPassword ? (
-          <EyeOff />
-          ) : (
-          <Eye />
-          )}
-          </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value || "")}
+              className="w-[316px] h-[56px] text-[16px] ml-2"
+            />
+            <div
+              className="my-auto cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <Eye /> : <EyeOff />}
+            </div>
           </div>
         </div>
-
-
-
 
         <div className="mx-auto">
           <button

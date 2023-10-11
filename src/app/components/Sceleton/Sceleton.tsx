@@ -32,7 +32,7 @@ export default function Sceleton({
   }
   const dispatch = useAppDispatch();
   const { forecastsItems: dataForecasts } = useAppSelector(
-    (state) => state.forecasts
+    (state) => state.forecasts,
   );
   const { storeItems: dataStores } = useAppSelector((state) => state.stores);
   const { skuItems: dataSkus } = useAppSelector((state) => state.skus);
@@ -112,7 +112,7 @@ export default function Sceleton({
       setTimeout(() => {
         setLoading(false);
         console.log(
-          `axios request "getData" is done for endpoint - ${apiEndpoint}`
+          `axios request "getData" is done for endpoint - ${apiEndpoint}`,
         );
       }, 1000); // 1 sec
     }
@@ -128,17 +128,17 @@ export default function Sceleton({
     console.log(
       `-= data ${Object.keys(dataForecasts || {}).length} : ${
         Object.values(dataForecasts || {}).length
-      } =-`
+      } =-`,
     );
     console.log(
       `-= data ${Object.keys(dataStores || {}).length} : ${
         Object.values(dataStores || {}).length
-      } =-`
+      } =-`,
     );
     console.log(
       `-= data ${Object.keys(dataSkus || {}).length} : ${
         Object.values(dataSKUS || {}).length
-      } =-`
+      } =-`,
     );
   }, [dataForecasts, dataStores, dataSkus]);
 
@@ -158,9 +158,5 @@ export default function Sceleton({
   const texttoast = isSuccessData ? "" : ` не загружено ${apiEndpoint} `;
   const titletoast = isSuccessData ? " Успешно " : " Ошибка ";
 
-  return (
-    <Fragment>
-   
-    </Fragment>
-  );
+  return <Fragment></Fragment>;
 }

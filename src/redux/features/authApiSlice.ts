@@ -1,4 +1,4 @@
-'use client'
+"use client";
 //@eslint-disable
 //@ts-ignore
 // роуты в приложеннии
@@ -22,17 +22,14 @@ interface CreateUserResponse {
   user: User;
 }
 
-
 interface Token {
   access?: string;
   refresh?: string;
 }
 
-
-
 const authApiSlice = apiSlice.injectEndpoints({
-    //@eslint-disable-next-line
-     
+  //@eslint-disable-next-line
+
   endpoints: (builder) => ({
     retrieveUser: builder.query<User, void>({
       query: () => "/users/me",
@@ -40,7 +37,7 @@ const authApiSlice = apiSlice.injectEndpoints({
     socialAutenticate: builder.mutation<CreateUserResponse, SocialAuthArgs>({
       query: ({ provider, state, code }) => ({
         url: `/o/${provider}/?state=${encodeURIComponent(
-          state
+          state,
         )}&code=${encodeURIComponent(code)}`,
         method: "POST",
         headers: {
@@ -61,7 +58,6 @@ const authApiSlice = apiSlice.injectEndpoints({
         url: "/jwt/create/",
         method: "POST",
         body: { email, password },
-        
       }),
     }),
 
@@ -80,13 +76,12 @@ const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     activation: builder.mutation({
-      query: ({uid, token}) => ({
+      query: ({ uid, token }) => ({
         url: "/users/activation",
         method: "POST",
         body: { uid, token },
       }),
     }),
-
   }),
 });
 

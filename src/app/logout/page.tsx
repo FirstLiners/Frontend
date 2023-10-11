@@ -5,16 +5,15 @@ import { useAppDispatch } from "@/redux/hooks";
 import { logout as SetLogout } from "@/redux/features/authSlice";
 import { useRouter } from "next/navigation";
 
-
 const Page: React.FC = () => {
   const dispatch = useAppDispatch();
   // in useEffect
-  const {push} = useRouter();
+  const { push } = useRouter();
   useEffect(() => {
     // clear token
     localStorage.removeItem("access_token");
     dispatch(SetLogout());
-    push('/login');
+    push("/login");
   }, [dispatch, push]);
 
   return (

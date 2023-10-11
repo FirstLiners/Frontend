@@ -6,7 +6,6 @@ import type {
 } from "@reduxjs/toolkit/query";
 import { setAuth, logout } from "../features/authSlice";
 import { Mutex } from "async-mutex";
- 
 
 // create a new mutex
 const mutex = new Mutex();
@@ -20,38 +19,38 @@ const baseQueryWithReauth: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   // wait until the mutex is available without locking it
-  await mutex.waitForUnlock()
-  let result = await baseQuery(args, api, extraOptions)
+  await mutex.waitForUnlock();
+  let result = await baseQuery(args, api, extraOptions);
   if (result.error && result.error.status === 401) {
     // checking whether the mutex is locked
     if (!mutex.isLocked()) {
-      const release = await mutex.acquire()
+      const release = await mutex.acquire();
       try {
         const refreshResult = await baseQuery(
-          '/users/token/',
+          "/users/token/",
           api,
-          extraOptions
-        )
+          extraOptions,
+        );
         if (refreshResult.data) {
-          api.dispatch(setAuth())
-         // localStorage.setItem("access_token", JSON.stringify(refreshResult.data.acces))
+          api.dispatch(setAuth());
+          // localStorage.setItem("access_token", JSON.stringify(refreshResult.data.acces))
           // retry the initial query
-          result = await baseQuery(args, api, extraOptions)
+          result = await baseQuery(args, api, extraOptions);
         } else {
-          api.dispatch(logout())
+          api.dispatch(logout());
         }
       } finally {
         // release must be called once the mutex should be released again.
-        release()
+        release();
       }
     } else {
       // wait until the mutex is available without locking it
-      await mutex.waitForUnlock()
-      result = await baseQuery(args, api, extraOptions)
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
     }
   }
-  return result
-}
+  return result;
+};
 
 export const apiSlice = createApi({
   reducerPath: "api",
