@@ -37,7 +37,7 @@ pnpm run dev
 
 Для запуска приложения необходим `Docker`. Для операционной системы Windows необходимо установить и активировать WSL2 (https://docs.docker.com/desktop/wsl/).
 
-## для работы Frontend требуется сначала запустить Backend (также информация о запуске доступна на странице https://github.com/FirstLiners/Backend) 
+## Для работы Frontend требуется сначала запустить Backend (также информация о запуске доступна на странице https://github.com/FirstLiners/Backend) 
 
 откройте два терминала, один для запуска Frontend, другой для запуска Backend
 перейдите в папку backend (FL-B FL-B в архиве релиза)
