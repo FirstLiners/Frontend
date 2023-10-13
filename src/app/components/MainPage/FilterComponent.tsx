@@ -20,7 +20,7 @@ interface FilterProps {
   filterItems: { label: string; checked: boolean }[];
   onFilterChange: (index: number, checked: boolean) => void;
   onFilterChangeAll: (
-    updatedFilters: { label: string; checked: boolean }[],
+    updatedFilters: { label: string; checked: boolean }[]
   ) => void;
 }
 
@@ -38,7 +38,7 @@ function BlockFilter({
       setSelectedItems((prevSelected) => [...prevSelected, index]);
     } else {
       setSelectedItems((prevSelected) =>
-        prevSelected.filter((itemIndex) => itemIndex !== index),
+        prevSelected.filter((itemIndex) => itemIndex !== index)
       );
     }
     onFilterChange(index, checked);
@@ -67,9 +67,10 @@ function BlockFilter({
   };
 
   // Фильтруем элементы по поисковому запросу
-  const filteredItems = filterItems.filter((item) =>
-    item.label.toLowerCase().includes(searchText.toLowerCase()),
-  );
+  const filteredItems =
+    filterItems?.filter((item) =>
+      item.label.toLowerCase().includes(searchText.toLowerCase())
+    ) || [];
 
   return (
     <DropdownMenu>
@@ -106,22 +107,25 @@ function BlockFilter({
 
         <DropdownMenuSeparator />
         <ScrollArea className="h-[200px] w-[190px] rounded-md border p-2">
-          {filteredItems.length === 0 ? (
+          {(filteredItems && filteredItems?.length === 0) ||
+          Object.values(filteredItems).length === 0 ? (
             // Если не найдено ни одного элемента, отображаем уведомление
             <div className="ml-7 text-xs">Ничего не найдено</div>
           ) : (
             // В противном случае, отображаем чекбоксы для найденных элементов
-            filteredItems.map((item, index) => (
-              <DropdownMenuCheckboxItem
-                key={index}
-                checked={selectedItems.includes(index)}
-                onCheckedChange={(checked) => {
-                  handleFilterChange(index, checked);
-                }}
-              >
-                {item.label}
-              </DropdownMenuCheckboxItem>
-            ))
+            filteredItems
+              .filter((item) => item !== undefined) // Filter out undefined items
+              .map((item, index) => (
+                <DropdownMenuCheckboxItem
+                  key={index}
+                  checked={selectedItems.includes(index)}
+                  onCheckedChange={(checked) => {
+                    handleFilterChange(index, checked);
+                  }}
+                >
+                  {item.label}
+                </DropdownMenuCheckboxItem>
+              ))
           )}
         </ScrollArea>
         <DropdownMenuSeparator />

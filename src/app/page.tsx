@@ -7,7 +7,7 @@ import NavButton from "./components/NavButton/Navbutton";
 import MainPage from "@/app/components/MainPage/MainPage";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
-import useStorage from "./hook";
+import useStorage from "./hooks/use-storage";
 
 export default function Home() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);

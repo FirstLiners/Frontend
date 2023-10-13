@@ -12,7 +12,7 @@ const myFont = localFont({
     {
       path: "../fonts/Gilroy-Regular.woff2",
       style: "normal",
-      weight: "600",
+      weight: "400",
     },
   ],
 });

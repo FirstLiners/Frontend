@@ -1,5 +1,5 @@
 {"data": [
-    {"store": "Lenta1", 
+    {"store": "Lenta 1", 
      "forecast_date": "2023-09-01",
      "forecast": {"sku": "sdf",
                   "sales_units": {"2023-09-01": 1,
@@ -9,7 +9,7 @@
                                   "2023-09-05": 0}
                  }
     },
-    {"store": "Lenta2",
+    {"store": "Lenta 2",
      "forecast_date": "2023-09-01",
      "forecast": {"sku": "sdf",
                   "sales_units": {"2023-09-01": 1,
