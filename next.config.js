@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env:{
+
+  },
     images: {
         domains: ['avatars.githubusercontent.com', 'avatars.mds.yandex.net'],
         remotePatterns: [
@@ -10,7 +13,7 @@ const nextConfig = {
                 port: '',
                 pathname: '/u/**',
             },
-            // yandex avatars 
+            // yandex avatars
             // все равно ошибка - яндекс скрывает внутренний домен картинок пользователей TODO найти правильный адрес
             {
                 protocol: 'https',

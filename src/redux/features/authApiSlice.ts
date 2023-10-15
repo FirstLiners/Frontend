@@ -46,6 +46,7 @@ const authApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    // the same as register for this app simplicity!
     login: builder.mutation({
       query: ({ email, password }) => ({
         url: "/users/token/",
@@ -53,11 +54,21 @@ const authApiSlice = apiSlice.injectEndpoints({
         body: { email, password },
       }),
     }),
+    // not using for now
     register: builder.mutation({
       query: ({ email, password }) => ({
         url: "/jwt/create/",
         method: "POST",
         body: { email, password },
+      }),
+    }),
+
+    // get refresh token
+    refresh: builder.mutation({
+      query: ({ refresh }) => ({
+        url: "/users/token/",
+        method: "POST",
+        body: { refresh },
       }),
     }),
 
@@ -70,7 +81,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 
     logout: builder.mutation({
       query: () => ({
-        url: "/logout/",
+        url: "/users/logout/",
         method: "POST",
       }),
     }),

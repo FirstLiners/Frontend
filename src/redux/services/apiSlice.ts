@@ -4,13 +4,17 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
-import { setAuth, logout } from "../features/authSlice";
+import { setAuth, setToken, logout } from "../features/authSlice";
 import { Mutex } from "async-mutex";
 
+interface TokenPayload {
+  access?: string;
+  refresh?: string;
+}
 // create a new mutex
 const mutex = new Mutex();
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:8000/api/v1",
+  baseUrl: `${process.env.NEXT_PUBLIC_BACKEND}/api/v1`,
   credentials: "include",
 });
 const baseQueryWithReauth: BaseQueryFn<
@@ -33,6 +37,12 @@ const baseQueryWithReauth: BaseQueryFn<
         );
         if (refreshResult.data) {
           api.dispatch(setAuth());
+          // take TokenPayload from refreshResult.data and dispatch setToken
+          if (refreshResult.data) {
+            console.log("refreshResult.data", refreshResult.data);
+            const tokenPayload = refreshResult.data as TokenPayload;
+            api.dispatch(setToken(tokenPayload));
+          }
           // localStorage.setItem("access_token", JSON.stringify(refreshResult.data.acces))
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);

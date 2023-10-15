@@ -116,7 +116,7 @@ const SimpleLineChart = () => {
           Прогноз спроса за 14 дней
         </p>
       </div>
-      <LineChart width={1560} height={454} data={data}>
+      <LineChart width={1280} height={454} data={data}>
         <CartesianGrid vertical={false} opacity="0.2" />
         <Legend />
         <XAxis

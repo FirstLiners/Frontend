@@ -9,24 +9,67 @@ import { useMockdata } from "@/app/hooks";
 type CheckedState = boolean;
 
 type FilterItem = {
-  id?: number;
-  name?: string;
   label?: string;
+  value?: string;
   checked: CheckedState;
 };
 
 export default function MainPage() {
   const [filterItems1, setFilterItems1] = useMockdata("store");
-  const [filterItems2, setFilterItems2] = useMockdata("group_id");
-  const [filterItems3, setFilterItems3] = useMockdata("cat_id");
-  const [filterItems4, setFilterItems4] = useMockdata("subcat_id");
-  const [filterItems5, setFilterItems5] = useMockdata("sku_id");
+  const [filterItems2, setFilterItems2] = useMockdata("group");
+  const [filterItems3, setFilterItems3] = useMockdata("category");
+  const [filterItems4, setFilterItems4] = useMockdata("subcategory");
+  const [filterItems5, setFilterItems5] = useMockdata("sku");
   const [filterItems6, setFilterItems6] = useMockdata("uom");
+
+  function onOptionsApply() {
+    console.log(
+      `ТК: ${JSON.stringify(filterItems1)} \n Группа: ${JSON.stringify(
+        filterItems2,
+      )} \n Категория: ${JSON.stringify(
+        filterItems3,
+      )} \n Подкатегория: ${JSON.stringify(
+        filterItems4,
+      )} \n Товар: ${JSON.stringify(
+        filterItems5,
+      )} \n Ед.измерения\\Руб: ${JSON.stringify(filterItems6)}`,
+    );
+    // create params for request only with checked items
+    const params = {
+      store:
+        filterItems1
+          ?.filter((item: FilterItem) => item.checked)
+          .map((item: FilterItem): string => item.label!) ?? [],
+      group:
+        filterItems2
+          ?.filter((item: FilterItem) => item.checked)
+          .map((item: FilterItem): string => item.label!) ?? [],
+      category:
+        filterItems3
+          ?.filter((item: FilterItem) => item.checked)
+          .map((item: FilterItem): string => item.label!) ?? [],
+      subcategory:
+        filterItems4
+          ?.filter((item: FilterItem) => item.checked)
+          .map((item: FilterItem): string => item.label!) ?? [],
+      sku:
+        filterItems5
+          ?.filter((item: FilterItem) => item.checked)
+          .map((item: FilterItem): string => item.label!) ?? [],
+      uom:
+        filterItems6
+          ?.filter((item: FilterItem) => item.checked)
+          .map((item: FilterItem): string => item.label!) ?? [],
+    };
+
+    console.log(`результат по кнопке аплай: ${JSON.stringify(params)} \n `);
+  }
 
   // Функция для обновления состояния фильтра 1
   const handleFilterChange1 = (index: number, checked: CheckedState) => {
     const updatedFilters = filterItems1 ? [...filterItems1] : [];
-    updatedFilters[index].checked = checked;
+    updatedFilters[index].checked = checked ?? false;
+
     setFilterItems1(updatedFilters);
   };
 
@@ -67,42 +110,60 @@ export default function MainPage() {
 
   // Функция для обновления состояния всех чекбоксов в фильтре 1
   const handleFilterChangeAll1 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: {
+      label: string;
+      checked: CheckedState;
+    }[],
   ) => {
     setFilterItems1(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 2
   const handleFilterChangeAll2 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: {
+      label: string;
+      checked: CheckedState;
+    }[],
   ) => {
     setFilterItems2(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 3
   const handleFilterChangeAll3 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: {
+      label: string;
+      checked: CheckedState;
+    }[],
   ) => {
     setFilterItems3(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 4
   const handleFilterChangeAll4 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: {
+      label: string;
+      checked: CheckedState;
+    }[],
   ) => {
     setFilterItems4(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 5
   const handleFilterChangeAll5 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: {
+      label: string;
+      checked: CheckedState;
+    }[],
   ) => {
     setFilterItems5(updatedFilters);
   };
 
   // Функция для обновления состояния всех чекбоксов в фильтре 6
   const handleFilterChangeAll6 = (
-    updatedFilters: { label: string; checked: CheckedState }[]
+    updatedFilters: {
+      label: string;
+      checked: CheckedState;
+    }[],
   ) => {
     setFilterItems6(updatedFilters);
   };
@@ -178,7 +239,9 @@ export default function MainPage() {
           </div>
         </div>
         <div className={styles.block__button}>
-          <Button variant="firstly">Применить</Button>
+          <Button variant="firstly" onClick={() => onOptionsApply()}>
+            Применить
+          </Button>
           <Button variant="secondary">Сбросить</Button>
         </div>
       </div>

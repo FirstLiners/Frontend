@@ -1,7 +1,7 @@
 "use client";
 // import { options } from "./api/auth/[...nextauth]/options";
 import styles from "./page.module.css";
-import Sceleton from "./components/Sceleton/Sceleton";
+// import Sceleton from "./components/Sceleton/Sceleton";
 import React, { useEffect, useState } from "react";
 import NavButton from "./components/NavButton/Navbutton";
 import MainPage from "@/app/components/MainPage/MainPage";
@@ -11,28 +11,26 @@ import useStorage from "./hooks/use-storage";
 
 export default function Home() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { token } = useAppSelector((state) => state.auth);
   // const isLocalStorage = localStorage.getItem("access_token") !== "" && localStorage.getItem("access_token") !== null && localStorage.getItem("access_token") !== undefined;
   const [myValue] = useStorage("access_token");
   const isLocalStorage =
     myValue !== "" && myValue !== null && myValue !== undefined;
 
   const { push } = useRouter();
-
+  // TODO заменить на token из редакса
   useEffect(() => {
-    !isLocalStorage && !isAuthenticated && push("/login");
-  }, [isLocalStorage, push]);
+    console.log("token /", token);
+    console.log("backend", process.env.NEXT_PUBLIC_BACKEND);
+    // console.log("MyValue", myValue);
+    (!token?.access || !myValue) && !isAuthenticated && push("/login");
+  }, [isLocalStorage, token, push, token]);
 
   return (
     <>
       {isAuthenticated ? (
         // если залогинен, то показываем скелетон (где загружаются данные и устанавливаются в стор)
         <>
-          {
-            //"sales",  "stores", "forecasts" очень большой объем данных, поэтому ... не показываем
-            ["skus"].map((element) => (
-              <Sceleton key={element} apiEndpoint={element} />
-            ))
-          }
           <MainPage />
         </>
       ) : // if not logged in, show login button with link to login page

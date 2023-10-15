@@ -2,10 +2,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface ForecastsItem {
-  st_id: string;
-  pr_sku_id: string;
+  store: string;
+  group: string;
+  category: string;
+  subcategory: string;
+  sku: string;
   date: string;
-  target: number;
+  forecast_data: number;
+  uom: string;
+  [key: string]: any;
 }
 
 interface ForecastsState {
@@ -31,7 +36,9 @@ const forecastsSlice = createSlice({
       state.forecastsItems = [];
     },
     setJsonData: (state, action) => {
-      return action.payload;
+      if (action) {
+        state.forecastsItems = action.payload;
+      }
     },
   },
 });

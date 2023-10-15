@@ -8,7 +8,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "../../redux/features/authApiSlice";
-import { setAuth, finishInitialLoad } from "../../redux/features/authSlice";
+import {
+  setAuth,
+  setToken,
+  finishInitialLoad,
+} from "../../redux/features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { Eye, EyeOff } from "react-feather";
 import Image from "next/image";
@@ -17,54 +21,56 @@ import useStorage from "../hooks/use-storage";
 
 const Login = () => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const { token } = useAppSelector((state) => state.auth);
+  const [myValue, setMyValue] = useStorage("access_token");
 
   const dispatch = useAppDispatch();
   const router = useRouter();
-
-  interface Token {
-    access?: string;
-    refresh?: string;
-  }
-
-  const [passwordError, setPasswordError] = React.useState(""); // Состояние для ошибки пароля
-
   const [login, { isLoading, error }] = useLoginMutation();
+
+  // форма логина
   const [email, setEmail] = React.useState("");
+  const [passwordError, setPasswordError] = React.useState(""); // Состояние для ошибки пароля
   const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     console.log("with : ", email, password);
 
-    login({ email, password })
-      .unwrap()
-      .then(({ access }) => {
-        console.log("access_token", access);
-        //   localStorage.setItem("access_token", JSON.stringify(access));
-        setAccessToken(access);
-        dispatch(setAuth());
-        dispatch(finishInitialLoad());
-        if (typeof window !== "undefined") {
-          router.push("/");
-        }
-      })
-      .catch((error) => {
-        if (error.status === 401) {
-          setPasswordError("Неверный пароль или логин");
-        } else {
-          // Обработка других возможных ошибок
-        }
-      });
+    setTimeout(() => {
+      login({ email, password })
+        .unwrap()
+        .then(({ access, refresh }) => {
+          console.log("access_token", access, refresh);
+          typeof setMyValue === "function" &&
+            myValue !== null &&
+            setMyValue(access);
+          dispatch(setToken({ access: access, refresh: refresh }));
+          dispatch(setAuth());
+          //   dispatch(finishInitialLoad());
+          if (typeof window !== "undefined") {
+            router.push("/");
+          }
+        })
+        .catch((error) => {
+          if (error.status === 401) {
+            setPasswordError("Неверный пароль или логин");
+          } else {
+            // Обработка других возможных ошибок
+          }
+        });
+    }, 1000);
   };
-
-  const [showPassword, setShowPassword] = React.useState(false);
 
   const errstyle = "flex rounded-lg flex-colum border-[#EF4545]";
   const okstyle = "w-[340px] h-[56px] text-[16px]";
-  if (isAuthenticated) {
-    router.replace("/");
-  }
+
+  React.useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated);
+    console.log("login token", token);
+    isAuthenticated && router.replace("/");
+  }, [isAuthenticated, router, token]);
 
   return (
     <main
