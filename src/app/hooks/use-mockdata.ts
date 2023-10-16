@@ -1,5 +1,6 @@
 // this hook must take data that consist of nested key: value  from the mockdata forecasts.json file and return return [value, setValue] for the given key argument
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { setJsonData, clearForecasts } from "@/redux/features/forecastsSlice";
 import { useState, useEffect } from "react";
 // теперь данные фетчатся с бэкенда TODO: rename module to use-fetchdata
 import axios from "axios";
@@ -64,6 +65,10 @@ function returnOptions(
   key: string,
   input: Forecasts["data"],
 ): { label: string; checked: boolean }[] {
+  // skip the case key==="forecast"
+  if (key === "forecast") {
+    return [];
+  }
   if (Array.isArray(input)) {
     // need to get unique key: values , so transform input array of objects  to a set of objects
     const unique = new Set(input);
@@ -100,12 +105,14 @@ export default function useMockdata(
   >(null);
 
   const { token } = useAppSelector((state) => state.auth);
-
+  const dispatch = useAppDispatch();
+  const { forecastsItems } = useAppSelector((state) => state.forecasts);
   useEffect(() => {
     fetchData(token, key).then((datum) => {
       // console.log(forecasts.data); // seems to be endless rerender, why?
       // @ts-ignore
       const options = returnOptions(key, datum);
+      key === "forecast" && dispatch(setJsonData(datum));
       options !== null && setValue(options ?? []);
     });
   }, [key]);
