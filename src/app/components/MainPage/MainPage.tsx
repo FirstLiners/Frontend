@@ -260,7 +260,7 @@ export default function MainPage() {
       </div>
       {paramsApplyed.applyed && (
         <div>
-          {console.log(`chart: ${paramsApplyed} \n `)}
+          {/* {console.log(`chart: ${paramsApplyed} \n `)} */}
           <SimpleLineChart params={paramsApplyed} />
         </div>
       )}

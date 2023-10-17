@@ -25,23 +25,37 @@ interface SimpleLineChartProps {
   params: paramsApplyed;
 }
 
+interface ForecastData {
+  name: string;
+  [key: string]: number | string;
+}
+
 const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ params }) => {
   // @ts-ignore
 
   const { forecastsItems } = useAppSelector((state) => state.forecasts);
-  const linechartData = Object.entries(
-    forecastsItems.reduce((acc, { date, sku, forecast_data }) => {
-      if (!acc[date]) {
-        acc[date] = { name: date };
-      }
-      acc[date][`line${Object.keys(acc[date]).length - 1}`] = forecast_data;
-      // acc[date][sku] = forecast_data;
-      return acc;
-    }, {}),
-  ).map(([name, data]) => ({
-    name,
-    ...data,
-  }));
+  const linechartData = Object.values(
+    Object.entries(
+      forecastsItems
+        .filter(({ sku }) => params.sku.includes(sku))
+        .reduce(
+          (acc, { date, forecast_data }) => {
+            if (!acc[date]) {
+              acc[date] = { name: date };
+            }
+            acc[date][`line${Object.keys(acc[date]).length - 1}`] =
+              forecast_data;
+            return acc;
+          },
+          {} as Record<string, ForecastData>,
+        ),
+    ).map(([name, data]) => ({
+      // eslint-disable-next-line
+      // @ts-ignore
+      name,
+      ...data,
+    })),
+  );
 
   const lines = Object.keys(linechartData[0])
     .filter((key) => key.startsWith("line"))
