@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { setJsonData, clearForecasts } from "@/redux/features/forecastsSlice";
 import {
   LineChart,
   Line,
@@ -10,51 +12,54 @@ import {
   Legend,
 } from "recharts";
 
-const dt = [
-  {
-    store: "Lenta_1",
-    group: "by_weight",
-    category: "Kulinaria",
-    subcategory: "salaty",
-    sku: "olivier",
-    date: "2023-10-14",
-    forecast_data: 100,
-    uom: "10",
-  },
-  {
-    store: "Lenta_1",
-    group: "by_weight",
-    category: "Kulinaria",
-    subcategory: "pirojki",
-    sku: "pirojok_s_kapustoi",
-    date: "2023-10-14",
-    forecast_data: 10,
-    uom: "1",
-  },
-  {
-    store: "Lenta_1",
-    group: "by_weight",
-    category: "Kulinaria",
-    subcategory: "pirojki",
-    sku: "pirojok_s_kapustoi",
-    date: "2023-10-15",
-    forecast_data: 101,
-    uom: "1",
-  },
-];
+interface paramsApplyed {
+  applyed: boolean;
+  store: string[];
+  group: string[];
+  category: string[];
+  subcategory: string[];
+  sku: string[];
+  uom: string[];
+}
+interface SimpleLineChartProps {
+  params: paramsApplyed;
+}
 
-const SimpleLineChart = ({ data }) => {
+const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ params }) => {
   // @ts-ignore
 
-  // @ts-ignore
+  const { forecastsItems } = useAppSelector((state) => state.forecasts);
+  const linechartData = Object.entries(
+    forecastsItems.reduce((acc, { date, sku, forecast_data }) => {
+      if (!acc[date]) {
+        acc[date] = { name: date };
+      }
+      acc[date][`line${Object.keys(acc[date]).length - 1}`] = forecast_data;
+      // acc[date][sku] = forecast_data;
+      return acc;
+    }, {}),
+  ).map(([name, data]) => ({
+    name,
+    ...data,
+  }));
 
-  // @ts-ignore
+  const lines = Object.keys(linechartData[0])
+    .filter((key) => key.startsWith("line"))
+    .map((key, index) => (
+      <Line
+        key={key}
+        type="monotone"
+        dataKey={key}
+        stroke={`#${(index + 1) * 111111}`}
+        activeDot={{ r: 8 }}
+      />
+    ));
 
   return (
     <LineChart
       width={1500}
       height={500}
-      data={data}
+      data={linechartData}
       margin={{
         top: 5,
         right: 30,
@@ -67,13 +72,7 @@ const SimpleLineChart = ({ data }) => {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Line
-        type="monotone"
-        dataKey="line1"
-        stroke="#8884d8"
-        activeDot={{ r: 8 }}
-      />
-      <Line type="monotone" dataKey="line0" stroke="#82ca9d" />
+      {lines}
     </LineChart>
   );
 };

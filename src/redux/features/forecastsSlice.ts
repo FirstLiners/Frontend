@@ -13,13 +13,32 @@ interface ForecastsItem {
   [key: string]: any;
 }
 
+interface paramsApplyed {
+  applyed: boolean;
+  store: string[];
+  group: string[];
+  category: string[];
+  subcategory: string[];
+  sku: string[];
+  uom: string[];
+}
+
 interface ForecastsState {
   forecastsItems: ForecastsItem[];
+  paramsApplyed: paramsApplyed;
 }
 
 const initialState: ForecastsState = {
   forecastsItems: [],
-  // convert date from string to Date object
+  paramsApplyed: {
+    applyed: false,
+    store: [],
+    group: [],
+    category: [],
+    subcategory: [],
+    sku: [],
+    uom: [],
+  },
 };
 
 // function convertData(state: ForecastsState) {
@@ -40,11 +59,25 @@ const forecastsSlice = createSlice({
         state.forecastsItems = action.payload;
       }
     },
+    setParamsApplyed: (state, action) => {
+      if (action) {
+        state.paramsApplyed = action.payload;
+        state.paramsApplyed.applyed = true;
+      }
+    },
+    unsetParamsApplyed: (state) => {
+      state.paramsApplyed = initialState.paramsApplyed;
+    },
   },
 });
 
-export const { clearForecasts, setJsonData } = forecastsSlice.actions;
+export const {
+  clearForecasts,
+  setJsonData,
+  setParamsApplyed,
+  unsetParamsApplyed,
+} = forecastsSlice.actions;
 // Извлекаем объект с создателями и редуктор
-const { actions, reducer: forecastReducer } = forecastsSlice;
+const { reducer: forecastReducer } = forecastsSlice;
 
 export default forecastReducer;

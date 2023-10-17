@@ -13,6 +13,10 @@ import {
   setToken,
   finishInitialLoad,
 } from "../../redux/features/authSlice";
+import {
+  unsetParamsApplyed,
+  clearForecasts,
+} from "@/redux/features/forecastsSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { Eye, EyeOff } from "react-feather";
 import Image from "next/image";
@@ -48,6 +52,8 @@ const Login = () => {
             setMyValue(access);
           dispatch(setToken({ access: access, refresh: refresh }));
           dispatch(setAuth());
+          dispatch(clearForecasts());
+          dispatch(unsetParamsApplyed());
           //   dispatch(finishInitialLoad());
           if (typeof window !== "undefined") {
             router.push("/");

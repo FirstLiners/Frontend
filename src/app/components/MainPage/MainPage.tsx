@@ -4,7 +4,12 @@ import styles from "./MainPage.module.css";
 import BlockFilter from "./FilterComponent";
 import SimpleLineChart from "./ExampleLineChart";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { setJsonData, clearForecasts } from "@/redux/features/forecastsSlice";
+import {
+  setJsonData,
+  clearForecasts,
+  setParamsApplyed,
+  unsetParamsApplyed,
+} from "@/redux/features/forecastsSlice";
 import { Button } from "@/components/ui/button";
 import { useMockdata } from "@/app/hooks";
 
@@ -18,20 +23,7 @@ type FilterItem = {
 
 export default function MainPage() {
   const dispatch = useAppDispatch();
-  const { forecastsItems } = useAppSelector((state) => state.forecasts);
-  const linechartData = Object.entries(
-    forecastsItems.reduce((acc, { date, sku, forecast_data }) => {
-      if (!acc[date]) {
-        acc[date] = { name: date };
-      }
-      acc[date][`line${Object.keys(acc[date]).length - 1}`] = forecast_data;
-      // acc[date][sku] = forecast_data;
-      return acc;
-    }, {}),
-  ).map(([name, data]) => ({
-    name,
-    ...data,
-  }));
+  const { paramsApplyed } = useAppSelector((state) => state.forecasts) || [];
 
   useMockdata("forecast");
   const [filterItems1, setFilterItems1] = useMockdata("store");
@@ -82,7 +74,8 @@ export default function MainPage() {
     };
 
     console.log(`результат по кнопке аплай: ${JSON.stringify(params)} \n `);
-    console.log(`forecasts: ${JSON.stringify(forecastsItems)} \n `);
+    dispatch(unsetParamsApplyed());
+    dispatch(setParamsApplyed(params));
   }
 
   // Функция для обновления состояния фильтра 1
@@ -265,9 +258,12 @@ export default function MainPage() {
           <Button variant="secondary">Сбросить</Button>
         </div>
       </div>
-      <div></div>
-      {console.log(`chart: ${linechartData} \n `)}
-      <SimpleLineChart data={linechartData as unknown as string} />
+      {paramsApplyed.applyed && (
+        <div>
+          {console.log(`chart: ${paramsApplyed} \n `)}
+          <SimpleLineChart params={paramsApplyed} />
+        </div>
+      )}
     </section>
   );
 }
