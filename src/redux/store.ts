@@ -4,19 +4,8 @@ import { apiSlice } from "./services/apiSlice";
 import { useAppSelector } from "./hooks";
 import Reducer from "./features/authSlice";
 import reducer, { decrement, incrementByAmount } from "./features/counterSlice";
-import forecastReducer, {
-  setJsonData as setJsonForecasts,
-  clearForecasts,
-} from "./features/forecastsSlice";
-import storesReducer, {
-  setJsonData as setJsonStores,
-  clearStores,
-} from "./features/storesSlice";
-import skuReducer, {
-  setJsonData,
-  clearSku,
-  calculateTotals,
-} from "./features/skuSlice";
+import statisticReducer from "./features/statisticSlice";
+import forecastReducer from "./features/forecastsSlice";
 
 export const makeStore = () =>
   configureStore({
@@ -25,8 +14,7 @@ export const makeStore = () =>
       auth: Reducer,
       counter: reducer,
       forecasts: forecastReducer,
-      stores: storesReducer,
-      skus: skuReducer,
+      statistics: statisticReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),

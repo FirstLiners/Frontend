@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -20,7 +19,7 @@ interface FilterProps {
   filterItems: { label: string; checked: boolean }[];
   onFilterChange: (index: number, checked: boolean) => void;
   onFilterChangeAll: (
-    updatedFilters: { label: string; checked: boolean }[]
+    updatedFilters: { label: string; checked: boolean }[],
   ) => void;
 }
 
@@ -38,7 +37,7 @@ function BlockFilter({
       setSelectedItems((prevSelected) => [...prevSelected, index]);
     } else {
       setSelectedItems((prevSelected) =>
-        prevSelected.filter((itemIndex) => itemIndex !== index)
+        prevSelected.filter((itemIndex) => itemIndex !== index),
       );
     }
     onFilterChange(index, checked);
@@ -69,7 +68,7 @@ function BlockFilter({
   // Фильтруем элементы по поисковому запросу
   const filteredItems =
     filterItems?.filter((item) =>
-      item.label.toLowerCase().includes(searchText.toLowerCase())
+      item.label.toLowerCase().includes(searchText.toLowerCase()),
     ) || [];
 
   return (

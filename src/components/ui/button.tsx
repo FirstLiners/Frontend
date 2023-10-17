@@ -24,7 +24,8 @@ const buttonVariants = cva(
           "bg-white text-[#003C96] justify-center rounded-lg w-[88px] border h-[32px] text-xs hover:bg-secondary/80",
         dropdownMenuButton3:
           "bg-white text-[#003C96] ml-2 justify-center rounded-md w-[70px] border h-[40px] text-sm hover:bg-secondary/80",
-        exel: "bg-white text-[#003C96] justify-center rounded-xl border w-[170px] hover:bg-secondary/80",
+        excel:
+          "bg-white text-[#003C96] justify-center rounded-xl border w-[170px] hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },

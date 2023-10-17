@@ -1,6 +1,7 @@
 // this hook must take data that consist of nested key: value  from the mockdata forecasts.json file and return return [value, setValue] for the given key argument
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { setJsonData, clearForecasts } from "@/redux/features/forecastsSlice";
+import { setStatisticData } from "@/redux/features/statisticSlice";
 import { useState, useEffect } from "react";
 // теперь данные фетчатся с бэкенда TODO: rename module to use-fetchdata
 import axios from "axios";
@@ -16,6 +17,25 @@ type Forecast = {
   uom: string;
   [key: string]: any;
 };
+
+type Statistics = {
+  store: string;
+  group: string;
+  category: string;
+  subcategory: string;
+  sku: string;
+  uom: string;
+  real_sale: number;
+  forecast: number;
+  difference: number;
+  period: number;
+  wape: number;
+  [key: string]: any;
+};
+
+interface Statistics {
+  data: Statistics[];
+}
 
 interface Forecasts {
   data: Forecast[];
@@ -37,43 +57,58 @@ async function fetchForecasts(
   const backend = process.env.NEXT_PUBLIC_BACKEND as string;
   // console.log(`Bearer ${token?.access}`);
   const response = await axios.get(`${backend}/api/v1/forecasts`, config);
-  console.log(JSON.stringify(response.data));
+  // console.log(JSON.stringify(response.data));
   return response.data as unknown as Forecasts;
+}
+
+async function fetchStatistics(
+  token: Token | null | undefined,
+): Promise<Statistics> {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token?.access}`,
+    },
+  };
+  const backend = process.env.NEXT_PUBLIC_BACKEND as string;
+  const response = await axios.get(`${backend}/api/v1/statistics`, config);
+
+  return response.data as unknown as Statistics;
 }
 
 async function fetchData(
   // TODO  переделать многоразовый фетч на один раз
   token: Token | null | undefined,
   point: string,
-): Promise<Forecasts | string[]> {
-  if (
-    point === "forecast" ||
-    point === "store" ||
-    point === "group" ||
-    point === "category" ||
-    point === "subcategory" ||
-    point === "sku" ||
-    point === "uom"
-  ) {
-    return fetchForecasts(token);
-  } else {
-    throw new Error(`Invalid point: ${point}`);
+): Promise<Forecasts | Statistics | string[]> {
+  switch (point) {
+    case "forecast":
+    case "store":
+    case "group":
+    case "category":
+    case "subcategory":
+    case "sku":
+    case "uom":
+      return fetchForecasts(token);
+    case "statistics":
+      return fetchStatistics(token);
+    default:
+      throw new Error(`Invalid point: ${point}`);
   }
 }
 
 function returnOptions(
   key: string,
-  input: Forecasts["data"],
+  input: Forecasts["data"] | Statistics["data"],
 ): { label: string; checked: boolean }[] {
   // skip the case key==="forecast"
-  if (key === "forecast") {
+  if (key === "forecast" || key === "statistics") {
     return [];
   }
   if (Array.isArray(input)) {
     // need to get unique key: values , so transform input array of objects  to a set of objects
     const unique = new Set(input);
     const values: { label: string; checked: boolean }[] = [];
-    Array.from(unique).forEach((obj: Forecast) => {
+    Array.from(unique).forEach((obj: Forecast | Statistics) => {
       // force label to be a string
       // before assign to label do check if it is unique value, not assigned before
       const label = obj[key].toString();
@@ -104,18 +139,22 @@ export default function useMockdata(
     { label: string; checked: boolean }[] | null
   >(null);
 
-  const { token } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const { token } = useAppSelector((state) => state.auth);
   const { forecastsItems } = useAppSelector((state) => state.forecasts);
+  const { StatisticsItems } = useAppSelector((state) => state.statistics);
   useEffect(() => {
     fetchData(token, key).then((datum) => {
       // console.log(forecasts.data); // seems to be endless rerender, why?
       // @ts-ignore
-      const options = returnOptions(key, datum);
       key === "forecast" && dispatch(setJsonData(datum));
+      key === "statistics" &&
+        typeof setStatisticData === "function" &&
+        dispatch(setStatisticData(datum));
+      const options = returnOptions(key, datum);
       options !== null && setValue(options ?? []);
     });
-  }, [key]);
+  }, [key, token, dispatch]);
 
   return [value, setValue];
 }

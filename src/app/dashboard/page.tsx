@@ -13,9 +13,11 @@ type CheckedState = boolean;
 export default function MainPage() {
   const { push } = useRouter();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+
   if (typeof window !== "undefined" && !isAuthenticated) {
     push("/login");
   }
+
   const [filterItems1, setFilterItems1] = useState([
     { label: "Яблоко", checked: false },
     { label: "Машина", checked: false },
@@ -74,6 +76,18 @@ export default function MainPage() {
     { label: "Фильтр 2", checked: false },
     // Добавьте другие фильтры и их состояния по вашему усмотрению
   ]);
+
+  const hasChecked =
+    [
+      filterItems1,
+      filterItems2,
+      filterItems3,
+      filterItems4,
+      filterItems5,
+      filterItems6,
+    ].some(
+      (filterItems) => filterItems && filterItems.some((item) => item.checked),
+    ) || false;
 
   // Функция для обновления состояния фильтра 1
   const handleFilterChange1 = (index: number, checked: CheckedState) => {
@@ -230,12 +244,21 @@ export default function MainPage() {
           </div>
         </div>
         <div className={styles.block__button}>
-          <Button variant="firstly">Применить</Button>
-          <Button variant="secondary">Сбросить</Button>
+          <Button disabled={!hasChecked} variant="firstly">
+            Применить
+          </Button>
+          <Button disabled={!hasChecked} variant="secondary">
+            Сбросить
+          </Button>
         </div>
       </div>
       <div className="flex justify-end mb-[10px]">
-        <Button variant="exel" size="tpr3" className="h-[40px]">
+        <Button
+          disabled={!hasChecked}
+          variant="excel"
+          size="tpr3"
+          className="h-[40px]"
+        >
           <Image
             src={Excel}
             alt="Логотип"

@@ -3,21 +3,33 @@ import React, { useEffect, useState } from "react";
 import styles from "../components/MainPage/MainPage.module.css";
 import BlockFilter from "../components/MainPage/FilterComponent";
 import DasTable2 from "./DashboardTable2";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Excel from "../shared/excel.svg";
 import SimpleBarChart from "./SimpleBarChart";
-import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import {
+  setJsonData,
+  clearStatistics,
+  setParamsApplyed,
+  unsetParamsApplyed,
+} from "@/redux/features/statisticSlice";
+import { Button } from "@/components/ui/button";
+import { useMockdata } from "@/app/hooks";
 
 type CheckedState = boolean;
 
-export default function MainPage() {
+export default function StatisticPage() {
   const { push } = useRouter();
+  const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { StatisticsItems } = useAppSelector((state) => state.statistics) || [];
+  const { paramsApplyed } = useAppSelector((state) => state.statistics) || [];
+
+  useMockdata("statistics");
 
   useEffect(() => {
-    isAuthenticated && push("/login");
+    !isAuthenticated && push("/login");
   }, [isAuthenticated, push]);
 
   const [filterItems1, setFilterItems1] = useState([
@@ -78,6 +90,18 @@ export default function MainPage() {
     { label: "Фильтр 2", checked: false },
     // Добавьте другие фильтры и их состояния по вашему усмотрению
   ]);
+
+  const hasChecked =
+    [
+      filterItems1,
+      filterItems2,
+      filterItems3,
+      filterItems4,
+      filterItems5,
+      filterItems6,
+    ].some(
+      (filterItems) => filterItems && filterItems.some((item) => item.checked),
+    ) || false;
 
   // Функция для обновления состояния фильтра 1
   const handleFilterChange1 = (index: number, checked: CheckedState) => {
@@ -234,8 +258,12 @@ export default function MainPage() {
           </div>
         </div>
         <div className={styles.block__button}>
-          <Button variant="firstly">Применить</Button>
-          <Button variant="secondary">Сбросить</Button>
+          <Button disabled={!hasChecked} variant="firstly">
+            Применить
+          </Button>
+          <Button disabled={!hasChecked} variant="secondary">
+            Сбросить
+          </Button>
         </div>
       </div>
       <div className="flex justify-between mb-[10px]">
@@ -257,7 +285,12 @@ export default function MainPage() {
             </Button>
           </div>
         </div>
-        <Button variant="exel" size="tpr3" className="h-[40px]">
+        <Button
+          disabled={!hasChecked}
+          variant="excel"
+          size="tpr3"
+          className="h-[40px]"
+        >
           <Image
             src={Excel}
             alt="Логотип"

@@ -33,6 +33,18 @@ export default function MainPage() {
   const [filterItems5, setFilterItems5] = useMockdata("sku");
   const [filterItems6, setFilterItems6] = useMockdata("uom");
 
+  const hasChecked =
+    [
+      filterItems1,
+      filterItems2,
+      filterItems3,
+      filterItems4,
+      filterItems5,
+      filterItems6,
+    ].some(
+      (filterItems) => filterItems && filterItems.some((item) => item.checked),
+    ) || false;
+
   function onOptionsApply() {
     console.log(
       `ТК: ${JSON.stringify(filterItems1)} \n Группа: ${JSON.stringify(
@@ -252,10 +264,16 @@ export default function MainPage() {
           </div>
         </div>
         <div className={styles.block__button}>
-          <Button variant="firstly" onClick={() => onOptionsApply()}>
+          <Button
+            disabled={!hasChecked}
+            variant="firstly"
+            onClick={() => onOptionsApply()}
+          >
             Применить
           </Button>
-          <Button variant="secondary">Сбросить</Button>
+          <Button disabled={!hasChecked} variant="secondary">
+            Сбросить
+          </Button>
         </div>
       </div>
       {paramsApplyed.applyed && (
