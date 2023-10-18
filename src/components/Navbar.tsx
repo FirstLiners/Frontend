@@ -2,7 +2,7 @@
 import styles from "./Navbar.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "../shared/lenta_logo.svg";
+import Logo from "@/shared/lenta_logo.svg";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout as SetLogout } from "@/redux/features/authSlice";
 import { useEffect } from "react";

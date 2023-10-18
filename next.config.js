@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env:{
-
-  },
+    reactStrictMode: true,
     images: {
         domains: ['avatars.githubusercontent.com', 'avatars.mds.yandex.net'],
         remotePatterns: [

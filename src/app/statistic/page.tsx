@@ -1,21 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import styles from "../components/MainPage/MainPage.module.css";
-import BlockFilter from "../components/MainPage/FilterComponent";
-import DasTable2 from "./DashboardTable2";
+import styles from "@/components/MainPage/MainPage.module.css";
+import BlockFilter from "@/components/MainPage/FilterComponent";
+import DasTable2 from "@/components/DashboardTable2";
 import Image from "next/image";
-import Excel from "../shared/excel.svg";
-import SimpleBarChart from "./SimpleBarChart";
+import Excel from "@/shared/excel.svg";
+import SimpleBarChart from "@/components/SimpleBarChart";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import {
-  setJsonData,
+  setStatisticData,
   clearStatistics,
   setParamsApplyed,
   unsetParamsApplyed,
 } from "@/redux/features/statisticSlice";
 import { Button } from "@/components/ui/button";
-import { useMockdata } from "@/app/hooks";
+import { useMockdata } from "@/hooks";
 
 type CheckedState = boolean;
 

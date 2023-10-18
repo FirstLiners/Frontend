@@ -3,11 +3,10 @@
 import styles from "./page.module.css";
 // import Sceleton from "./components/Sceleton/Sceleton";
 import React, { useEffect, useState } from "react";
-import NavButton from "./components/NavButton/Navbutton";
-import MainPage from "@/app/components/MainPage/MainPage";
+import MainPage from "@/components/MainPage/MainPage";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
-import useStorage from "./hooks/use-storage";
+import useStorage from "@/hooks/use-storage";
 
 export default function Home() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);

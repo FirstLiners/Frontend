@@ -17,11 +17,11 @@ import {
   unsetParamsApplyed,
   clearForecasts,
 } from "@/redux/features/forecastsSlice";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Eye, EyeOff } from "react-feather";
 import Image from "next/image";
-import Logo from "../shared/lenta_logo.svg";
-import useStorage from "../hooks/use-storage";
+import Logo from "@/shared/lenta_logo.svg";
+import useStorage from "@/hooks/use-storage";
 
 const Login = () => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);

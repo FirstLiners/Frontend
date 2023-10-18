@@ -1,9 +1,8 @@
 "use client";
 import styles from "./sceleton.module.css";
-import React, { Fragment, use, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setJsonData as setStores } from "@/redux/features/storesSlice";
-import { setJsonData as setSkus } from "@/redux/features/skuSlice";
+
 import { setJsonData as setForecasts } from "@/redux/features/forecastsSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -34,13 +33,6 @@ export default function Sceleton({
   const { forecastsItems: dataForecasts } = useAppSelector(
     (state) => state.forecasts,
   );
-  const { storeItems: dataStores } = useAppSelector((state) => state.stores);
-  const { skuItems: dataSkus } = useAppSelector((state) => state.skus);
-
-  const [dataSKUS, setDataSKUS] = useState<Data>(); //is () or ({}) is better
-  const [dataSALES, setDataSALES] = useState<Data>();
-  const [dataFORECASTS, setDataFORECASTS] = useState<Data>();
-  const [dataSTORES, setDataSTORES] = useState<Data>();
 
   const [isSuccessData, setSuccessData] = useState(false);
 
@@ -80,19 +72,13 @@ export default function Sceleton({
         .then((data) => {
           switch (apiEndpoint) {
             case "skus":
-              setDataSKUS(data);
-              dispatch(setSkus(data));
               break;
             case "stores":
-              setDataSTORES(data);
-              dispatch(setStores(data));
               break;
             case "forecasts":
-              setDataFORECASTS(data);
               dispatch(setForecasts(data));
               break;
             case "sales":
-              setDataSALES(data);
               break;
             default:
               data[0] !== undefined && data[0] !== null && data[0] !== ""
@@ -130,17 +116,7 @@ export default function Sceleton({
         Object.values(dataForecasts || {}).length
       } =-`,
     );
-    console.log(
-      `-= data ${Object.keys(dataStores || {}).length} : ${
-        Object.values(dataStores || {}).length
-      } =-`,
-    );
-    console.log(
-      `-= data ${Object.keys(dataSkus || {}).length} : ${
-        Object.values(dataSKUS || {}).length
-      } =-`,
-    );
-  }, [dataForecasts, dataStores, dataSkus]);
+  }, [dataForecasts]);
 
   // useEffect for call toast() if isSuccessData
 

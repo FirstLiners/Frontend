@@ -4,7 +4,7 @@ import { apiSlice } from "./services/apiSlice";
 import { useAppSelector } from "./hooks";
 import Reducer from "./features/authSlice";
 import reducer, { decrement, incrementByAmount } from "./features/counterSlice";
-import statisticReducer from "./features/statisticSlice";
+import statisticsReducer from "./features/statisticSlice";
 import forecastReducer from "./features/forecastsSlice";
 
 export const makeStore = () =>
@@ -14,7 +14,7 @@ export const makeStore = () =>
       auth: Reducer,
       counter: reducer,
       forecasts: forecastReducer,
-      statistics: statisticReducer,
+      statistics: statisticsReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),

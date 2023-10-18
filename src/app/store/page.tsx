@@ -2,16 +2,14 @@
 import styles from "./about.module.css";
 import React, { useState } from "react";
 import Link from "next/link";
-import type { RootState } from "../../redux/store";
+import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import {
   increment,
   decrement,
   incrementByAmount,
-} from "../../redux/features/counterSlice";
+} from "@/redux/features/counterSlice";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
-import qs from "qs";
 
 function ButtonAsChild({ ...props }) {
   return (

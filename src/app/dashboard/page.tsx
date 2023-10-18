@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
-import styles from "../components/MainPage/MainPage.module.css";
-import BlockFilter from "../components/MainPage/FilterComponent";
-import DasTable from "./DashboardTable/DashboardTable";
+import React, { useEffect, useState } from "react";
+import styles from "@/components/MainPage/MainPage.module.css";
+import BlockFilter from "@/components/MainPage/FilterComponent";
+import DasTable from "@/components/DashboardTable/DashboardTable";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Excel from "../shared/excel.svg";
+import Excel from "@/shared/excel.svg";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 type CheckedState = boolean;
@@ -14,9 +14,9 @@ export default function MainPage() {
   const { push } = useRouter();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
-  if (typeof window !== "undefined" && !isAuthenticated) {
-    push("/login");
-  }
+  useEffect(() => {
+    typeof window !== "undefined" && !isAuthenticated && push("/login");
+  }, [isAuthenticated, push]);
 
   const [filterItems1, setFilterItems1] = useState([
     { label: "Яблоко", checked: false },

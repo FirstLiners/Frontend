@@ -39,7 +39,7 @@
     "**/*d.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/dashboard/DashboardTable"
+    "src/components/DashboardTable"
   ],
   "exclude": [
     "node_modules"

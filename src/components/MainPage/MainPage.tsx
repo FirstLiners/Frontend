@@ -11,7 +11,7 @@ import {
   unsetParamsApplyed,
 } from "@/redux/features/forecastsSlice";
 import { Button } from "@/components/ui/button";
-import { useMockdata } from "@/app/hooks";
+import { useMockdata } from "@/hooks";
 
 type CheckedState = boolean;
 

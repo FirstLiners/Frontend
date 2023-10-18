@@ -1,8 +1,8 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Navbar from "./components/Navbar";
-import AuthProvider from "./context/AuthProvider";
-import ThemeProvider from "./context/ThemeProvider";
+import Navbar from "../components/Navbar";
+import AuthProvider from "../context/AuthProvider";
+import ThemeProvider from "../context/ThemeProvider";
 import StoreProvider from "../redux/provider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";

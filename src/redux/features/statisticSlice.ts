@@ -70,11 +70,11 @@ const StatisticsSlice = createSlice({
 
 export const {
   clearStatistics,
-  setJsonData,
+  setStatisticData,
   setParamsApplyed,
   unsetParamsApplyed,
 } = StatisticsSlice.actions;
 // Извлекаем объект с создателями и редуктор
-const { reducer: statisticReducer } = StatisticsSlice;
+const { reducer: statisticsReducer } = StatisticsSlice;
 
-export default statisticReducer;
+export default statisticsReducer;

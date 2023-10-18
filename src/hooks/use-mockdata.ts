@@ -18,7 +18,7 @@ type Forecast = {
   [key: string]: any;
 };
 
-type Statistics = {
+type Statistic = {
   store: string;
   group: string;
   category: string;
@@ -34,7 +34,7 @@ type Statistics = {
 };
 
 interface Statistics {
-  data: Statistics[];
+  data: Statistic[];
 }
 
 interface Forecasts {
@@ -106,9 +106,12 @@ function returnOptions(
   }
   if (Array.isArray(input)) {
     // need to get unique key: values , so transform input array of objects  to a set of objects
-    const unique = new Set(input);
+
+    const unique = Array.from(
+      new Set([...input.filter((item) => "forecast_data" in item)]), //clean up the array from objects without forecast_data key
+    );
     const values: { label: string; checked: boolean }[] = [];
-    Array.from(unique).forEach((obj: Forecast | Statistics) => {
+    Array.from(unique).forEach((obj: Forecast | Statistic) => {
       // force label to be a string
       // before assign to label do check if it is unique value, not assigned before
       const label = obj[key].toString();
@@ -127,6 +130,10 @@ function returnOptions(
   }
 }
 
+function isString(item: unknown): item is string {
+  return typeof item === "string";
+}
+
 export default function useMockdata(
   key: string,
 ): [
@@ -140,18 +147,25 @@ export default function useMockdata(
   >(null);
 
   const dispatch = useAppDispatch();
+  // когда прихожу из статистики, токен должен быть не пустой, для этого need dispatch(setAuth())
   const { token } = useAppSelector((state) => state.auth);
   const { forecastsItems } = useAppSelector((state) => state.forecasts);
   const { StatisticsItems } = useAppSelector((state) => state.statistics);
   useEffect(() => {
     fetchData(token, key).then((datum) => {
       // console.log(forecasts.data); // seems to be endless rerender, why?
-      // @ts-ignore
       key === "forecast" && dispatch(setJsonData(datum));
       key === "statistics" &&
         typeof setStatisticData === "function" &&
         dispatch(setStatisticData(datum));
-      const options = returnOptions(key, datum);
+      const filteredItems =
+        Array.isArray(datum) &&
+        datum.filter(
+          (item) =>
+            !isString(item) && ("forecast_data" in item || "data" in item),
+        );
+      // @ts-ignore
+      const options = returnOptions(key, datum || []);
       options !== null && setValue(options ?? []);
     });
   }, [key, token, dispatch]);
