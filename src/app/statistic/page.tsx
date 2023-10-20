@@ -11,8 +11,8 @@ import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import {
   setStatisticData,
   clearStatistics,
-  setParamsApplyed,
-  unsetParamsApplyed,
+  setParamsStatistics,
+  unsetParamsStatistics,
 } from "@/redux/features/statisticSlice";
 import { Button } from "@/components/ui/button";
 import { useMockdata } from "@/hooks";
@@ -20,17 +20,17 @@ import { useMockdata } from "@/hooks";
 type CheckedState = boolean;
 
 export default function StatisticPage() {
-  const { push } = useRouter();
+  const { push, replace } = useRouter();
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, token } = useAppSelector((state) => state.auth);
   const { StatisticsItems } = useAppSelector((state) => state.statistics) || [];
   const { paramsApplyed } = useAppSelector((state) => state.statistics) || [];
 
   useMockdata("statistics");
 
   useEffect(() => {
-    !isAuthenticated && push("/login");
-  }, [isAuthenticated, push]);
+    !isAuthenticated && replace("/login");
+  }, [isAuthenticated, push, replace]);
 
   const [filterItems1, setFilterItems1] = useState([
     { label: "Яблоко", checked: false },

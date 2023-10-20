@@ -24,8 +24,11 @@ type FilterItem = {
 export default function MainPage() {
   const dispatch = useAppDispatch();
   const { paramsApplyed } = useAppSelector((state) => state.forecasts) || [];
+  const { forecastsItems } = useAppSelector((state) => state.forecasts) || [];
+  const { StatisticsItems } = useAppSelector((state) => state.statistics) || [];
 
   useMockdata("forecast");
+  useMockdata("statistics");
   const [filterItems1, setFilterItems1] = useMockdata("store");
   const [filterItems2, setFilterItems2] = useMockdata("group");
   const [filterItems3, setFilterItems3] = useMockdata("category");

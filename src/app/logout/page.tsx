@@ -8,13 +8,13 @@ import { useRouter } from "next/navigation";
 const Page: React.FC = () => {
   const dispatch = useAppDispatch();
   // in useEffect
-  const { push } = useRouter();
+  const { push, replace } = useRouter();
   useEffect(() => {
     // clear token
     localStorage.removeItem("access_token");
     dispatch(SetLogout());
-    push("/login");
-  }, [dispatch, push]);
+    replace("/login");
+  }, [dispatch, push, replace]);
 
   return (
     <div

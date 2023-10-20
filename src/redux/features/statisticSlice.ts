@@ -56,24 +56,20 @@ const StatisticsSlice = createSlice({
         state.StatisticsItems = action.payload;
       }
     },
-    setParamsApplyed: (state, action) => {
+    setParamsStatistics: (state, action) => {
       if (action) {
         state.paramsApplyed = action.payload;
         state.paramsApplyed.applyed = true;
       }
     },
-    unsetParamsApplyed: (state) => {
+    unsetParamsStatistics: (state) => {
       state.paramsApplyed = initialState.paramsApplyed;
     },
   },
 });
 
-export const {
-  clearStatistics,
-  setStatisticData,
-  setParamsApplyed,
-  unsetParamsApplyed,
-} = StatisticsSlice.actions;
+export const { clearStatistics, setStatisticData, setParamsStatistics, unsetParamsStatistics } =
+  StatisticsSlice.actions;
 // Извлекаем объект с создателями и редуктор
 const { reducer: statisticsReducer } = StatisticsSlice;
 

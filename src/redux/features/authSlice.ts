@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import useStorage, { writeStorage, deleteFromStorage } from "@rehooks/local-storage";
 
 interface TokenPayload {
   access?: string;
@@ -35,6 +36,7 @@ const authSlice = createSlice({
           access,
           refresh,
         };
+        writeStorage("token", action.payload);
       }
     },
     clearToken: (state) => {
@@ -42,6 +44,7 @@ const authSlice = createSlice({
         access: "",
         refresh: "",
       };
+      deleteFromStorage("token");
     },
     logout: (state) => {
       state.isAuthenticated = false;
@@ -52,6 +55,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAuth, logout, setToken, finishInitialLoad } =
-  authSlice.actions;
+export const { setAuth, logout, setToken, finishInitialLoad } = authSlice.actions;
 export default authSlice.reducer;

@@ -3,6 +3,7 @@ import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { setJsonData, clearForecasts } from "@/redux/features/forecastsSlice";
 import { setStatisticData } from "@/redux/features/statisticSlice";
 import { useState, useEffect } from "react";
+import useStorage from "@rehooks/local-storage";
 // теперь данные фетчатся с бэкенда TODO: rename module to use-fetchdata
 import axios from "axios";
 
@@ -46,9 +47,7 @@ type Token = {
   refresh?: string;
 };
 
-async function fetchForecasts(
-  token: Token | null | undefined,
-): Promise<Forecasts> {
+async function fetchForecasts(token: Token | null | undefined): Promise<Forecasts> {
   const config = {
     headers: {
       Authorization: `Bearer ${token?.access}`,
@@ -61,9 +60,7 @@ async function fetchForecasts(
   return response.data as unknown as Forecasts;
 }
 
-async function fetchStatistics(
-  token: Token | null | undefined,
-): Promise<Statistics> {
+async function fetchStatistics(token: Token | null | undefined): Promise<Statistics> {
   const config = {
     headers: {
       Authorization: `Bearer ${token?.access}`,
@@ -89,7 +86,8 @@ async function fetchData(
     case "sku":
     case "uom":
       return fetchForecasts(token);
-    case "statistics":
+    case "statistics": //statistic
+      console.log("fetching statistics with token", token?.access);
       return fetchStatistics(token);
     default:
       throw new Error(`Invalid point: ${point}`);
@@ -138,37 +136,29 @@ export default function useMockdata(
   key: string,
 ): [
   { label: string; checked: boolean }[] | null,
-  React.Dispatch<
-    React.SetStateAction<{ label: string; checked: boolean }[] | null>
-  >,
+  React.Dispatch<React.SetStateAction<{ label: string; checked: boolean }[] | null>>,
 ] {
-  const [value, setValue] = useState<
-    { label: string; checked: boolean }[] | null
-  >(null);
+  const [value, setValue] = useState<{ label: string; checked: boolean }[] | null>(null);
 
   const dispatch = useAppDispatch();
   // когда прихожу из статистики, токен должен быть не пустой, для этого need dispatch(setAuth())
-  const { token } = useAppSelector((state) => state.auth);
+  const [storagetoken] = useStorage("token");
+  const authState = useAppSelector((state) => state.auth);
+  const token = authState.token ? (authState.token as unknown as Token) : (storagetoken as unknown as Token);
   const { forecastsItems } = useAppSelector((state) => state.forecasts);
   const { StatisticsItems } = useAppSelector((state) => state.statistics);
   useEffect(() => {
     fetchData(token, key).then((datum) => {
       // console.log(forecasts.data); // seems to be endless rerender, why?
+      key === "statistics" && dispatch(setStatisticData(datum));
       key === "forecast" && dispatch(setJsonData(datum));
-      key === "statistics" &&
-        typeof setStatisticData === "function" &&
-        dispatch(setStatisticData(datum));
       const filteredItems =
-        Array.isArray(datum) &&
-        datum.filter(
-          (item) =>
-            !isString(item) && ("forecast_data" in item || "data" in item),
-        );
+        Array.isArray(datum) && datum.filter((item) => !isString(item) && ("forecast_data" in item || "data" in item));
       // @ts-ignore
       const options = returnOptions(key, datum || []);
       options !== null && setValue(options ?? []);
     });
-  }, [key, token, dispatch]);
+  }, [key, token]);
 
   return [value, setValue];
 }

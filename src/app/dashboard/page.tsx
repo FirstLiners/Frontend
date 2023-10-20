@@ -11,12 +11,12 @@ import { useRouter } from "next/navigation";
 type CheckedState = boolean;
 
 export default function MainPage() {
-  const { push } = useRouter();
+  const { push, replace } = useRouter();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    typeof window !== "undefined" && !isAuthenticated && push("/login");
-  }, [isAuthenticated, push]);
+    typeof window !== "undefined" && !isAuthenticated && replace("/login");
+  }, [isAuthenticated, push, replace]);
 
   const [filterItems1, setFilterItems1] = useState([
     { label: "Яблоко", checked: false },

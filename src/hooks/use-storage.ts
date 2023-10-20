@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 
-export default function useStorage(key: string, type = "sessionStorage") {
+export default function useStorage(
+  key: string,
+  type = "sessionStorage",
+): [string | null, React.Dispatch<React.SetStateAction<string | null>>] {
   const [value, setValue] = useState<string | null>(null);
 
   // Initial fetch from storage

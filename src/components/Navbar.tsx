@@ -11,6 +11,8 @@ import { useLogoutMutation } from "@/redux/features/authApiSlice";
 
 export default function Navbar() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { token } = useAppSelector((state) => state.auth);
+
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
@@ -18,9 +20,9 @@ export default function Navbar() {
 
   const labelSign = isAuthenticated ? "Выйти" : "Войти";
   const hrefSign = isAuthenticated ? "/logout" : "/login";
-
   useEffect(() => {
-    !isAuthenticated && localStorage.removeItem("access_token");
+    // ошибка?
+    // !isAuthenticated && localStorage.removeItem("access_token");
   }, [isAuthenticated]);
 
   return (
@@ -29,21 +31,12 @@ export default function Navbar() {
         <nav className="bg-[#003C96] pr-40 pl-40 flex h-[64px] justify-between">
           <ul className="flex text-white items-center h-[64px]">
             <div>
-              <Image
-                src={Logo}
-                alt="Логотип"
-                width={101}
-                height={40}
-                className="pt-[12px] pb-[12px]"
-              />
+              <Image src={Logo} alt="Логотип" width={101} height={40} className="pt-[12px] pb-[12px]" />
             </div>
 
             <li className="ml-10 h-[64px] items-center flex">
               {isAuthenticated && (
-                <Link
-                  className={pathname == "/" ? styles.active_link : ""}
-                  href="/"
-                >
+                <Link className={pathname == "/" ? styles.active_link : ""} href="/">
                   Главная
                 </Link>
               )}
@@ -52,10 +45,7 @@ export default function Navbar() {
             <li className="ml-8 h-[64px] items-center flex">
               {/* dashboard/page.tsx */}
               {isAuthenticated && (
-                <Link
-                  className={pathname == "/dashboard" ? styles.active_link : ""}
-                  href="/dashboard"
-                >
+                <Link className={pathname == "/dashboard" ? styles.active_link : ""} href="/dashboard">
                   Данные по прогнозу
                 </Link>
               )}
@@ -63,10 +53,7 @@ export default function Navbar() {
             <li className="ml-8 h-[64px] items-center flex">
               {/* statistic/page.tsx */}
               {isAuthenticated && (
-                <Link
-                  className={pathname == "/statistic" ? styles.active_link : ""}
-                  href="/statistic"
-                >
+                <Link className={pathname == "/statistic" ? styles.active_link : ""} href="/statistic">
                   Статистика
                 </Link>
               )}
