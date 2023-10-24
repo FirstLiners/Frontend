@@ -42,6 +42,8 @@ interface Forecasts {
   data: Forecast[];
 }
 
+type Data = Forecast[] | Statistic[] | string[] | null;
+
 type Token = {
   access?: string;
   refresh?: string;
@@ -73,22 +75,23 @@ async function fetchStatistics(token: Token | null | undefined): Promise<Statist
 }
 
 async function fetchData(
-  // TODO  переделать многоразовый фетч на один раз
+  forecastsItems: Forecasts | string[], //кешированные данные из стора
+  statisticsItems: Statistics | string[], //кешированные данные из стора
   token: Token | null | undefined,
   point: string,
 ): Promise<Forecasts | Statistics | string[]> {
   switch (point) {
     case "forecast":
+      return Array.isArray(forecastsItems) && forecastsItems.length ? forecastsItems : fetchForecasts(token);
+    case "statistics":
+      return Array.isArray(statisticsItems) && statisticsItems.length ? statisticsItems : fetchStatistics(token);
     case "store":
     case "group":
     case "category":
     case "subcategory":
     case "sku":
     case "uom":
-      return fetchForecasts(token);
-    case "statistics": //statistic
-      console.log("fetching statistics with token", token?.access);
-      return fetchStatistics(token);
+      return Array.isArray(forecastsItems) && forecastsItems.length ? forecastsItems : fetchForecasts(token);
     default:
       throw new Error(`Invalid point: ${point}`);
   }
@@ -145,10 +148,10 @@ export default function useMockdata(
   const [storagetoken] = useStorage("token");
   const authState = useAppSelector((state) => state.auth);
   const token = authState.token ? (authState.token as unknown as Token) : (storagetoken as unknown as Token);
-  const { forecastsItems } = useAppSelector((state) => state.forecasts);
-  const { StatisticsItems } = useAppSelector((state) => state.statistics);
+  const { forecastsItems = [] } = useAppSelector((state) => state.forecasts) || [];
+  const { StatisticsItems = [] } = useAppSelector((state) => state.statistics) || [];
   useEffect(() => {
-    fetchData(token, key).then((datum) => {
+    fetchData(forecastsItems as Data, StatisticsItems as Data, token, key).then((datum) => {
       // console.log(forecasts.data); // seems to be endless rerender, why?
       key === "statistics" && dispatch(setStatisticData(datum));
       key === "forecast" && dispatch(setJsonData(datum));
