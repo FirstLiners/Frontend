@@ -1,6 +1,6 @@
 // this hook must take data that consist of nested key: value  from the mockdata forecasts.json file and return return [value, setValue] for the given key argument
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { setJsonData, clearForecasts } from "@/redux/features/forecastsSlice";
+import { setJsonData } from "@/redux/features/forecastsSlice";
 import { setStatisticData } from "@/redux/features/statisticSlice";
 import { useState, useEffect } from "react";
 import useStorage from "@rehooks/local-storage";
@@ -42,8 +42,6 @@ interface Forecasts {
   data: Forecast[];
 }
 
-type Data = Forecast[] | Statistic[] | string[] | null;
-
 type Token = {
   access?: string;
   refresh?: string;
@@ -75,59 +73,27 @@ async function fetchStatistics(token: Token | null | undefined): Promise<Statist
 }
 
 async function fetchData(
-  forecastsItems: Forecasts | string[], //кешированные данные из стора
-  statisticsItems: Statistics | string[], //кешированные данные из стора
+  //кешированные данные из стора
+  Items: Forecasts | Statistics,
   token: Token | null | undefined,
-  point: string,
-): Promise<Forecasts | Statistics | string[]> {
-  switch (point) {
+  key: string,
+): Promise<Forecasts | Statistics> {
+  switch (key) {
     case "forecast":
-      return Array.isArray(forecastsItems) && forecastsItems.length ? forecastsItems : fetchForecasts(token);
+      return Array.isArray(Items) && Items.length ? Items : fetchForecasts(token);
+      // it seems that  fetchForecasts(token) does not return data, need to verify that
+      console.log(`fetchedData: ${JSON.stringify(Items)}`);
     case "statistics":
-      return Array.isArray(statisticsItems) && statisticsItems.length ? statisticsItems : fetchStatistics(token);
+      return Array.isArray(Items) && Items.length ? Items : fetchStatistics(token);
     case "store":
     case "group":
     case "category":
     case "subcategory":
     case "sku":
     case "uom":
-      return Array.isArray(forecastsItems) && forecastsItems.length ? forecastsItems : fetchForecasts(token);
+      return Array.isArray(Items) && Items.length ? Items : fetchForecasts(token);
     default:
-      throw new Error(`Invalid point: ${point}`);
-  }
-}
-
-function returnOptions(
-  key: string,
-  input: Forecasts["data"] | Statistics["data"],
-): { label: string; checked: boolean }[] {
-  // skip the case key==="forecast"
-  if (key === "forecast" || key === "statistics") {
-    return [];
-  }
-  if (Array.isArray(input)) {
-    // need to get unique key: values , so transform input array of objects  to a set of objects
-
-    const unique = Array.from(
-      new Set([...input.filter((item) => "forecast_data" in item)]), //clean up the array from objects without forecast_data key
-    );
-    const values: { label: string; checked: boolean }[] = [];
-    Array.from(unique).forEach((obj: Forecast | Statistic) => {
-      // force label to be a string
-      // before assign to label do check if it is unique value, not assigned before
-      const label = obj[key].toString();
-      // check if label is unique
-      if (values.some((value) => value.label === label)) {
-        // then skip it and do not add to values array
-      } else {
-        // unique label, add to values array
-        values.push({ label, checked: false });
-      }
-    });
-    // convert values to a set to get unique values, then convert back to an array
-    return Array.from(new Set(values));
-  } else {
-    return [];
+      throw new Error(`Invalid point: ${key}`);
   }
 }
 
@@ -135,33 +101,39 @@ function isString(item: unknown): item is string {
   return typeof item === "string";
 }
 
-export default function useMockdata(
-  key: string,
-): [
-  { label: string; checked: boolean }[] | null,
-  React.Dispatch<React.SetStateAction<{ label: string; checked: boolean }[] | null>>,
+export default function useMockdata(key: string): [
+  boolean, // loading state
+  string | null, // error message
 ] {
-  const [value, setValue] = useState<{ label: string; checked: boolean }[] | null>(null);
-
   const dispatch = useAppDispatch();
-  // когда прихожу из статистики, токен должен быть не пустой, для этого need dispatch(setAuth())
+  const [isLoading, setLoading] = useState(false);
+  const [isError, setError] = useState<string | null>(null);
+
   const [storagetoken] = useStorage("token");
   const authState = useAppSelector((state) => state.auth);
   const token = authState.token ? (authState.token as unknown as Token) : (storagetoken as unknown as Token);
   const { forecastsItems = [] } = useAppSelector((state) => state.forecasts) || [];
   const { StatisticsItems = [] } = useAppSelector((state) => state.statistics) || [];
+
   useEffect(() => {
-    fetchData(forecastsItems as Data, StatisticsItems as Data, token, key).then((datum) => {
-      // console.log(forecasts.data); // seems to be endless rerender, why?
-      key === "statistics" && dispatch(setStatisticData(datum));
-      key === "forecast" && dispatch(setJsonData(datum));
-      const filteredItems =
-        Array.isArray(datum) && datum.filter((item) => !isString(item) && ("forecast_data" in item || "data" in item));
-      // @ts-ignore
-      const options = returnOptions(key, datum || []);
-      options !== null && setValue(options ?? []);
-    });
+    setLoading(true);
+    setError(null);
+    const Items = key === "forecast" ? forecastsItems : StatisticsItems;
+    fetchData(Items as unknown as Statistics | Forecasts, token, key)
+      .then((datum) => {
+        console.log(`datum: ${JSON.stringify(datum)}`);
+        // console.log(`key: ${key}`);
+        key === "statistics" && dispatch(setStatisticData(datum));
+        key === "forecast" && dispatch(setJsonData(datum));
+      })
+      .catch((error) => {
+        setError(error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, token]);
 
-  return [value, setValue];
+  return [isLoading, isError];
 }

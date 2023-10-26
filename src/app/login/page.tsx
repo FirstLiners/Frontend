@@ -61,7 +61,7 @@ const Login = () => {
           dispatch(unsetParamsStatistics());
           //   dispatch(finishInitialLoad());
           if (typeof window !== "undefined") {
-            router.replace("/");
+            router.push("/");
           }
         })
         .catch((error) => {
@@ -80,7 +80,7 @@ const Login = () => {
   React.useEffect(() => {
     console.log("isAuthenticated", isAuthenticated);
     console.log("login token", token);
-    // isAuthenticated && router.replace("/");
+    router.prefetch("/main");
   }, [isAuthenticated, router, token]);
 
   return (

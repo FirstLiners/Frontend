@@ -1,12 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import styles from "@/components/MainPage/MainPage.module.css";
+import styles from "@/styles/dashboard.module.css";
 import BlockFilter from "@/components/MainPage/FilterComponent";
 import DasTable2 from "@/components/DashboardTable2";
 import Image from "next/image";
 import Excel from "@/shared/excel.svg";
 import SimpleBarChart from "@/components/SimpleBarChart";
-import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import {
   setStatisticData,
@@ -15,9 +14,15 @@ import {
   unsetParamsStatistics,
 } from "@/redux/features/statisticSlice";
 import { Button } from "@/components/ui/button";
-import { useMockdata } from "@/hooks";
+import { useRouter } from "next/navigation";
+import { useMockdata, useOptions } from "@/hooks";
 
 type CheckedState = boolean;
+
+type keyType = "forecast_data" | "do_nothing" | "real_sale";
+
+type sixfiltersType = "store" | "group" | "category" | "subcategory" | "sku" | "uom";
+
 type StatisticsItemsType = {
   store: string;
   group: string;
@@ -42,69 +47,40 @@ export default function StatisticPage() {
   useMockdata("statistics");
 
   useEffect(() => {
-    !isAuthenticated && replace("/login");
+    typeof window !== "undefined" && !isAuthenticated && replace("/login");
   }, [isAuthenticated, push, replace]);
 
-  function returnOptions(key: string, input: StatisticsItemsType): { label: string; checked: boolean }[] {
-    // skip the case key==="forecast"
-    if (key === "forecast" || key === "statistics") {
-      return [];
-    }
-    if (Array.isArray(input)) {
-      // need to get unique key: values , so transform input array of objects  to a set of objects
+  // use-options.ts
 
-      const unique = Array.from(
-        new Set([...input.filter((item) => "real_sale" in item)]), //clean up the array from objects without real_sale key
-      );
-      const values: { label: string; checked: boolean }[] = [];
-      Array.from(unique).forEach((obj: StatisticsItemsType) => {
-        // force label to be a string
-        // before assign to label do check if it is unique value, not assigned before
-        const label = obj[key].toString();
-        // check if label is unique
-        if (values.some((value) => value.label === label)) {
-          // then skip it and do not add to values array
-        } else {
-          // unique label, add to values array
-          values.push({ label, checked: false });
-        }
-      });
-      // convert values to a set to get unique values, then convert back to an array
-      return Array.from(new Set(values));
-    } else {
-      return [];
-    }
-  }
+  let f1 = useOptions("forecast_data" as unknown as keyType, "store" as unknown as sixfiltersType);
 
-  let filterItems = returnOptions("store", StatisticsItems);
+  const [filterItems1, setFilterItems1] = useState([...f1]);
+
+  let f2 = useOptions("forecast_data" as unknown as keyType, "group" as unknown as sixfiltersType);
+
+  const [filterItems2, setFilterItems2] = useState([...f2]);
+
+  let f3 = useOptions("forecast_data" as unknown as keyType, "category" as unknown as sixfiltersType);
+
+  const [filterItems3, setFilterItems3] = useState([...f3]);
+
+  let f4 = useOptions("forecast_data" as unknown as keyType, "subcategory" as unknown as sixfiltersType);
+
+  const [filterItems4, setFilterItems4] = useState([...f4]);
+
+  let f5 = useOptions("forecast_data" as unknown as keyType, "sku" as unknown as sixfiltersType);
+
+  const [filterItems5, setFilterItems5] = useState([...f5]);
+
+  let f6 = useOptions("forecast_data" as unknown as keyType, "uom" as unknown as sixfiltersType);
+
+  const [filterItems6, setFilterItems6] = useState([...f6]);
 
   useEffect(() => {
-    console.log("statistics", StatisticsItems);
+    console.log("forecasts", StatisticsItems);
     console.log("paramsApplyed", paramsApplyed);
-    console.log("filtered: ", filterItems);
-  }, [StatisticsItems, filterItems, paramsApplyed]);
-
-  const [filterItems1, setFilterItems1] = useState([...filterItems]);
-
-  filterItems = returnOptions("group", StatisticsItems);
-
-  const [filterItems2, setFilterItems2] = useState([...filterItems]);
-
-  filterItems = returnOptions("category", StatisticsItems);
-
-  const [filterItems3, setFilterItems3] = useState([...filterItems]);
-
-  filterItems = returnOptions("subcategory", StatisticsItems);
-
-  const [filterItems4, setFilterItems4] = useState([...filterItems]);
-
-  filterItems = returnOptions("sku", StatisticsItems);
-
-  const [filterItems5, setFilterItems5] = useState([...filterItems]);
-
-  filterItems = returnOptions("uom", StatisticsItems);
-
-  const [filterItems6, setFilterItems6] = useState([...filterItems]);
+    console.log("filtered on statistic page: ", f1, f2, f3, f4, f5, f6);
+  }, [StatisticsItems, f1, f2, f3, f4, f5, f6, paramsApplyed]);
 
   const hasChecked =
     [filterItems1, filterItems2, filterItems3, filterItems4, filterItems5, filterItems6].some(
@@ -184,7 +160,7 @@ export default function StatisticPage() {
   };
 
   return (
-    <section>
+    <section className="p-0 pl-40 pr-40  ">
       <h1 className={styles.block__title_h1}>Параметры</h1>
       <div className={styles.block__filter2}>
         <div>

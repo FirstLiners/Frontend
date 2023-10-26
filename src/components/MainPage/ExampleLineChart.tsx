@@ -2,15 +2,7 @@
 import React, { useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { setJsonData, clearForecasts } from "@/redux/features/forecastsSlice";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
 
 interface paramsApplyed {
   applyed: boolean;
@@ -40,11 +32,10 @@ const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ params }) => {
         .filter(({ sku }) => params.sku.includes(sku))
         .reduce(
           (acc, { date, forecast_data }) => {
-            if (!acc[date]) {
+            if (!acc[date] && date !== undefined) {
               acc[date] = { name: date };
             }
-            acc[date][`line${Object.keys(acc[date]).length - 1}`] =
-              forecast_data;
+            acc[date][`line${Object.keys(acc[date]).length - 1}`] = forecast_data;
             return acc;
           },
           {} as Record<string, ForecastData>,
@@ -56,17 +47,14 @@ const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ params }) => {
       ...data,
     })),
   );
-
-  const lines = Object.keys(linechartData[0])
+  if (linechartData.length === 0 || linechartData[0] === undefined) {
+    return <></>;
+  }
+  let lines = [];
+  lines = Object.keys(linechartData[0])
     .filter((key) => key.startsWith("line"))
     .map((key, index) => (
-      <Line
-        key={key}
-        type="monotone"
-        dataKey={key}
-        stroke={`#${(index + 1) * 111111}`}
-        activeDot={{ r: 8 }}
-      />
+      <Line key={key} type="monotone" dataKey={key} stroke={`#${(index + 1) * 111111}`} activeDot={{ r: 8 }} />
     ));
 
   return (

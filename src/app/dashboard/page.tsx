@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import styles from "@/components/MainPage/MainPage.module.css";
+import styles from "@/styles/dashboard.module.css";
 import BlockFilter from "@/components/MainPage/FilterComponent";
 import DasTable from "@/components/DashboardTable/DashboardTable";
 import { Button } from "@/components/ui/button";
@@ -10,20 +10,13 @@ import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { setParamsApplyed, unsetParamsApplyed } from "@/redux/features/forecastsSlice";
 
-import { useMockdata } from "@/hooks";
+import { useMockdata, useOptions } from "@/hooks";
 
 type CheckedState = boolean;
 
-type ForecastsItemsType = {
-  store: string;
-  group: string;
-  category: string;
-  subcategory: string;
-  sku: string;
-  date: string;
-  forecast_data: number;
-  uom: string;
-}[];
+type keyType = "forecast_data" | "do_nothing" | "real_sale";
+
+type sixfiltersType = "store" | "group" | "category" | "subcategory" | "sku" | "uom";
 
 export default function MainPage() {
   const { push, replace } = useRouter();
@@ -38,61 +31,37 @@ export default function MainPage() {
 
   useMockdata("forecast");
 
-  function returnOptions(key: string, input: ForecastsItemsType): { label: string; checked: boolean }[] {
-    // skip the case key==="forecast"
-    if (key === "forecast" || key === "statistics") {
-      return [];
-    }
-    if (Array.isArray(input)) {
-      // need to get unique key: values , so transform input array of objects  to a set of objects
+  // use-options.ts
 
-      const unique = Array.from(
-        new Set([...input.filter((item) => "forecast_data" in item)]), //clean up the array from objects without forecast_data key (they are not needed just for fun)
-      );
-      const values: { label: string; checked: boolean }[] = [];
-      Array.from(unique).forEach((obj: ForecastsItemsType) => {
-        // force label to be a string
-        // before assign to label do check if it is unique value, not assigned before
-        const label = obj[key].toString();
-        // check if label is unique
-        if (values.some((value) => value.label === label)) {
-          // then skip it and do not add to values array
-        } else {
-          // unique label, add to values array
-          values.push({ label, checked: false });
-        }
-      });
-      // convert values to a set to get unique values, then convert back to an array
-      return Array.from(new Set(values));
-    } else {
-      return [];
-    }
-  }
+  let f1 = useOptions("forecast_data" as unknown as keyType, "store" as unknown as sixfiltersType);
 
-  let filterItems = returnOptions("store", forecastsItems);
+  const [filterItems1, setFilterItems1] = useState([...f1]);
+
+  let f2 = useOptions("forecast_data" as unknown as keyType, "group" as unknown as sixfiltersType);
+
+  const [filterItems2, setFilterItems2] = useState([...f2]);
+
+  let f3 = useOptions("forecast_data" as unknown as keyType, "category" as unknown as sixfiltersType);
+
+  const [filterItems3, setFilterItems3] = useState([...f3]);
+
+  let f4 = useOptions("forecast_data" as unknown as keyType, "subcategory" as unknown as sixfiltersType);
+
+  const [filterItems4, setFilterItems4] = useState([...f4]);
+
+  let f5 = useOptions("forecast_data" as unknown as keyType, "sku" as unknown as sixfiltersType);
+
+  const [filterItems5, setFilterItems5] = useState([...f5]);
+
+  let f6 = useOptions("forecast_data" as unknown as keyType, "uom" as unknown as sixfiltersType);
+
+  const [filterItems6, setFilterItems6] = useState([...f6]);
 
   useEffect(() => {
     console.log("forecasts", forecastsItems);
     console.log("paramsApplyed", paramsApplyed);
-    console.log("filtered: ", filterItems);
-  }, [forecastsItems, filterItems, paramsApplyed]);
-
-  const [filterItems1, setFilterItems1] = useState([...filterItems]);
-
-  filterItems = returnOptions("group", forecastsItems);
-  const [filterItems2, setFilterItems2] = useState([...filterItems]);
-
-  filterItems = returnOptions("category", forecastsItems);
-  const [filterItems3, setFilterItems3] = useState([...filterItems]);
-
-  filterItems = returnOptions("subcategory", forecastsItems);
-  const [filterItems4, setFilterItems4] = useState([...filterItems]);
-
-  filterItems = returnOptions("sku", forecastsItems);
-  const [filterItems5, setFilterItems5] = useState([...filterItems]);
-
-  filterItems = returnOptions("uom", forecastsItems);
-  const [filterItems6, setFilterItems6] = useState([...filterItems]);
+    console.log("filtered on prognosis page: ", f1, f2, f3, f4, f5, f6);
+  }, [forecastsItems, f1, f2, f3, f4, f5, f6, paramsApplyed]);
 
   const hasChecked =
     [filterItems1, filterItems2, filterItems3, filterItems4, filterItems5, filterItems6].some(
@@ -113,7 +82,7 @@ export default function MainPage() {
     setFilterItems2(updatedFilters);
   };
 
-  // Функция для обновления состояния фильтра 2
+  // Функция для обновления состояния фильтра 3
   const handleFilterChange3 = (index: number, checked: CheckedState) => {
     const updatedFilters = [...filterItems3];
     updatedFilters[index].checked = checked;
@@ -127,14 +96,14 @@ export default function MainPage() {
     setFilterItems4(updatedFilters);
   };
 
-  // Функция для обновления состояния фильтра 2
+  // Функция для обновления состояния фильтра 4
   const handleFilterChange5 = (index: number, checked: CheckedState) => {
     const updatedFilters = [...filterItems5];
     updatedFilters[index].checked = checked;
     setFilterItems5(updatedFilters);
   };
 
-  // Функция для обновления состояния фильтра 2
+  // Функция для обновления состояния фильтра 5
   const handleFilterChange6 = (index: number, checked: CheckedState) => {
     const updatedFilters = [...filterItems6];
     updatedFilters[index].checked = checked;
@@ -172,7 +141,7 @@ export default function MainPage() {
   };
 
   return (
-    <section>
+    <section className="p-0 pl-40 pr-40  ">
       <h1 className={styles.block__title_h1}>Параметры</h1>
       <div className={styles.block__filter2}>
         <div>

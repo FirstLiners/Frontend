@@ -1,18 +1,19 @@
+
+
 .block__filter {
+  @apply min-w-fit justify-between ;
     position: relative;
     display: flex;
     flex-direction: row;
-    justify-content: center;
     overflow: hidden;
     padding-bottom: 5px;
     margin-bottom: 80px;
 }
 
 .block__filter2 {
+
     position: relative;
-    display: flex;
     flex-direction: row;
-    justify-content: center;
     overflow: hidden;
     padding-bottom: 5px;
     margin-bottom: 10px;
@@ -52,6 +53,6 @@
     right: 2;
 }
 
-.filter__button{
-    margin-left: 0;
+.filter__button {
+  @apply ml-0;
 }
