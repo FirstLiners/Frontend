@@ -9,12 +9,19 @@ type ForecastsItemsType = {
   category: string;
   subcategory: string;
   sku: string;
-  date: string;
-  forecast_data: number;
-  uom: string;
+  [key: string]: string | number;
 }[];
 
-const DasTable: React.FC = () => {
+type ParamType = {
+  key: keyof ForecastsItemsType[0];
+  value: string | number;
+};
+
+type DashboardTableProps = {
+  paramsApplyed?: ParamType;
+};
+
+const DasTable: React.FC<DashboardTableProps> = () => {
   const { forecastsItems = [] } = useAppSelector((state) => state.forecasts) || [];
   const { paramsApplyed = [] } = useAppSelector((state) => state.forecasts) || [];
 
@@ -41,7 +48,7 @@ const DasTable: React.FC = () => {
     }
     return (
       !paramsApplyed ||
-      paramsApplyed.every((param) => {
+      paramsApplyed.every((param: ParamType) => {
         return item[param.key] === param.value;
       })
     );
