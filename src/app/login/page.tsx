@@ -50,9 +50,6 @@ const Login = () => {
         .unwrap()
         .then(({ access, refresh }) => {
           console.log("access_token", access, refresh);
-          // typeof setMyValue === "function" &&
-          //   myValue !== null &&
-          //   setMyValue(access);
           dispatch(setToken({ access: access, refresh: refresh }));
           dispatch(setAuth());
           dispatch(clearForecasts());
@@ -60,9 +57,6 @@ const Login = () => {
           dispatch(clearStatistics());
           dispatch(unsetParamsStatistics());
           //   dispatch(finishInitialLoad());
-          if (typeof window !== "undefined") {
-            router.push("/");
-          }
         })
         .catch((error) => {
           if (error.status === 401) {
@@ -70,8 +64,12 @@ const Login = () => {
           } else {
             // Обработка других возможных ошибок
           }
+        })
+        .finally(() => {
+          // Code that will always run, regardless of whether an error was thrown
+          router.push("/", { scroll: true });
         });
-    }, 1000);
+    }, 5000);
   };
 
   const errstyle = "flex rounded-lg flex-colum border-[#EF4545]";
@@ -80,7 +78,6 @@ const Login = () => {
   React.useEffect(() => {
     console.log("isAuthenticated", isAuthenticated);
     console.log("login token", token);
-    router.prefetch("/main");
   }, [isAuthenticated, router, token]);
 
   return (

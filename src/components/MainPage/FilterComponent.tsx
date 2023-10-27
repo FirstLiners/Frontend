@@ -67,7 +67,7 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="ml-2 justify-between overflow-hidden max-w-[200px]">
+        <Button variant="outline" className="ml-2 justify-between overflow-hidden max-w-[300px]">
           {/* Отображаем текст фильтра или выбранные элементы */}
           {selectedItems.length === 0 ? (
             // Если нет выбранных элементов, отображаем текст фильтра
@@ -82,14 +82,14 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 w-[200px]">
+      <DropdownMenuContent className="min-w-[200px]">
         <div className="flex items-center rounded-lg bg-gray-50">
           <Input value={searchText} onChange={handleSearchChange} placeholder="Поиск..." />
           <Search className="mr-2" color="#003C96" />
         </div>
 
         <DropdownMenuSeparator />
-        <ScrollArea className="h-[200px] w-[190px] rounded-md border p-2">
+        <ScrollArea className="min-h-[200px] min-w-[190px] rounded-md border p-2">
           {(filteredItems && filteredItems?.length === 0) || Object.values(filteredItems).length === 0 ? (
             // Если не найдено ни одного элемента, отображаем уведомление
             <div className="ml-7 text-xs">Ничего не найдено</div>

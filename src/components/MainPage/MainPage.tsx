@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import styles from "./MainPage.module.css";
 import BlockFilter from "./FilterComponent";
 import SimpleLineChart from "./ExampleLineChart";
@@ -52,6 +52,16 @@ export default function MainPage() {
     console.log("paramsApplyed", paramsApplyed);
     console.log("filtered on MainPage: ", f1, f2, f3, f4, f5, f6);
   }, [forecastsItems, f1, f2, f3, f4, f5, f6, paramsApplyed]);
+
+  useEffect(() => {
+    setFilterItems1([...f1]);
+    setFilterItems2([...f2]);
+    setFilterItems3([...f3]);
+    setFilterItems4([...f4]);
+    setFilterItems5([...f5]);
+    setFilterItems6(f6);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forecastsItems]);
 
   const hasChecked =
     [filterItems1, filterItems2, filterItems3, filterItems4, filterItems5, filterItems6].some(
@@ -148,7 +158,7 @@ export default function MainPage() {
           <div className={styles.shift}>
             <BlockFilter
               filterLabel="Выбор"
-              filterItems={filterItems1 || []}
+              filterItems={f1.length > filterItems1.length ? f1 : filterItems1}
               onFilterChange={handleFilterChange1}
               onFilterChangeAll={handleFilterChangeAll1}
             />
@@ -159,7 +169,7 @@ export default function MainPage() {
           <div>
             <BlockFilter
               filterLabel="Выбор"
-              filterItems={filterItems2 || []}
+              filterItems={f2.length > filterItems2.length ? f2 : filterItems2}
               onFilterChange={handleFilterChange2}
               onFilterChangeAll={handleFilterChangeAll2}
             />
@@ -170,7 +180,7 @@ export default function MainPage() {
           <div>
             <BlockFilter
               filterLabel="Выбор"
-              filterItems={filterItems3 || []}
+              filterItems={f3.length > filterItems3.length ? f3 : filterItems3}
               onFilterChange={handleFilterChange3}
               onFilterChangeAll={handleFilterChangeAll3}
             />
@@ -181,7 +191,7 @@ export default function MainPage() {
           <div>
             <BlockFilter
               filterLabel="Выбор"
-              filterItems={filterItems4 || []}
+              filterItems={f4.length > filterItems4.length ? f4 : filterItems4}
               onFilterChange={handleFilterChange4}
               onFilterChangeAll={handleFilterChangeAll4}
             />
@@ -192,7 +202,7 @@ export default function MainPage() {
           <div>
             <BlockFilter
               filterLabel="Выбор"
-              filterItems={filterItems5 || []}
+              filterItems={f5.length > filterItems5.length ? f5 : filterItems5}
               onFilterChange={handleFilterChange5}
               onFilterChangeAll={handleFilterChangeAll5}
             />
@@ -203,7 +213,7 @@ export default function MainPage() {
           <div>
             <BlockFilter
               filterLabel="Выбор"
-              filterItems={filterItems6 || []}
+              filterItems={f6.length > filterItems6.length ? f6 : filterItems6}
               onFilterChange={handleFilterChange6}
               onFilterChangeAll={handleFilterChangeAll6}
             />
