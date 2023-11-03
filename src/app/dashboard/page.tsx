@@ -9,10 +9,17 @@ import Excel from "@/shared/excel.svg";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { setParamsApplyed, unsetParamsApplyed } from "@/redux/features/forecastsSlice";
+import { downloadClick } from "@/utils";
+import useStorage from "@rehooks/local-storage";
 
 import { useMockdata, useOptions } from "@/hooks";
 
 type CheckedState = boolean;
+
+type Token = {
+  access?: string;
+  refresh?: string;
+};
 
 type keyType = "forecast_data" | "do_nothing" | "real_sale";
 
@@ -21,9 +28,18 @@ type sixfiltersType = "store" | "group" | "category" | "subcategory" | "sku" | "
 export default function MainPage() {
   const { push, replace } = useRouter();
   const dispatch = useAppDispatch();
+
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const [storagetoken] = useStorage("token");
+  const authState = useAppSelector((state) => state.auth);
+  const token = authState.token ? (authState.token as unknown as Token) : (storagetoken as unknown as Token);
+
   const { forecastsItems = [] } = useAppSelector((state) => state.forecasts) || [];
   const { paramsApplyed = [] } = useAppSelector((state) => state.forecasts) || [];
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
+  const [authToken, setAuthToken] = useState("");
 
   useEffect(() => {
     typeof window !== "undefined" && !isAuthenticated && replace("/login");
@@ -31,6 +47,9 @@ export default function MainPage() {
 
   useMockdata("forecast");
 
+  useEffect(() => {
+    token.access && setAuthToken(token.access);
+  }, [token]);
   // use-options.ts
 
   let f1 = useOptions("forecast_data" as unknown as keyType, "store" as unknown as sixfiltersType);
@@ -140,6 +159,25 @@ export default function MainPage() {
     setFilterItems2(updatedFilters);
   };
 
+  const handleDownloadClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      setIsDownloading(true); // Set the loading state to true
+      const authtoken = authState.token?.access || storagetoken || authToken;
+      console.log("authtoken before call obtained", authtoken);
+      const handlerd = await downloadClick("file.xlsx", authtoken);
+
+      if (typeof handlerd === "function") {
+        handlerd(event);
+        setIsDownloading(false); // Set the loading state to false when the download is complete
+        setDownloadError(""); // Clear any previous download errors
+      }
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      setIsDownloading(false); // Set the loading state to false when the download fails
+      setDownloadError("Error downloading file. Please try again."); // Set the error message
+    }
+  };
+
   return (
     <section className="p-0 pl-40 pr-40  ">
       <h1 className={styles.block__title_h1}>Параметры</h1>
@@ -220,10 +258,27 @@ export default function MainPage() {
         </div>
       </div>
       <div className="flex justify-end mb-[10px]">
-        <Button disabled={!hasChecked} variant="excel" size="tpr3" className="h-[40px]">
-          <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" />
-          Экспорт в Excel
+        {/* use downloadClick hook */}
+        <Button
+          onClick={handleDownloadClick}
+          disabled={!hasChecked || isDownloading}
+          variant="excel"
+          size="tpr3"
+          className="h-[40px]"
+        >
+          {isDownloading ? (
+            <>
+              <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" /> Загружаем...{" "}
+              <span className="loading loading-spinner loading-md"></span>
+            </>
+          ) : (
+            <>
+              <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" />
+              Экспорт в Excel
+            </>
+          )}
         </Button>
+        {downloadError && <p>{downloadError}</p>}
       </div>
       {/* <div className='flex space-x-[660px] bg-[#E0E3F1] h-14 text-center rounded-t-lg align-middle'>
       <h1 className='ml-4 pt-4 text-sm'>Товар</h1>

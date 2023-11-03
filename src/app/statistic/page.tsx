@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useMockdata, useOptions } from "@/hooks";
+import { downloadClick } from "@/utils";
 
 type CheckedState = boolean;
 
@@ -44,11 +45,19 @@ export default function StatisticPage() {
   const { StatisticsItems = [] } = useAppSelector((state) => state.statistics) || [];
   const { paramsApplyed } = useAppSelector((state) => state.statistics) || [];
 
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
+  const [authToken, setAuthToken] = useState("");
+
   useMockdata("statistics");
 
   useEffect(() => {
     typeof window !== "undefined" && !isAuthenticated && replace("/login");
   }, [isAuthenticated, push, replace]);
+
+  useEffect(() => {
+    token && setAuthToken(token.access || "");
+  }, [token]);
 
   // use-options.ts
 
@@ -159,6 +168,25 @@ export default function StatisticPage() {
     setFilterItems2(updatedFilters);
   };
 
+  const handleDownloadClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      setIsDownloading(true); // Set the loading state to true
+      const authtoken = token?.access || authToken;
+      console.log("authtoken before call obtained", authtoken);
+      const handlerd = await downloadClick("statfile.xlsx", authtoken);
+
+      if (typeof handlerd === "function") {
+        handlerd(event);
+        setIsDownloading(false); // Set the loading state to false when the download is complete
+        setDownloadError(""); // Clear any previous download errors
+      }
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      setIsDownloading(false); // Set the loading state to false when the download fails
+      setDownloadError("Error downloading file. Please try again."); // Set the error message
+    }
+  };
+
   return (
     <section className="p-0 pl-40 pr-40  ">
       <h1 className={styles.block__title_h1}>Параметры</h1>
@@ -238,6 +266,7 @@ export default function StatisticPage() {
           </Button>
         </div>
       </div>
+
       <div className="flex justify-between mb-[10px]">
         <div>
           <h1 className="mb-2">Длительность</h1>
@@ -253,10 +282,27 @@ export default function StatisticPage() {
             </Button>
           </div>
         </div>
-        <Button disabled={!hasChecked} variant="excel" size="tpr3" className="h-[40px]">
-          <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" />
-          Экспорт в Excel
+        {/* use downloadClick hook */}
+        <Button
+          onClick={handleDownloadClick}
+          disabled={!hasChecked || isDownloading}
+          variant="excel"
+          size="tpr3"
+          className="h-[40px]"
+        >
+          {isDownloading ? (
+            <>
+              <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" /> Загружаем...{" "}
+              <span className="loading loading-spinner loading-md"></span>
+            </>
+          ) : (
+            <>
+              <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" />
+              Экспорт в Excel
+            </>
+          )}
         </Button>
+        {downloadError && <p>{downloadError}</p>}
       </div>
 
       <div className="rounded-lg ring-offset-background border flex flex-col justify-center">
