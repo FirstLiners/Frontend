@@ -7,12 +7,7 @@ import Image from "next/image";
 import Excel from "@/shared/excel.svg";
 import SimpleBarChart from "@/components/SimpleBarChart";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import {
-  setStatisticData,
-  clearStatistics,
-  setParamsStatistics,
-  unsetParamsStatistics,
-} from "@/redux/features/statisticSlice";
+import { setStatisticData, clearStatistics, setParamsStatistics, unsetParamsStatistics } from "@/redux/features/statisticSlice";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useMockdata, useOptions } from "@/hooks";
@@ -174,19 +169,22 @@ export default function StatisticPage() {
       const authtoken = token?.access || authToken;
       console.log("authtoken before call obtained", authtoken);
       const handlerd = await downloadClick("statfile.xlsx", authtoken);
-
+      console.log("handlerd", typeof handlerd === "function" ? "is Function" : JSON.stringify(handlerd.status));
       if (typeof handlerd === "function") {
         handlerd(event);
+        console.log("handlerd inside");
         setIsDownloading(false); // Set the loading state to false when the download is complete
         setDownloadError(""); // Clear any previous download errors
       }
-    } catch (error) {
-      console.error("Error downloading file:", error);
+    } catch (downloadError) {
+      console.error("Error downloading file:", downloadError);
       setIsDownloading(false); // Set the loading state to false when the download fails
+      if (downloadError) {
+        console.log(downloadError, "catched ! error");
+      }
       setDownloadError("Error downloading file. Please try again."); // Set the error message
     }
   };
-
   return (
     <section className="p-0 pl-40 pr-40  ">
       <h1 className={styles.block__title_h1}>Параметры</h1>

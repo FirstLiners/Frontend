@@ -162,22 +162,25 @@ export default function MainPage() {
   const handleDownloadClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     try {
       setIsDownloading(true); // Set the loading state to true
-      const authtoken = authState.token?.access || storagetoken || authToken;
+      const authtoken = token?.access || authToken;
       console.log("authtoken before call obtained", authtoken);
       const handlerd = await downloadClick("file.xlsx", authtoken);
-
+      console.log("handlerd", typeof handlerd === "function" ? "is Function" : JSON.stringify(handlerd.status));
       if (typeof handlerd === "function") {
         handlerd(event);
+        console.log("handlerd inside");
         setIsDownloading(false); // Set the loading state to false when the download is complete
         setDownloadError(""); // Clear any previous download errors
       }
-    } catch (error) {
-      console.error("Error downloading file:", error);
+    } catch (downloadError) {
+      console.error("outside Error downloading file:", downloadError);
       setIsDownloading(false); // Set the loading state to false when the download fails
+      if (downloadError) {
+        console.log(downloadError, "catched ! error");
+      }
       setDownloadError("Error downloading file. Please try again."); // Set the error message
     }
   };
-
   return (
     <section className="p-0 pl-40 pr-40  ">
       <h1 className={styles.block__title_h1}>Параметры</h1>
