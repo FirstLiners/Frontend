@@ -14,6 +14,11 @@ const myFont = localFont({
       style: "normal",
       weight: "400",
     },
+    {
+      path: "../fonts/Gilroy-Medium.woff2",
+      style: "normal",
+      weight: "600",
+    },
   ],
 });
 
@@ -22,11 +27,7 @@ export const metadata: Metadata = {
   description: "Hackaton Lenta 2023, market sales ml prognosis dashboard",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={myFont.className}>
       <body>
@@ -34,9 +35,7 @@ export default function RootLayout({
           <AuthProvider>
             <StoreProvider>
               <Navbar />
-              <main className="flex justify-center items-start py-0 min-h-screen h-full w-full">
-                {children}
-              </main>
+              <main className="flex justify-center items-start py-0 min-h-screen h-full w-full">{children}</main>
             </StoreProvider>
           </AuthProvider>
         </ThemeProvider>

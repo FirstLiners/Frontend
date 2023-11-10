@@ -10,7 +10,9 @@ import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { setParamsApplyed, unsetParamsApplyed } from "@/redux/features/forecastsSlice";
 import { downloadClick } from "@/utils";
+import FilePopover from "@/components/file-popover";
 import useStorage from "@rehooks/local-storage";
+import disableScroll from "disable-scroll";
 
 import { useMockdata, useOptions } from "@/hooks";
 
@@ -38,8 +40,17 @@ export default function MainPage() {
   const { forecastsItems = [] } = useAppSelector((state) => state.forecasts) || [];
   const { paramsApplyed = [] } = useAppSelector((state) => state.forecasts) || [];
   const [isDownloading, setIsDownloading] = useState(false);
-  const [downloadError, setDownloadError] = useState("");
+  const [downloadError, setDownloadError] = useState<{}>({});
   const [authToken, setAuthToken] = useState("");
+
+  function callback(action: any, data: any) {
+    // eslint-disable-next-line no-console
+    console.log(action, data);
+
+    if (data.placement === "center") {
+      disableScroll[action === "open" ? "on" : "off"]();
+    }
+  }
 
   useEffect(() => {
     typeof window !== "undefined" && !isAuthenticated && replace("/login");
@@ -170,7 +181,7 @@ export default function MainPage() {
         handlerd(event);
         console.log("handlerd inside");
         setIsDownloading(false); // Set the loading state to false when the download is complete
-        setDownloadError(""); // Clear any previous download errors
+        setDownloadError({}); // Clear any previous download errors
       }
     } catch (downloadError) {
       console.error("outside Error downloading file:", downloadError);
@@ -178,7 +189,7 @@ export default function MainPage() {
       if (downloadError) {
         console.log(downloadError, "catched ! error");
       }
-      setDownloadError("Error downloading file. Please try again."); // Set the error message
+      setDownloadError({ downloadError }); // Set the error message
     }
   };
   return (
@@ -281,12 +292,12 @@ export default function MainPage() {
             </>
           )}
         </Button>
-        {downloadError && <p>{downloadError}</p>}
       </div>
-      {/* <div className='flex space-x-[660px] bg-[#E0E3F1] h-14 text-center rounded-t-lg align-middle'>
-      <h1 className='ml-4 pt-4 text-sm'>Товар</h1>
-      <h1 className='pt-4 text-sm'>Прогнозирование спроса по дням</h1>
-    </div> */}
+      {Object.keys(downloadError).length > 0 && (
+        <div>
+          <FilePopover cb={(action: {}, data: any) => {}} arg={downloadError} fileSize={0} />
+        </div>
+      )}
       <DasTable />
     </section>
   );

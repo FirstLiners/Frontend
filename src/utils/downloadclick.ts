@@ -7,7 +7,7 @@ import dateFormated from "./date";
 export default async function downloadClick(
   filename?: string,
   token?: string,
-): Promise<MouseEventHandler<HTMLButtonElement> | { error: string; status: number }> {
+): Promise<MouseEventHandler<HTMLButtonElement> | { error: object }> {
   const actualDate = dateFormated({ dateString: new Date().toISOString() });
   const pathname = `${process.env.NEXT_PUBLIC_URL}/api/download/${filename}` || "http://localhost:3000/api/download/file.pdf";
   token = token;
@@ -24,6 +24,7 @@ export default async function downloadClick(
   try {
     return async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (response.status === 200) {
+        console.log("response is", response);
         const blob = response.data;
 
         const url = window.URL.createObjectURL(blob);
@@ -49,6 +50,6 @@ export default async function downloadClick(
     // need to handle error with popover
     console.log("Error occurred while downloading file:", error);
     // add error to return
-    return { error: "Error occurred while downloading file:", status: 500 };
+    return { error: { msg: `Error occurred while downloading file: ${filename}_${actualDate}`, error: error } };
   }
 }

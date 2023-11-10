@@ -12,6 +12,7 @@ module.exports = {
         '2xl': '1400px',
       },
     },
+
     extend: {
       colors: {
         border: 'hsl(var(--border))',
@@ -69,5 +70,25 @@ module.exports = {
       },
     },
   },
+
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+
+"primary": "#9fb2e0",
+"secondary": "#f490f9",
+"accent": "#3b238c",
+"neutral": "#202428",
+"base-100": "#fafafa",
+"info": "#2ab0e5",
+"success": "#11554a",
+"warning": "#f0cb28",
+"error": "#EF4545",
+        },
+      },
+    ],
+  },
+
   plugins: [require('tailwindcss-animate'), require("daisyui")],
 };

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useMockdata, useOptions } from "@/hooks";
 import { downloadClick } from "@/utils";
+import FilePopover from "@/components/file-popover";
 
 type CheckedState = boolean;
 
@@ -182,7 +183,7 @@ export default function StatisticPage() {
       if (downloadError) {
         console.log(downloadError, "catched ! error");
       }
-      setDownloadError("Error downloading file. Please try again."); // Set the error message
+      setDownloadError(`Error downloading file. Please try again. ${downloadError}`); // Set the error message
     }
   };
   return (
@@ -312,6 +313,11 @@ export default function StatisticPage() {
           <DasTable2 />
         </div>
       </div>
+      {Object.keys(downloadError).length > 0 && (
+        <div>
+          <FilePopover cb={(action: {}, data: any) => {}} arg={downloadError} fileSize={0} />
+        </div>
+      )}
     </section>
   );
 }
