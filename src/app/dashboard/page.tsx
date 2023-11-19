@@ -1,21 +1,19 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import styles from '@/styles/dashboard.module.css';
-import BlockFilter from '@/components/MainPage/FilterComponent';
-import DasTable from '@/components/DashboardTable/DashboardTable';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import Excel from '@/shared/excel.svg';
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { useRouter } from 'next/navigation';
-import { setParamsApplyed, unsetParamsApplyed } from '@/redux/features/forecastsSlice';
-import { downloadClick } from '@/utils';
-import FilePopover from '@/components/file-popover';
 import useStorage from '@rehooks/local-storage';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
+import DasTable from '@/components/DashboardTable/DashboardTable';
+import FilePopover from '@/components/file-popover';
+import BlockFilter from '@/components/MainPage/FilterComponent';
+import { Button } from '@/components/ui/button';
 import { useMockdata, useOptions } from '@/hooks';
-import { set } from 'date-fns';
+// eslint-disable-next-line unused-imports/no-unused-imports
+import { setParamsApplyed, unsetParamsApplyed } from '@/redux/features/forecastsSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import Excel from '@/shared/excel.svg';
+import styles from '@/styles/dashboard.module.css';
+import { downloadClick } from '@/utils';
 
 type CheckedState = boolean;
 
@@ -50,9 +48,17 @@ export default function MainPage() {
     console.log(action, data);
   }
 
+  const handleClickClear = () => {
+    setDownloadError({});
+    setResponse({});
+    setIsDownloading(false);
+  };
+
   useEffect(() => {
     console.log('isDownloading updated:', isDownloading);
-  }, [isDownloading]);
+    console.log('downloadError updated:', downloadError);
+    console.log('response updated:', response);
+  }, [isDownloading, downloadError, response]);
 
   useEffect(() => {
     typeof window !== 'undefined' && !isAuthenticated && replace('/login');
@@ -181,23 +187,21 @@ export default function MainPage() {
       console.log('isDownloading after:', isDownloading);
       const authtoken = token?.access || authToken;
       console.log('authtoken before call obtained', authtoken);
-      const handlerd = await downloadClick('file.xlsx', authtoken);
-      console.log(
-        'handlerd',
-        typeof handlerd === 'function' ? 'is Function' : 'respinfo' in handlerd && JSON.stringify(handlerd.respinfo),
-      );
-      'respinfo' in handlerd && setResponse(handlerd.respinfo);
-
-      if (typeof handlerd === 'function') {
-        handlerd(event);
-        console.log('handlerd inside');
+      const { respinfo, error } = await downloadClick('file.xlsx', authtoken); // file.xlsx statfile.xlsx
+      setResponse(respinfo || error); // Set the response
+      if (response) {
+        console.log('respinfo', response);
       }
     } catch (downloadError) {
+      // it should never happen as error is passed to response do remove code below
       console.error('outside Error downloading file:', downloadError);
       if (downloadError) {
         console.log(downloadError, 'catched ! error');
       }
       setDownloadError({ downloadError }); // Set the error message
+      if (typeof downloadError === 'object' && downloadError !== null) {
+        setResponse(downloadError);
+      }
     } finally {
       // This block will run regardless of whether an exception was thrown or caught
       console.log('Download attempt finished.');
@@ -205,17 +209,12 @@ export default function MainPage() {
       setTimeout(() => {
         setIsDownloading(false);
       }, 2000); // 2000 ms = 2 seconds
-      setIsDownloading(false); // Set the loading state to false when the download fails or is complete
+      //    setIsDownloading(false); // Set the loading state to false when the download fails or is complete
     }
   };
   return (
     <>
-      {isDownloading && (
-        <div>
-          <FilePopover cb={(action: {}, data: any) => {}} arg={response} fileSize={0} />
-        </div>
-      )}
-      <section className="p-0 pl-40 pr-40  ">
+      <section className="p-0 px-40">
         <h1 className={styles.block__title_h1}>Параметры</h1>
         <div className={styles.block__filter2}>
           <div>
@@ -293,13 +292,14 @@ export default function MainPage() {
             </Button>
           </div>
         </div>
-        <div className="flex justify-end mb-[10px]">
+        <div className="mb-[10px] flex justify-end">
           {/* use downloadClick hook */}
 
           <button
             className="btn"
             disabled={!hasChecked || isDownloading}
             onClick={() => {
+              handleClickClear();
               handleDownloadClick(event);
             }}
           >
@@ -316,6 +316,8 @@ export default function MainPage() {
               </svg>
             )}
           </button>
+          {/* show file-popover */}
+          {Object.keys(response).length > 0 ? <FilePopover cb={callback} arg={response} fileSize={0} /> : <div></div>}
         </div>
 
         <DasTable />

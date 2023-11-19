@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import type { NextFetchEvent } from 'next/server';
+import type { NextFetchEvent, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // export as an async _GET_ function. This is a convention in NextJS
 const GET = async function GET(req: NextRequest, event: NextFetchEvent) {
@@ -14,8 +14,8 @@ const GET = async function GET(req: NextRequest, event: NextFetchEvent) {
     STATISTICS_URL,
   ];
 
-  const filename = req.nextUrl.searchParams.get('filename'); // got null
-
+  const filename = req.nextUrl.searchParams.get('filename')?.trim();
+  console.log('Filename:', filename);
   // use fetch to get a response, this way no get files that are bigger than 4mb
   let url;
   switch (filename) {
@@ -35,7 +35,7 @@ const GET = async function GET(req: NextRequest, event: NextFetchEvent) {
       url = new URL(testLinks[0]); // "http://127.0.0.1:8000/api/v1/statistics/download_statistics"; // ACTUAL_FORECAST_URL; // "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"; //
       break;
   }
-
+  console.log('URL:', url);
   console.log(
     'url, nexturl and cookies are: ',
     JSON.stringify(req.url),
@@ -65,8 +65,20 @@ const GET = async function GET(req: NextRequest, event: NextFetchEvent) {
       headers: newHeaders,
     });
     return res;
-  } else {
+  } else if (respstatus === 401) {
     return new NextResponse('Unauthorized', { status: 401 });
+  } else if (respstatus === 500) {
+    return new NextResponse('Internal Server Error', { status: 500 });
+  } else if (respstatus === 404) {
+    return new NextResponse('Not Found', { status: 404 });
+  } else if (respstatus === 400) {
+    return new NextResponse('Bad Request', { status: 400 });
+  } else if (respstatus === 403) {
+    return new NextResponse('Forbidden', { status: 403 });
+  } else if (respstatus === 405) {
+    return new NextResponse('Method Not Allowed', { status: 405 });
+  } else {
+    return new NextResponse('Something went wrong', { status: 500 });
   }
 };
 

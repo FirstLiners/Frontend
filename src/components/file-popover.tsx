@@ -81,7 +81,7 @@ function callback(action: any, data: any) {
 }
 
 function distinguishResponse(response: any) {
-  if (response.status !== 200 || response?.downloadError?.status) {
+  if (response.status !== 200 && response.status !== 0) {
     return 'fail';
   } else if (response.status === 200) {
     return 'OK';
@@ -91,8 +91,14 @@ function distinguishResponse(response: any) {
 }
 
 export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: Props) {
+  // if fileSize is 0 then try to get it from arg headers object as content-length
+  if (fileSize === 0) {
+    fileSize = Number(arg?.headers?.['content-length']) || 0;
+  }
   console.group('ErrPopover');
   //  console.log(err);
+  console.log(arg);
+  console.log('fileSize', fileSize);
   console.log(distinguishResponse(arg));
   console.log(fileSize);
 
@@ -102,7 +108,7 @@ export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: P
   // func accept array of steps {object of  string values} and a boolean value to run the tour
   const [isOpen, setOpen] = useState(true);
   const [okObj, setOkObj] = useState(arg);
-  const [errObj, setErrObj] = useState(arg);
+  const [errObj, setErrObj] = useState({});
   const [isComplete, setComplete] = useState(false);
 
   useEffect(() => {

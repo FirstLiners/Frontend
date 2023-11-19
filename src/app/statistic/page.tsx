@@ -1,18 +1,19 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import styles from '@/styles/dashboard.module.css';
-import BlockFilter from '@/components/MainPage/FilterComponent';
-import DasTable2 from '@/components/DashboardTable2';
 import Image from 'next/image';
-import Excel from '@/shared/excel.svg';
-import SimpleBarChart from '@/components/SimpleBarChart';
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { setStatisticData, clearStatistics, setParamsStatistics, unsetParamsStatistics } from '@/redux/features/statisticSlice';
-import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useMockdata, useOptions } from '@/hooks';
-import { downloadClick } from '@/utils';
+import React, { useEffect, useState } from 'react';
+
+import DasTable2 from '@/components/DashboardTable2';
 import FilePopover from '@/components/file-popover';
+import BlockFilter from '@/components/MainPage/FilterComponent';
+import SimpleBarChart from '@/components/SimpleBarChart';
+import { Button } from '@/components/ui/button';
+import { useMockdata, useOptions } from '@/hooks';
+import { clearStatistics, setParamsStatistics, setStatisticData, unsetParamsStatistics } from '@/redux/features/statisticSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import Excel from '@/shared/excel.svg';
+import styles from '@/styles/dashboard.module.css';
+import { downloadClick } from '@/utils';
 
 type CheckedState = boolean;
 
@@ -34,6 +35,11 @@ type StatisticsItemsType = {
   wape: number;
 }[];
 
+function callback(action: any, data: any) {
+  // eslint-disable-next-line no-console
+  console.log(action, data);
+}
+
 export default function StatisticPage() {
   const { push, replace } = useRouter();
   const dispatch = useAppDispatch();
@@ -44,6 +50,7 @@ export default function StatisticPage() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState('');
   const [authToken, setAuthToken] = useState('');
+  const [response, setResponse] = useState<{}>({}); // response from downloadClick()
 
   useMockdata('statistics');
 
@@ -169,10 +176,9 @@ export default function StatisticPage() {
       setIsDownloading(true); // Set the loading state to true
       const authtoken = token?.access || authToken;
       console.log('authtoken before call obtained', authtoken);
-      const handlerd = await downloadClick('statfile.xlsx', authtoken);
-      console.log('handlerd', typeof handlerd === 'function' ? 'is Function' : JSON.stringify(handlerd.status));
-      if (typeof handlerd === 'function') {
-        handlerd(event);
+      const { respinfo, error } = await downloadClick('statfile.xlsx', authtoken); // file.xlsx statfile.xlsx
+      setResponse(respinfo || error); // Set the response
+      if (response) {
         console.log('handlerd inside');
         setIsDownloading(false); // Set the loading state to false when the download is complete
         setDownloadError(''); // Clear any previous download errors
@@ -266,11 +272,11 @@ export default function StatisticPage() {
         </div>
       </div>
 
-      <div className="flex justify-between mb-[10px]">
+      <div className="mb-[10px] flex justify-between">
         <div>
           <h1 className="mb-2">Длительность</h1>
-          <div className="items-end justify-center flex">
-            <Button variant="dropdownMenuButton2" className="w-[70px] h-[40px] rounded-md text-sm" size="tpr3">
+          <div className="flex items-end justify-center">
+            <Button variant="dropdownMenuButton2" className="h-[40px] w-[70px] rounded-md text-sm" size="tpr3">
               День
             </Button>
             <Button variant="dropdownMenuButton3" size="tpr3">
@@ -304,18 +310,18 @@ export default function StatisticPage() {
         {downloadError && <p>{downloadError}</p>}
       </div>
 
-      <div className="rounded-lg ring-offset-background border flex flex-col justify-center">
-        <h1 className="font-bold mb-4 ml-4 mt-4">Прогноз сравнение</h1>
+      <div className="flex flex-col justify-center rounded-lg border ring-offset-background">
+        <h1 className="my-4 ml-4 font-bold">Прогноз сравнение</h1>
         <SimpleBarChart />
 
-        <div className="mb-5 rounded-lg ring-offset-background border w-[1560px] ml-5 flex flex-col justify-center">
-          <h1 className="font-bold ml-5 mt-4">Прогноз сравнение</h1>
+        <div className="mb-5 ml-5 flex w-[1560px] flex-col justify-center rounded-lg border ring-offset-background">
+          <h1 className="ml-5 mt-4 font-bold">Прогноз сравнение</h1>
           <DasTable2 />
         </div>
       </div>
-      {Object.keys(downloadError).length > 0 && (
+      {Object.keys(response).length > 0 && (
         <div>
-          <FilePopover cb={(action: {}, data: any) => {}} arg={downloadError} fileSize={0} />
+          <FilePopover cb={callback} arg={response} fileSize={0} />
         </div>
       )}
     </section>
