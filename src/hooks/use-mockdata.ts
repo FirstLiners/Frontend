@@ -1,11 +1,11 @@
 // this hook must take data that consist of nested key: value  from the mockdata forecasts.json file and return return [value, setValue] for the given key argument
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { setJsonData } from "@/redux/features/forecastsSlice";
-import { setStatisticData } from "@/redux/features/statisticSlice";
-import { useState, useEffect } from "react";
-import useStorage from "@rehooks/local-storage";
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { setJsonData } from '@/redux/features/forecastsSlice';
+import { setStatisticData } from '@/redux/features/statisticSlice';
+import { useState, useEffect } from 'react';
+import useStorage from '@rehooks/local-storage';
 // теперь данные фетчатся с бэкенда TODO: rename module to use-fetchdata
-import axios from "axios";
+import axios from 'axios';
 
 type Forecast = {
   store: string;
@@ -79,18 +79,18 @@ async function fetchData(
   key: string,
 ): Promise<Forecasts | Statistics> {
   switch (key) {
-    case "forecast":
+    case 'forecast':
       return Array.isArray(Items) && Items.length ? Items : fetchForecasts(token);
       // it seems that  fetchForecasts(token) does not return data, need to verify that
       console.log(`fetchedData: ${JSON.stringify(Items)}`);
-    case "statistics":
+    case 'statistics':
       return Array.isArray(Items) && Items.length ? Items : fetchStatistics(token);
-    case "store":
-    case "group":
-    case "category":
-    case "subcategory":
-    case "sku":
-    case "uom":
+    case 'store':
+    case 'group':
+    case 'category':
+    case 'subcategory':
+    case 'sku':
+    case 'uom':
       return Array.isArray(Items) && Items.length ? Items : fetchForecasts(token);
     default:
       throw new Error(`Invalid point: ${key}`);
@@ -98,7 +98,7 @@ async function fetchData(
 }
 
 function isString(item: unknown): item is string {
-  return typeof item === "string";
+  return typeof item === 'string';
 }
 
 export default function useMockdata(key: string): [
@@ -109,7 +109,7 @@ export default function useMockdata(key: string): [
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState<string | null>(null);
 
-  const [storagetoken] = useStorage("token");
+  const [storagetoken] = useStorage('token');
   const authState = useAppSelector((state) => state.auth);
   const token = authState.token ? (authState.token as unknown as Token) : (storagetoken as unknown as Token);
   const { forecastsItems = [] } = useAppSelector((state) => state.forecasts) || [];
@@ -118,13 +118,13 @@ export default function useMockdata(key: string): [
   useEffect(() => {
     setLoading(true);
     setError(null);
-    const Items = key === "forecast" ? forecastsItems : StatisticsItems;
+    const Items = key === 'forecast' ? forecastsItems : StatisticsItems;
     fetchData(Items as unknown as Statistics | Forecasts, token, key)
       .then((datum) => {
         console.log(`datum: ${JSON.stringify(datum)}`);
         // console.log(`key: ${key}`);
-        key === "statistics" && dispatch(setStatisticData(datum));
-        key === "forecast" && dispatch(setJsonData(datum));
+        key === 'statistics' && dispatch(setStatisticData(datum));
+        key === 'forecast' && dispatch(setJsonData(datum));
       })
       .catch((error) => {
         setError(error.message);

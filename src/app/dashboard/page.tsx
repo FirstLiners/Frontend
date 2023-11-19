@@ -1,20 +1,21 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import styles from "@/styles/dashboard.module.css";
-import BlockFilter from "@/components/MainPage/FilterComponent";
-import DasTable from "@/components/DashboardTable/DashboardTable";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Excel from "@/shared/excel.svg";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { useRouter } from "next/navigation";
-import { setParamsApplyed, unsetParamsApplyed } from "@/redux/features/forecastsSlice";
-import { downloadClick } from "@/utils";
-import FilePopover from "@/components/file-popover";
-import useStorage from "@rehooks/local-storage";
-import disableScroll from "disable-scroll";
+'use client';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import styles from '@/styles/dashboard.module.css';
+import BlockFilter from '@/components/MainPage/FilterComponent';
+import DasTable from '@/components/DashboardTable/DashboardTable';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import Excel from '@/shared/excel.svg';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { useRouter } from 'next/navigation';
+import { setParamsApplyed, unsetParamsApplyed } from '@/redux/features/forecastsSlice';
+import { downloadClick } from '@/utils';
+import FilePopover from '@/components/file-popover';
+import useStorage from '@rehooks/local-storage';
 
-import { useMockdata, useOptions } from "@/hooks";
+import { useMockdata, useOptions } from '@/hooks';
+import { set } from 'date-fns';
 
 type CheckedState = boolean;
 
@@ -23,9 +24,9 @@ type Token = {
   refresh?: string;
 };
 
-type keyType = "forecast_data" | "do_nothing" | "real_sale";
+type keyType = 'forecast_data' | 'do_nothing' | 'real_sale';
 
-type sixfiltersType = "store" | "group" | "category" | "subcategory" | "sku" | "uom";
+type sixfiltersType = 'store' | 'group' | 'category' | 'subcategory' | 'sku' | 'uom';
 
 export default function MainPage() {
   const { push, replace } = useRouter();
@@ -33,7 +34,7 @@ export default function MainPage() {
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
-  const [storagetoken] = useStorage("token");
+  const [storagetoken] = useStorage('token');
   const authState = useAppSelector((state) => state.auth);
   const token = authState.token ? (authState.token as unknown as Token) : (storagetoken as unknown as Token);
 
@@ -41,56 +42,57 @@ export default function MainPage() {
   const { paramsApplyed = [] } = useAppSelector((state) => state.forecasts) || [];
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<{}>({});
-  const [authToken, setAuthToken] = useState("");
+  const [response, setResponse] = useState<{}>({}); // response from downloadClick()
+  const [authToken, setAuthToken] = useState('');
 
   function callback(action: any, data: any) {
     // eslint-disable-next-line no-console
     console.log(action, data);
-
-    if (data.placement === "center") {
-      disableScroll[action === "open" ? "on" : "off"]();
-    }
   }
 
   useEffect(() => {
-    typeof window !== "undefined" && !isAuthenticated && replace("/login");
+    console.log('isDownloading updated:', isDownloading);
+  }, [isDownloading]);
+
+  useEffect(() => {
+    typeof window !== 'undefined' && !isAuthenticated && replace('/login');
   }, [isAuthenticated, push, replace]);
 
-  useMockdata("forecast");
+  useMockdata('forecast');
 
   useEffect(() => {
     token.access && setAuthToken(token.access);
   }, [token]);
   // use-options.ts
 
-  let f1 = useOptions("forecast_data" as unknown as keyType, "store" as unknown as sixfiltersType);
+  let f1 = useOptions('forecast_data' as unknown as keyType, 'store' as unknown as sixfiltersType);
 
   const [filterItems1, setFilterItems1] = useState([...f1]);
 
-  let f2 = useOptions("forecast_data" as unknown as keyType, "group" as unknown as sixfiltersType);
+  let f2 = useOptions('forecast_data' as unknown as keyType, 'group' as unknown as sixfiltersType);
 
   const [filterItems2, setFilterItems2] = useState([...f2]);
 
-  let f3 = useOptions("forecast_data" as unknown as keyType, "category" as unknown as sixfiltersType);
+  let f3 = useOptions('forecast_data' as unknown as keyType, 'category' as unknown as sixfiltersType);
 
   const [filterItems3, setFilterItems3] = useState([...f3]);
 
-  let f4 = useOptions("forecast_data" as unknown as keyType, "subcategory" as unknown as sixfiltersType);
+  let f4 = useOptions('forecast_data' as unknown as keyType, 'subcategory' as unknown as sixfiltersType);
 
   const [filterItems4, setFilterItems4] = useState([...f4]);
 
-  let f5 = useOptions("forecast_data" as unknown as keyType, "sku" as unknown as sixfiltersType);
+  let f5 = useOptions('forecast_data' as unknown as keyType, 'sku' as unknown as sixfiltersType);
 
   const [filterItems5, setFilterItems5] = useState([...f5]);
 
-  let f6 = useOptions("forecast_data" as unknown as keyType, "uom" as unknown as sixfiltersType);
+  let f6 = useOptions('forecast_data' as unknown as keyType, 'uom' as unknown as sixfiltersType);
 
   const [filterItems6, setFilterItems6] = useState([...f6]);
 
   useEffect(() => {
-    console.log("forecasts", forecastsItems);
-    console.log("paramsApplyed", paramsApplyed);
-    console.log("filtered on prognosis page: ", f1, f2, f3, f4, f5, f6);
+    console.log('forecasts', forecastsItems);
+    console.log('paramsApplyed', paramsApplyed);
+    console.log('filtered on prognosis page: ', f1, f2, f3, f4, f5, f6);
   }, [forecastsItems, f1, f2, f3, f4, f5, f6, paramsApplyed]);
 
   const hasChecked =
@@ -172,133 +174,152 @@ export default function MainPage() {
 
   const handleDownloadClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      setIsDownloading(true); // Set the loading state to true
+      setResponse({}); // Clear the response
+      setDownloadError({}); // Clear any previous download errors
+      console.log('isDownloading before:', isDownloading);
+      setIsDownloading(true);
+      console.log('isDownloading after:', isDownloading);
       const authtoken = token?.access || authToken;
-      console.log("authtoken before call obtained", authtoken);
-      const handlerd = await downloadClick("file.xlsx", authtoken);
-      console.log("handlerd", typeof handlerd === "function" ? "is Function" : JSON.stringify(handlerd.status));
-      if (typeof handlerd === "function") {
+      console.log('authtoken before call obtained', authtoken);
+      const handlerd = await downloadClick('file.xlsx', authtoken);
+      console.log(
+        'handlerd',
+        typeof handlerd === 'function' ? 'is Function' : 'respinfo' in handlerd && JSON.stringify(handlerd.respinfo),
+      );
+      'respinfo' in handlerd && setResponse(handlerd.respinfo);
+
+      if (typeof handlerd === 'function') {
         handlerd(event);
-        console.log("handlerd inside");
-        setIsDownloading(false); // Set the loading state to false when the download is complete
-        setDownloadError({}); // Clear any previous download errors
+        console.log('handlerd inside');
       }
     } catch (downloadError) {
-      console.error("outside Error downloading file:", downloadError);
-      setIsDownloading(false); // Set the loading state to false when the download fails
+      console.error('outside Error downloading file:', downloadError);
       if (downloadError) {
-        console.log(downloadError, "catched ! error");
+        console.log(downloadError, 'catched ! error');
       }
       setDownloadError({ downloadError }); // Set the error message
+    } finally {
+      // This block will run regardless of whether an exception was thrown or caught
+      console.log('Download attempt finished.');
+      // Hide the popover after a delay
+      setTimeout(() => {
+        setIsDownloading(false);
+      }, 2000); // 2000 ms = 2 seconds
+      setIsDownloading(false); // Set the loading state to false when the download fails or is complete
     }
   };
   return (
-    <section className="p-0 pl-40 pr-40  ">
-      <h1 className={styles.block__title_h1}>Параметры</h1>
-      <div className={styles.block__filter2}>
+    <>
+      {isDownloading && (
         <div>
-          <h1 className={styles.h1_first}>Торговый Комплекс</h1>
-          <div className={styles.shift}>
-            <BlockFilter
-              filterLabel="Выбор"
-              filterItems={filterItems1}
-              onFilterChange={handleFilterChange1}
-              onFilterChangeAll={handleFilterChangeAll1}
-            />
-          </div>
-        </div>
-        <div>
-          <h1 className={styles.h1}>Группа</h1>
-          <div>
-            <BlockFilter
-              filterLabel="Выбор"
-              filterItems={filterItems2}
-              onFilterChange={handleFilterChange2}
-              onFilterChangeAll={handleFilterChangeAll2}
-            />
-          </div>
-        </div>
-        <div>
-          <h1 className={styles.h1}>Категория</h1>
-          <div>
-            <BlockFilter
-              filterLabel="Выбор"
-              filterItems={filterItems3}
-              onFilterChange={handleFilterChange3}
-              onFilterChangeAll={handleFilterChangeAll3}
-            />
-          </div>
-        </div>
-        <div>
-          <h1 className={styles.h1}>Подкатегория</h1>
-          <div>
-            <BlockFilter
-              filterLabel="Выбор"
-              filterItems={filterItems4}
-              onFilterChange={handleFilterChange4}
-              onFilterChangeAll={handleFilterChangeAll4}
-            />
-          </div>
-        </div>
-        <div>
-          <h1 className={styles.h1}>Товар</h1>
-          <div>
-            <BlockFilter
-              filterLabel="Выбор"
-              filterItems={filterItems5}
-              onFilterChange={handleFilterChange5}
-              onFilterChangeAll={handleFilterChangeAll5}
-            />
-          </div>
-        </div>
-        <div>
-          <h1 className={styles.h1}>Ед.измерения\Руб</h1>
-          <div>
-            <BlockFilter
-              filterLabel="Выбор"
-              filterItems={filterItems6}
-              onFilterChange={handleFilterChange6}
-              onFilterChangeAll={handleFilterChangeAll6}
-            />
-          </div>
-        </div>
-        <div className={styles.block__button}>
-          <Button disabled={!hasChecked} variant="firstly">
-            Применить
-          </Button>
-          <Button disabled={!hasChecked} variant="secondary">
-            Сбросить
-          </Button>
-        </div>
-      </div>
-      <div className="flex justify-end mb-[10px]">
-        {/* use downloadClick hook */}
-        <Button
-          onClick={handleDownloadClick}
-          disabled={!hasChecked || isDownloading}
-          variant="excel"
-          size="tpr3"
-          className="h-[40px]"
-        >
-          {isDownloading ? (
-            <>
-              <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" /> Загружаем...{" "}
-              <span className="loading loading-spinner loading-md"></span>
-            </>
-          ) : (
-            <>
-              <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" />
-              Экспорт в Excel
-            </>
-          )}
-        </Button>
-      </div>
-      {Object.keys(downloadError).length > 0 && (
-        <div>
-          <FilePopover cb={(action: {}, data: any) => {}} arg={downloadError} fileSize={0} />
+          <FilePopover cb={(action: {}, data: any) => {}} arg={response} fileSize={0} />
         </div>
       )}
-      <DasTable />
-    </section>
+      <section className="p-0 pl-40 pr-40  ">
+        <h1 className={styles.block__title_h1}>Параметры</h1>
+        <div className={styles.block__filter2}>
+          <div>
+            <h1 className={styles.h1_first}>Торговый Комплекс</h1>
+            <div className={styles.shift}>
+              <BlockFilter
+                filterLabel="Выбор"
+                filterItems={filterItems1}
+                onFilterChange={handleFilterChange1}
+                onFilterChangeAll={handleFilterChangeAll1}
+              />
+            </div>
+          </div>
+          <div>
+            <h1 className={styles.h1}>Группа</h1>
+            <div>
+              <BlockFilter
+                filterLabel="Выбор"
+                filterItems={filterItems2}
+                onFilterChange={handleFilterChange2}
+                onFilterChangeAll={handleFilterChangeAll2}
+              />
+            </div>
+          </div>
+          <div>
+            <h1 className={styles.h1}>Категория</h1>
+            <div>
+              <BlockFilter
+                filterLabel="Выбор"
+                filterItems={filterItems3}
+                onFilterChange={handleFilterChange3}
+                onFilterChangeAll={handleFilterChangeAll3}
+              />
+            </div>
+          </div>
+          <div>
+            <h1 className={styles.h1}>Подкатегория</h1>
+            <div>
+              <BlockFilter
+                filterLabel="Выбор"
+                filterItems={filterItems4}
+                onFilterChange={handleFilterChange4}
+                onFilterChangeAll={handleFilterChangeAll4}
+              />
+            </div>
+          </div>
+          <div>
+            <h1 className={styles.h1}>Товар</h1>
+            <div>
+              <BlockFilter
+                filterLabel="Выбор"
+                filterItems={filterItems5}
+                onFilterChange={handleFilterChange5}
+                onFilterChangeAll={handleFilterChangeAll5}
+              />
+            </div>
+          </div>
+          <div>
+            <h1 className={styles.h1}>Ед.измерения\Руб</h1>
+            <div>
+              <BlockFilter
+                filterLabel="Выбор"
+                filterItems={filterItems6}
+                onFilterChange={handleFilterChange6}
+                onFilterChangeAll={handleFilterChangeAll6}
+              />
+            </div>
+          </div>
+          <div className={styles.block__button}>
+            <Button disabled={!hasChecked} variant="firstly">
+              Применить
+            </Button>
+            <Button disabled={!hasChecked} variant="secondary">
+              Сбросить
+            </Button>
+          </div>
+        </div>
+        <div className="flex justify-end mb-[10px]">
+          {/* use downloadClick hook */}
+
+          <button
+            className="btn"
+            disabled={!hasChecked || isDownloading}
+            onClick={() => {
+              handleDownloadClick(event);
+            }}
+          >
+            {isDownloading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        <DasTable />
+      </section>
+    </>
   );
 }

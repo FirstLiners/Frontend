@@ -1,9 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
-  content: [
-    './src/**/*.{ts,tsx,js,jsx}',
-  ],
+  content: ['./src/**/*.{ts,tsx,js,jsx}'],
   theme: {
     container: {
       center: true,
@@ -75,20 +73,19 @@ module.exports = {
     themes: [
       {
         mytheme: {
-
-"primary": "#9fb2e0",
-"secondary": "#f490f9",
-"accent": "#3b238c",
-"neutral": "#202428",
-"base-100": "#fafafa",
-"info": "#2ab0e5",
-"success": "#11554a",
-"warning": "#f0cb28",
-"error": "#EF4545",
+          primary: '#9fb2e0',
+          secondary: '#f490f9',
+          accent: '#3b238c',
+          neutral: '#202428',
+          'base-100': '#fafafa',
+          info: '#2ab0e5',
+          success: '#11554a',
+          warning: '#f0cb28',
+          error: '#EF4545',
         },
       },
     ],
   },
 
-  plugins: [require('tailwindcss-animate'), require("daisyui")],
+  plugins: [require('tailwindcss-animate'), require('daisyui')],
 };

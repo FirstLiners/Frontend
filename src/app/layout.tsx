@@ -1,30 +1,30 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
-import Navbar from "../components/Navbar";
-import AuthProvider from "../context/AuthProvider";
-import ThemeProvider from "../context/ThemeProvider";
-import StoreProvider from "../redux/provider";
-import type { Metadata } from "next";
-import localFont from "next/font/local";
+import './globals.css';
+import { Inter } from 'next/font/google';
+import Navbar from '../components/Navbar';
+import AuthProvider from '../context/AuthProvider';
+import ThemeProvider from '../context/ThemeProvider';
+import StoreProvider from '../redux/provider';
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 
 const myFont = localFont({
   src: [
     {
-      path: "../fonts/Gilroy-Regular.woff2",
-      style: "normal",
-      weight: "400",
+      path: '../fonts/Gilroy-Regular.woff2',
+      style: 'normal',
+      weight: '400',
     },
     {
-      path: "../fonts/Gilroy-Medium.woff2",
-      style: "normal",
-      weight: "600",
+      path: '../fonts/Gilroy-Medium.woff2',
+      style: 'normal',
+      weight: '600',
     },
   ],
 });
 
 export const metadata: Metadata = {
-  title: "Hackaton Lenta",
-  description: "Hackaton Lenta 2023, market sales ml prognosis dashboard",
+  title: 'Hackaton Lenta',
+  description: 'Hackaton Lenta 2023, market sales ml prognosis dashboard',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

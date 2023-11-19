@@ -1,15 +1,11 @@
-"use client";
-import styles from "./about.module.css";
-import React, { useState } from "react";
-import Link from "next/link";
-import type { RootState } from "@/redux/store";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  increment,
-  decrement,
-  incrementByAmount,
-} from "@/redux/features/counterSlice";
-import { Button } from "@/components/ui/button";
+'use client';
+import styles from './about.module.css';
+import React, { useState } from 'react';
+import Link from 'next/link';
+import type { RootState } from '@/redux/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement, incrementByAmount } from '@/redux/features/counterSlice';
+import { Button } from '@/components/ui/button';
 
 function ButtonAsChild({ ...props }) {
   return (
@@ -33,10 +29,7 @@ export default function Page() {
         <button className={styles.button} onClick={() => dispatch(decrement())}>
           Decrement
         </button>
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementByAmount(2))}
-        >
+        <button className={styles.button} onClick={() => dispatch(incrementByAmount(2))}>
           Increment by 2
         </button>
       </div>

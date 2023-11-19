@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useAppSelector } from "@/redux/hooks";
+import React, { useEffect } from 'react';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useAppSelector } from '@/redux/hooks';
 
 type ForecastsItemsType = {
   store: string;
@@ -39,7 +39,7 @@ const DasTable: React.FC<DashboardTableProps> = () => {
   const dates = forteenDaysAgo();
 
   useEffect(() => {
-    console.log("dates", dates);
+    console.log('dates', dates);
   }, [dates]);
 
   const filteredData = forecastsItems.filter((item) => {

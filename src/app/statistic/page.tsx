@@ -1,24 +1,24 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import styles from "@/styles/dashboard.module.css";
-import BlockFilter from "@/components/MainPage/FilterComponent";
-import DasTable2 from "@/components/DashboardTable2";
-import Image from "next/image";
-import Excel from "@/shared/excel.svg";
-import SimpleBarChart from "@/components/SimpleBarChart";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { setStatisticData, clearStatistics, setParamsStatistics, unsetParamsStatistics } from "@/redux/features/statisticSlice";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useMockdata, useOptions } from "@/hooks";
-import { downloadClick } from "@/utils";
-import FilePopover from "@/components/file-popover";
+'use client';
+import React, { useEffect, useState } from 'react';
+import styles from '@/styles/dashboard.module.css';
+import BlockFilter from '@/components/MainPage/FilterComponent';
+import DasTable2 from '@/components/DashboardTable2';
+import Image from 'next/image';
+import Excel from '@/shared/excel.svg';
+import SimpleBarChart from '@/components/SimpleBarChart';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { setStatisticData, clearStatistics, setParamsStatistics, unsetParamsStatistics } from '@/redux/features/statisticSlice';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { useMockdata, useOptions } from '@/hooks';
+import { downloadClick } from '@/utils';
+import FilePopover from '@/components/file-popover';
 
 type CheckedState = boolean;
 
-type keyType = "forecast_data" | "do_nothing" | "real_sale";
+type keyType = 'forecast_data' | 'do_nothing' | 'real_sale';
 
-type sixfiltersType = "store" | "group" | "category" | "subcategory" | "sku" | "uom";
+type sixfiltersType = 'store' | 'group' | 'category' | 'subcategory' | 'sku' | 'uom';
 
 type StatisticsItemsType = {
   store: string;
@@ -42,49 +42,49 @@ export default function StatisticPage() {
   const { paramsApplyed } = useAppSelector((state) => state.statistics) || [];
 
   const [isDownloading, setIsDownloading] = useState(false);
-  const [downloadError, setDownloadError] = useState("");
-  const [authToken, setAuthToken] = useState("");
+  const [downloadError, setDownloadError] = useState('');
+  const [authToken, setAuthToken] = useState('');
 
-  useMockdata("statistics");
+  useMockdata('statistics');
 
   useEffect(() => {
-    typeof window !== "undefined" && !isAuthenticated && replace("/login");
+    typeof window !== 'undefined' && !isAuthenticated && replace('/login');
   }, [isAuthenticated, push, replace]);
 
   useEffect(() => {
-    token && setAuthToken(token.access || "");
+    token && setAuthToken(token.access || '');
   }, [token]);
 
   // use-options.ts
 
-  let f1 = useOptions("forecast_data" as unknown as keyType, "store" as unknown as sixfiltersType);
+  let f1 = useOptions('forecast_data' as unknown as keyType, 'store' as unknown as sixfiltersType);
 
   const [filterItems1, setFilterItems1] = useState([...f1]);
 
-  let f2 = useOptions("forecast_data" as unknown as keyType, "group" as unknown as sixfiltersType);
+  let f2 = useOptions('forecast_data' as unknown as keyType, 'group' as unknown as sixfiltersType);
 
   const [filterItems2, setFilterItems2] = useState([...f2]);
 
-  let f3 = useOptions("forecast_data" as unknown as keyType, "category" as unknown as sixfiltersType);
+  let f3 = useOptions('forecast_data' as unknown as keyType, 'category' as unknown as sixfiltersType);
 
   const [filterItems3, setFilterItems3] = useState([...f3]);
 
-  let f4 = useOptions("forecast_data" as unknown as keyType, "subcategory" as unknown as sixfiltersType);
+  let f4 = useOptions('forecast_data' as unknown as keyType, 'subcategory' as unknown as sixfiltersType);
 
   const [filterItems4, setFilterItems4] = useState([...f4]);
 
-  let f5 = useOptions("forecast_data" as unknown as keyType, "sku" as unknown as sixfiltersType);
+  let f5 = useOptions('forecast_data' as unknown as keyType, 'sku' as unknown as sixfiltersType);
 
   const [filterItems5, setFilterItems5] = useState([...f5]);
 
-  let f6 = useOptions("forecast_data" as unknown as keyType, "uom" as unknown as sixfiltersType);
+  let f6 = useOptions('forecast_data' as unknown as keyType, 'uom' as unknown as sixfiltersType);
 
   const [filterItems6, setFilterItems6] = useState([...f6]);
 
   useEffect(() => {
-    console.log("forecasts", StatisticsItems);
-    console.log("paramsApplyed", paramsApplyed);
-    console.log("filtered on statistic page: ", f1, f2, f3, f4, f5, f6);
+    console.log('forecasts', StatisticsItems);
+    console.log('paramsApplyed', paramsApplyed);
+    console.log('filtered on statistic page: ', f1, f2, f3, f4, f5, f6);
   }, [StatisticsItems, f1, f2, f3, f4, f5, f6, paramsApplyed]);
 
   const hasChecked =
@@ -168,20 +168,20 @@ export default function StatisticPage() {
     try {
       setIsDownloading(true); // Set the loading state to true
       const authtoken = token?.access || authToken;
-      console.log("authtoken before call obtained", authtoken);
-      const handlerd = await downloadClick("statfile.xlsx", authtoken);
-      console.log("handlerd", typeof handlerd === "function" ? "is Function" : JSON.stringify(handlerd.status));
-      if (typeof handlerd === "function") {
+      console.log('authtoken before call obtained', authtoken);
+      const handlerd = await downloadClick('statfile.xlsx', authtoken);
+      console.log('handlerd', typeof handlerd === 'function' ? 'is Function' : JSON.stringify(handlerd.status));
+      if (typeof handlerd === 'function') {
         handlerd(event);
-        console.log("handlerd inside");
+        console.log('handlerd inside');
         setIsDownloading(false); // Set the loading state to false when the download is complete
-        setDownloadError(""); // Clear any previous download errors
+        setDownloadError(''); // Clear any previous download errors
       }
     } catch (downloadError) {
-      console.error("Error downloading file:", downloadError);
+      console.error('Error downloading file:', downloadError);
       setIsDownloading(false); // Set the loading state to false when the download fails
       if (downloadError) {
-        console.log(downloadError, "catched ! error");
+        console.log(downloadError, 'catched ! error');
       }
       setDownloadError(`Error downloading file. Please try again. ${downloadError}`); // Set the error message
     }
@@ -291,7 +291,7 @@ export default function StatisticPage() {
         >
           {isDownloading ? (
             <>
-              <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" /> Загружаем...{" "}
+              <Image src={Excel} alt="Логотип" width={24} height={24} className="mr-3" /> Загружаем...{' '}
               <span className="loading loading-spinner loading-md"></span>
             </>
           ) : (

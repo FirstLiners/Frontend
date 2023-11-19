@@ -3,19 +3,19 @@
 // 2. Warning Cannot update a component (`HotReload`) while rendering a different component (`BlockFilter`). FilterComponent.tsx:21:11 issue #31
 // 3. при заполнении фильтров c помощью кнопки "выбрать все" данные "затирают" уже введенные данные в соседних фильтрах, uom затирает в group, subcategory затирает тоже в group, sku затирает в store. если манипулировать с "очистить все" и затем выбрыть все, то не затирает, также не затирает при выборе по одной опции за раз. issue #32  и т.д. issue #32
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
-import { Search } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu';
+import { ChevronDown } from 'lucide-react';
+import { Search } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 type CheckedState = boolean;
 
@@ -27,7 +27,7 @@ interface FilterProps {
 }
 
 function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeAll }: FilterProps) {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
   const handleFilterChange = (index: number, checked: boolean) => {
@@ -77,7 +77,7 @@ function BlockFilter({ filterLabel, filterItems, onFilterChange, onFilterChangeA
           ) : (
             // Если есть выбранные элементы, отображаем их
             <span className="block whitespace-nowrap overflow-hidden overflow-ellipsis">
-              {selectedItems.map((index) => filterItems[index].label).join(", ")}
+              {selectedItems.map((index) => filterItems[index].label).join(', ')}
             </span>
           )}
         </Button>

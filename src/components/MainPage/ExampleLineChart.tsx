@@ -1,8 +1,8 @@
-"use client";
-import React, { useState } from "react";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { setJsonData, clearForecasts } from "@/redux/features/forecastsSlice";
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
+'use client';
+import React, { useState } from 'react';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { setJsonData, clearForecasts } from '@/redux/features/forecastsSlice';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from 'recharts';
 
 interface paramsApplyed {
   applyed: boolean;
@@ -52,7 +52,7 @@ const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ params }) => {
   }
   let lines = [];
   lines = Object.keys(linechartData[0])
-    .filter((key) => key.startsWith("line"))
+    .filter((key) => key.startsWith('line'))
     .map((key, index) => (
       <Line key={key} type="monotone" dataKey={key} stroke={`#${(index + 1) * 111111}`} activeDot={{ r: 8 }} />
     ));

@@ -1,6 +1,6 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 export default function DasTable2() {
   const dispatch = useAppDispatch();
@@ -31,17 +31,17 @@ export default function DasTable2() {
 
           <TableBody>
             <TableRow>
-              <TableCell className="font-medium">{"store"}</TableCell>
-              <TableCell>{"group"}</TableCell>
-              <TableCell>{"category"}</TableCell>
-              <TableCell>{"subcategory"}</TableCell>
-              <TableCell>{"sku"}</TableCell>
-              <TableCell>{"period"}</TableCell>
-              <TableCell>{"uom"}</TableCell>
-              <TableCell>{"real_sale"}</TableCell>
-              <TableCell>{"forecast"}</TableCell>
-              <TableCell>{"difference"}</TableCell>
-              <TableCell>{"wape"}</TableCell>
+              <TableCell className="font-medium">{'store'}</TableCell>
+              <TableCell>{'group'}</TableCell>
+              <TableCell>{'category'}</TableCell>
+              <TableCell>{'subcategory'}</TableCell>
+              <TableCell>{'sku'}</TableCell>
+              <TableCell>{'period'}</TableCell>
+              <TableCell>{'uom'}</TableCell>
+              <TableCell>{'real_sale'}</TableCell>
+              <TableCell>{'forecast'}</TableCell>
+              <TableCell>{'difference'}</TableCell>
+              <TableCell>{'wape'}</TableCell>
             </TableRow>
           </TableBody>
         </ScrollArea>

@@ -1,5 +1,5 @@
-"use client";
-import { createSlice } from "@reduxjs/toolkit";
+'use client';
+import { createSlice } from '@reduxjs/toolkit';
 
 interface ForecastsItem {
   store: string;
@@ -48,7 +48,7 @@ const initialState: ForecastsState = {
 //   }
 
 const forecastsSlice = createSlice({
-  name: "forecasts",
+  name: 'forecasts',
   initialState,
   reducers: {
     clearForecasts: (state) => {
@@ -71,12 +71,7 @@ const forecastsSlice = createSlice({
   },
 });
 
-export const {
-  clearForecasts,
-  setJsonData,
-  setParamsApplyed,
-  unsetParamsApplyed,
-} = forecastsSlice.actions;
+export const { clearForecasts, setJsonData, setParamsApplyed, unsetParamsApplyed } = forecastsSlice.actions;
 // Извлекаем объект с создателями и редуктор
 const { reducer: forecastReducer } = forecastsSlice;
 

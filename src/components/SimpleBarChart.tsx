@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import "./SimpleBarChart.css";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import './SimpleBarChart.css';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 /*
 const data = [

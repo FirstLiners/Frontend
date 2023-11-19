@@ -1,8 +1,9 @@
 @font-face {
-    font-family: "Gilroy";
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url("./Gilroy-Regular.woff2") format("woff2"),
-         url("./Gilroy-Regular.ttf") format("truetype");
-  }
+  font-family: 'Gilroy';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url('./Gilroy-Regular.woff2') format('woff2'),
+    url('./Gilroy-Regular.ttf') format('truetype');
+}

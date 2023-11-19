@@ -12,9 +12,9 @@
 - React 18.2
 - Redux Toolkit/RTK Query
 - Axios
-- Recharts  
+- Recharts
 - Tailwindcss
-- Shadcn-ui  
+- Shadcn-ui
 
 ## Для разработчиков
 
@@ -112,8 +112,8 @@ docker run -p 3000:3000 -d firstliners-frontend-dev
 или с помощью docker-compose
 
 ```bash
-docker-compose up 
-``` 
+docker-compose up
+```
 
 проверить, что контейнер запущен
 

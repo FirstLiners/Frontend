@@ -1,11 +1,7 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type {
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query";
-import { setAuth, setToken, logout } from "../features/authSlice";
-import { Mutex } from "async-mutex";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { setAuth, setToken, logout } from '../features/authSlice';
+import { Mutex } from 'async-mutex';
 
 interface TokenPayload {
   access?: string;
@@ -15,13 +11,9 @@ interface TokenPayload {
 const mutex = new Mutex();
 const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.NEXT_PUBLIC_BACKEND}/api/v1`,
-  credentials: "include",
+  credentials: 'include',
 });
-const baseQueryWithReauth: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
+const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
   // wait until the mutex is available without locking it
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
@@ -30,16 +22,12 @@ const baseQueryWithReauth: BaseQueryFn<
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
-        const refreshResult = await baseQuery(
-          "/users/token/",
-          api,
-          extraOptions,
-        );
+        const refreshResult = await baseQuery('/users/token/', api, extraOptions);
         if (refreshResult.data) {
           api.dispatch(setAuth());
           // take TokenPayload from refreshResult.data and dispatch setToken
           if (refreshResult.data) {
-            console.log("refreshResult.data", refreshResult.data);
+            console.log('refreshResult.data', refreshResult.data);
             const tokenPayload = refreshResult.data as TokenPayload;
             api.dispatch(setToken(tokenPayload));
           }
@@ -63,7 +51,7 @@ const baseQueryWithReauth: BaseQueryFn<
 };
 
 export const apiSlice = createApi({
-  reducerPath: "api",
+  reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({}),
 });

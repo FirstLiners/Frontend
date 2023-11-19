@@ -1,14 +1,12 @@
 /* Стили для активной ссылки */
 .active_link {
-  
-    border-bottom: 4px solid #ffb900;
-    color: #ffb900;
-    height: 64px;
-    display: flex;
-    align-items: center;
-  }
-  
-  
-  .active_link:hover {
-    border-bottom: 4px solid #ffb900; 
-  }
+  border-bottom: 4px solid #ffb900;
+  color: #ffb900;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.active_link:hover {
+  border-bottom: 4px solid #ffb900;
+}

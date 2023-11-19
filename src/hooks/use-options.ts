@@ -1,5 +1,5 @@
 // это пока не работает! доделать!
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from '@/redux/hooks';
 type CheckedState = boolean;
 
 type FilterItem = {
@@ -8,9 +8,9 @@ type FilterItem = {
   checked: CheckedState;
 };
 
-type keyType = "forecast_data" | "do_nothing" | "real_sale";
+type keyType = 'forecast_data' | 'do_nothing' | 'real_sale';
 
-type sixfiltersType = "store" | "group" | "category" | "subcategory" | "sku" | "uom";
+type sixfiltersType = 'store' | 'group' | 'category' | 'subcategory' | 'sku' | 'uom';
 
 type ForecastsItemsType = {
   store: string;
@@ -44,12 +44,12 @@ export default function useOptions(key: keyType, option: sixfiltersType): { labe
 
   // skip the case key==="do_nothing"
   switch (key) {
-    case "do_nothing":
+    case 'do_nothing':
       return [];
-    case "real_sale":
+    case 'real_sale':
       Items = StatisticsItems.length > 0 ? StatisticsItems : [];
       break;
-    case "forecast_data":
+    case 'forecast_data':
       Items = forecastsItems.length > 0 ? forecastsItems : [];
       break;
     default:

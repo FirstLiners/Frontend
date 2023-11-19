@@ -13,8 +13,9 @@ show the progress of file downloading with
 3. percent == 100 then we need to remove the progress of downloading the file and show `w-168 progress progress-success left-0 object-left' in the popover.
 */
 
-import React, { useEffect, useState } from "react";
-import Floater from "react-floater";
+/* eslint-disable unused-imports/no-unused-imports */
+import React, { useEffect, useState } from 'react';
+import Floater from 'react-floater';
 
 type Props = {
   arg: object;
@@ -68,18 +69,29 @@ const completeSvg = (
   </svg>
 );
 
+// eslint-disable-next-line unused-imports/no-unused-vars
+function callback(action: any, data: any) {
+  // eslint-disable-next-line no-console
+  console.log(action, data);
+
+  if (data.placement === 'center') {
+    //@ts-ignore
+    disableScroll[action === 'open' ? 'on' : 'off']();
+  }
+}
+
 function distinguishResponse(response: any) {
-  if (response.downloadError && response.downloadError.status !== 200) {
-    return "fail";
+  if (response.status !== 200 || response?.downloadError?.status) {
+    return 'fail';
   } else if (response.status === 200) {
-    return "OK";
+    return 'OK';
   } else {
-    return "unknown";
+    return 'unknown';
   }
 }
 
 export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: Props) {
-  console.group("ErrPopover");
+  console.group('ErrPopover');
   //  console.log(err);
   console.log(distinguishResponse(arg));
   console.log(fileSize);
@@ -91,14 +103,30 @@ export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: P
   const [isOpen, setOpen] = useState(true);
   const [okObj, setOkObj] = useState(arg);
   const [errObj, setErrObj] = useState(arg);
+  const [isComplete, setComplete] = useState(false);
 
   useEffect(() => {
-    if (distinguishResponse(arg) === "OK") {
+    if (distinguishResponse(arg) === 'OK') {
       setOkObj(arg);
-    } else if (distinguishResponse(arg) === "fail") {
+      setProgress(0);
+      setPercent(0);
+      setComplete(false);
+    } else if (distinguishResponse(arg) === 'fail') {
       setErrObj(arg);
     }
   }, [arg]);
+
+  useEffect(() => {
+    // if is complete and percent is 100 then close the popover after 3 seconds
+    let progressId: string | number | NodeJS.Timeout | undefined;
+    if (isComplete && percent >= 99) {
+      progressId = setTimeout(() => {
+        setOpen(false);
+      }, 2000); // Close the popover after 3 seconds
+    }
+    // Make sure to clear the timeout if the component unmounts
+    return () => clearTimeout(progressId);
+  }, [isComplete, percent]);
 
   useEffect(() => {
     const progressId = setTimeout(() => {
@@ -106,7 +134,8 @@ export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: P
         setProgress(prgress + 1);
         setPercent(prgress + 1);
       }
-    }, 50);
+      setComplete(true);
+    }, 25);
     return () => clearTimeout(progressId);
   }, [prgress, fileSize]);
 
@@ -120,55 +149,55 @@ export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: P
         <h1 className="ml-[-0.1rem] object-left text-start text-[24px] text-stone-950">
           {/* three different states of h1 text */}
           {/* err state */}
-          {distinguishResponse(arg) === "fail" && "Download failed"}
+          {distinguishResponse(arg) === 'fail' && 'Download failed'}
           {/* progress state */}
-          {distinguishResponse(arg) === "OK" && percent < 100 && "Downloading file"}
+          {distinguishResponse(arg) === 'OK' && percent < 100 && 'Downloading file'}
           {/* complete OK state */}
-          {distinguishResponse(arg) === "OK" && percent === 100 && "Download complete"}
-        </h1>{" "}
+          {distinguishResponse(arg) === 'OK' && percent === 100 && 'Download complete'}
+        </h1>{' '}
       </div>
       <div className="cursor-pointer object-right" onClick={handleClick}>
         {/* this is a hack to show the close button as an inline svg instead of using backgroundImage */}
         {/* three different states of div svg */}
         {/* err state */}
-        {distinguishResponse(arg) === "fail" && errSvg}
+        {distinguishResponse(arg) === 'fail' && errSvg}
         {/* progress state not needed svg for progress state should be empty*/}
         {/* complete OK state */}
-        {distinguishResponse(arg) === "OK" && percent === 100 && completeSvg}
+        {distinguishResponse(arg) === 'OK' && percent === 100 && completeSvg}
       </div>
     </div>
   );
   const content = (
     <div>
-      <h2 className="left-0 object-left  text-start text-stone-950">
+      <h2 className="left-0 object-left  text-start">
         {/* three different states of h2 text */}
         {/* err state */}
-        {distinguishResponse(arg) === "fail" && "Download failed"}
+        {distinguishResponse(arg) === 'fail' && 'Download failed'}
         {/* progress state */}
-        {distinguishResponse(arg) === "OK" && percent < 100 && "Downloading file"}
+        {distinguishResponse(arg) === 'OK' && percent < 100 && 'Downloading file'}
         {/* complete OK state */}
-        {distinguishResponse(arg) === "OK" && percent === 100 && "Download complete"}
+        {distinguishResponse(arg) === 'OK' && percent === 100 && 'Download complete'}
       </h2>
       <p className="text-[12px] text-gray-400">
         {/* three different states of p text */}
         {/* err state */}
-        {distinguishResponse(arg) === "fail" &&
-          "The file could not be loaded" + " " + (errObj as any)?.downloadError?.message + " "}
-        {distinguishResponse(arg) === "fail" && String((errObj as any)?.downloadError?.config?.params?.filename)}
+        {distinguishResponse(arg) === 'fail' &&
+          'The file could not be loaded' + ' ' + (errObj as any)?.downloadError?.message + ' '}
+        {distinguishResponse(arg) === 'fail' && String((errObj as any)?.downloadError?.config?.params?.filename)}
         {/* progress state */}
-        {distinguishResponse(arg) === "OK" &&
+        {distinguishResponse(arg) === 'OK' &&
           percent < 100 &&
-          "Download in progress: " + String((okObj as any)?.config?.params?.filename) + " " + percent + "%"}
+          'Download in progress: ' + String((okObj as any)?.config?.params?.filename) + ' ' + percent + '%'}
 
         {/* complete OK state */}
-        {distinguishResponse(arg) === "OK" &&
+        {distinguishResponse(arg) === 'OK' &&
           percent === 100 &&
-          "Download complete: " + String((okObj as any)?.config?.params?.filename)}
+          'Download complete: ' + String((okObj as any)?.config?.params?.filename)}
       </p>
       {/* two different states of progressbar */}
       {/* progress state and complete state */}
       <div>
-        {distinguishResponse(arg) === "OK" ? (
+        {distinguishResponse(arg) === 'OK' ? (
           <>
             {percent < 100 ? (
               <progress className="w-168 progress progress-info left-0 object-left" value={percent.toString()} max="100" />
@@ -185,9 +214,9 @@ export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: P
   const footer = (
     <div
       className={
-        distinguishResponse(arg) === "OK"
-          ? "join ml-[-0.5rem] flex justify-start space-x-2"
-          : "join ml-0 flex justify-start space-x-2"
+        distinguishResponse(arg) === 'OK'
+          ? 'join ml-[-0.5rem] flex justify-start space-x-2'
+          : 'join ml-0 flex justify-start space-x-2'
       }
     >
       <button
@@ -199,17 +228,17 @@ export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: P
       >
         {/* three different states of p text */}
         {/* err state */}
-        {distinguishResponse(arg) === "fail" && "Repeat download"}
+        {distinguishResponse(arg) === 'fail' && 'Repeat download'}
         {/* progress state */}
       </button>
       <button className="link no-underline" onClick={handleClick}>
         {/* three different states of p text */}
         {/* err state */}
-        {distinguishResponse(arg) === "fail" && "Close"}
+        {distinguishResponse(arg) === 'fail' && 'Close'}
         {/* progress state */}
-        {distinguishResponse(arg) === "OK" && percent < 100 && "Cancel"}
+        {distinguishResponse(arg) === 'OK' && percent < 100 && 'Cancel'}
         {/* complete OK state */}
-        {distinguishResponse(arg) === "OK" && percent === 100 && "Close"}
+        {distinguishResponse(arg) === 'OK' && percent === 100 && 'Close'}
       </button>
     </div>
   );
@@ -229,7 +258,7 @@ export default function FilePopover({ cb = () => {}, arg = {}, fileSize = 0 }: P
           },
           floater: {
             maxWidth: 418,
-            width: "100%",
+            width: '100%',
           },
           container: {
             borderRadius: 8,

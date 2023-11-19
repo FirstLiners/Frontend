@@ -1,1 +1,1 @@
-export { default as downloadClick } from "./downloadclick";
+export { default as downloadClick } from './downloadclick';

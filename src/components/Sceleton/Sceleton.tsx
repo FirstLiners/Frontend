@@ -1,21 +1,19 @@
-"use client";
-import styles from "./sceleton.module.css";
-import React, { Fragment, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+'use client';
+import styles from './sceleton.module.css';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
-import { setJsonData as setForecasts } from "@/redux/features/forecastsSlice";
-import { Skeleton } from "@/components/ui/skeleton";
+import { setJsonData as setForecasts } from '@/redux/features/forecastsSlice';
+import { Skeleton } from '@/components/ui/skeleton';
 
-import axios, { AxiosResponse } from "axios";
-import qs from "qs";
+import axios, { AxiosResponse } from 'axios';
+import qs from 'qs';
 
 interface Props {
   apiEndpoint: string;
 }
 
-export default function Sceleton({
-  apiEndpoint,
-}: Props & { apiEndpoint?: string }) {
+export default function Sceleton({ apiEndpoint }: Props & { apiEndpoint?: string }) {
   interface Item {
     id: number;
     sku_id: string;
@@ -30,9 +28,7 @@ export default function Sceleton({
     data: Item[];
   }
   const dispatch = useAppDispatch();
-  const { forecastsItems: dataForecasts } = useAppSelector(
-    (state) => state.forecasts,
-  );
+  const { forecastsItems: dataForecasts } = useAppSelector((state) => state.forecasts);
 
   const [isSuccessData, setSuccessData] = useState(false);
 
@@ -41,17 +37,17 @@ export default function Sceleton({
   // function that do post request to get token from backend localhost:8000/api/v1/users/token using axios
   // and post method body email and password
 
-  async function getData(apiEndpoint = "skus") {
-    console.log("getData");
-    let token = localStorage.getItem("access_token");
+  async function getData(apiEndpoint = 'skus') {
+    console.log('getData');
+    let token = localStorage.getItem('access_token');
     if (token) {
-      token = token.replace(/^"(.*)"$/, "$1"); // Remove quotes from token start/end. This is a temp fix?!
+      token = token.replace(/^"(.*)"$/, '$1'); // Remove quotes from token start/end. This is a temp fix?!
     }
     let data = qs.stringify({});
     console.log(token);
     try {
       let config = {
-        method: "GET",
+        method: 'GET',
         // mode: "no-cors",
         // refferer: "127.0.0.1:3000",
         maxBodyLength: Infinity,
@@ -71,19 +67,17 @@ export default function Sceleton({
         })
         .then((data) => {
           switch (apiEndpoint) {
-            case "skus":
+            case 'skus':
               break;
-            case "stores":
+            case 'stores':
               break;
-            case "forecasts":
+            case 'forecasts':
               dispatch(setForecasts(data));
               break;
-            case "sales":
+            case 'sales':
               break;
             default:
-              data[0] !== undefined && data[0] !== null && data[0] !== ""
-                ? setSuccessData(true)
-                : setSuccessData(false);
+              data[0] !== undefined && data[0] !== null && data[0] !== '' ? setSuccessData(true) : setSuccessData(false);
               console.log(data[0]);
               break;
           }
@@ -97,9 +91,7 @@ export default function Sceleton({
     } finally {
       setTimeout(() => {
         setLoading(false);
-        console.log(
-          `axios request "getData" is done for endpoint - ${apiEndpoint}`,
-        );
+        console.log(`axios request "getData" is done for endpoint - ${apiEndpoint}`);
       }, 1000); // 1 sec
     }
   }
@@ -111,11 +103,7 @@ export default function Sceleton({
   }, [apiEndpoint]);
 
   useEffect(() => {
-    console.log(
-      `-= data ${Object.keys(dataForecasts || {}).length} : ${
-        Object.values(dataForecasts || {}).length
-      } =-`,
-    );
+    console.log(`-= data ${Object.keys(dataForecasts || {}).length} : ${Object.values(dataForecasts || {}).length} =-`);
   }, [dataForecasts]);
 
   // useEffect for call toast() if isSuccessData
@@ -131,8 +119,8 @@ export default function Sceleton({
       </div>
     );
   }
-  const texttoast = isSuccessData ? "" : ` не загружено ${apiEndpoint} `;
-  const titletoast = isSuccessData ? " Успешно " : " Ошибка ";
+  const texttoast = isSuccessData ? '' : ` не загружено ${apiEndpoint} `;
+  const titletoast = isSuccessData ? ' Успешно ' : ' Ошибка ';
 
   return <Fragment></Fragment>;
 }

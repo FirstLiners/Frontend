@@ -1,13 +1,13 @@
-"use client";
-import styles from "./Navbar.module.css";
-import Link from "next/link";
-import Image from "next/image";
-import Logo from "@/shared/lenta_logo.svg";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { logout as SetLogout } from "@/redux/features/authSlice";
-import { useEffect, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { useLogoutMutation } from "@/redux/features/authApiSlice";
+'use client';
+import styles from './Navbar.module.css';
+import Link from 'next/link';
+import Image from 'next/image';
+import Logo from '@/shared/lenta_logo.svg';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { logout as SetLogout } from '@/redux/features/authSlice';
+import { useEffect, useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useLogoutMutation } from '@/redux/features/authApiSlice';
 
 export default function Navbar() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
@@ -20,15 +20,15 @@ export default function Navbar() {
 
   const linkRef1 = useRef<HTMLAnchorElement>(null);
   function doClick1() {
-    if (linkRef1.current && typeof window !== "undefined") {
-      linkRef1.current.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    if (linkRef1.current && typeof window !== 'undefined') {
+      linkRef1.current.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   }
 
   const linkRef2 = useRef<HTMLAnchorElement>(null);
   function doClick2() {
-    if (linkRef2.current && typeof window !== "undefined") {
-      linkRef2.current.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    if (linkRef2.current && typeof window !== 'undefined') {
+      linkRef2.current.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   }
 
@@ -47,8 +47,8 @@ export default function Navbar() {
       }, 2000); */
   }, [pathname]);
 
-  const labelSign = isAuthenticated ? "Выйти" : "Войти";
-  const hrefSign = isAuthenticated ? "/logout" : "/login";
+  const labelSign = isAuthenticated ? 'Выйти' : 'Войти';
+  const hrefSign = isAuthenticated ? '/logout' : '/login';
   useEffect(() => {
     // ошибка?
     // !isAuthenticated && localStorage.removeItem("access_token");
@@ -65,7 +65,7 @@ export default function Navbar() {
 
             <li className="ml-10 h-[64px] items-center flex">
               {isAuthenticated && (
-                <Link className={pathname == "/" ? styles.active_link : ""} href="/" ref={linkRef2}>
+                <Link className={pathname == '/' ? styles.active_link : ''} href="/" ref={linkRef2}>
                   Главная
                 </Link>
               )}
@@ -74,7 +74,7 @@ export default function Navbar() {
             <li className="ml-8 h-[64px] items-center flex">
               {/* dashboard/page.tsx */}
               {isAuthenticated && (
-                <Link className={pathname == "/dashboard" ? styles.active_link : ""} href="/dashboard" ref={linkRef1}>
+                <Link className={pathname == '/dashboard' ? styles.active_link : ''} href="/dashboard" ref={linkRef1}>
                   Данные по прогнозу
                 </Link>
               )}
@@ -82,7 +82,7 @@ export default function Navbar() {
             <li className="ml-8 h-[64px] items-center flex">
               {/* statistic/page.tsx */}
               {isAuthenticated && (
-                <Link className={pathname == "/statistic" ? styles.active_link : ""} href="/statistic">
+                <Link className={pathname == '/statistic' ? styles.active_link : ''} href="/statistic">
                   Статистика
                 </Link>
               )}

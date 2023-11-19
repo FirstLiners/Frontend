@@ -1,56 +1,56 @@
-"use client";
-import React, { use, useEffect, useState } from "react";
-import styles from "./MainPage.module.css";
-import BlockFilter from "./FilterComponent";
-import SimpleLineChart from "./ExampleLineChart";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { Button } from "@/components/ui/button";
-import { useMockdata, useOptions, useOnOptionsApply } from "@/hooks"; //   from "@/hooks/use-options";
+'use client';
+import React, { use, useEffect, useState } from 'react';
+import styles from './MainPage.module.css';
+import BlockFilter from './FilterComponent';
+import SimpleLineChart from './ExampleLineChart';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { Button } from '@/components/ui/button';
+import { useMockdata, useOptions, useOnOptionsApply } from '@/hooks'; //   from "@/hooks/use-options";
 // MainPage is a part of page.tsx so not need to check isAuthenticated ! no need to useRouter
 // import { useRouter } from "next/navigation";
 
 type CheckedState = boolean;
 
-type keyType = "forecast_data" | "do_nothing" | "real_sale";
+type keyType = 'forecast_data' | 'do_nothing' | 'real_sale';
 
-type sixfiltersType = "store" | "group" | "category" | "subcategory" | "sku" | "uom";
+type sixfiltersType = 'store' | 'group' | 'category' | 'subcategory' | 'sku' | 'uom';
 
 export default function MainPage() {
   const { paramsApplyed } = useAppSelector((state) => state.forecasts) || [];
   const { forecastsItems } = useAppSelector((state) => state.forecasts) || [];
   // const [isLoading, isError] = useMockdata("forecast");
-  useMockdata("forecast");
+  useMockdata('forecast');
 
   // use-options.ts
 
-  let f1 = useOptions("forecast_data" as unknown as keyType, "store" as unknown as sixfiltersType);
+  let f1 = useOptions('forecast_data' as unknown as keyType, 'store' as unknown as sixfiltersType);
 
   const [filterItems1, setFilterItems1] = useState([...f1]);
 
-  let f2 = useOptions("forecast_data" as unknown as keyType, "group" as unknown as sixfiltersType);
+  let f2 = useOptions('forecast_data' as unknown as keyType, 'group' as unknown as sixfiltersType);
 
   const [filterItems2, setFilterItems2] = useState([...f2]);
 
-  let f3 = useOptions("forecast_data" as unknown as keyType, "category" as unknown as sixfiltersType);
+  let f3 = useOptions('forecast_data' as unknown as keyType, 'category' as unknown as sixfiltersType);
 
   const [filterItems3, setFilterItems3] = useState([...f3]);
 
-  let f4 = useOptions("forecast_data" as unknown as keyType, "subcategory" as unknown as sixfiltersType);
+  let f4 = useOptions('forecast_data' as unknown as keyType, 'subcategory' as unknown as sixfiltersType);
 
   const [filterItems4, setFilterItems4] = useState([...f4]);
 
-  let f5 = useOptions("forecast_data" as unknown as keyType, "sku" as unknown as sixfiltersType);
+  let f5 = useOptions('forecast_data' as unknown as keyType, 'sku' as unknown as sixfiltersType);
 
   const [filterItems5, setFilterItems5] = useState([...f5]);
 
-  let f6 = useOptions("forecast_data" as unknown as keyType, "uom" as unknown as sixfiltersType);
+  let f6 = useOptions('forecast_data' as unknown as keyType, 'uom' as unknown as sixfiltersType);
 
   const [filterItems6, setFilterItems6] = useState([...f6]);
 
   useEffect(() => {
-    console.log("forecasts", forecastsItems);
-    console.log("paramsApplyed", paramsApplyed);
-    console.log("filtered on MainPage: ", f1, f2, f3, f4, f5, f6);
+    console.log('forecasts', forecastsItems);
+    console.log('paramsApplyed', paramsApplyed);
+    console.log('filtered on MainPage: ', f1, f2, f3, f4, f5, f6);
   }, [forecastsItems, f1, f2, f3, f4, f5, f6, paramsApplyed]);
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export default function MainPage() {
     filterItems4,
     filterItems5,
     filterItems6,
-    "forecast",
+    'forecast',
   );
   return (
     <section className="p-0 pl-40 pr-40  ">

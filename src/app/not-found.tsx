@@ -1,16 +1,12 @@
-import Link from "next/link";
-import styles from "./not-found.module.css";
+import Link from 'next/link';
+import styles from './not-found.module.css';
 
 export default function NotFound() {
   return (
     <>
-      <main
-        className={`p-8 flex justify-center flex-col items-center w-screen h-screen bg-[#003C96]`}
-      >
+      <main className={`p-8 flex justify-center flex-col items-center w-screen h-screen bg-[#003C96]`}>
         <div className="h-[64px] ">
-          <h1 className="text-[#EF4545] gap-4 p-4 py-4 text-[28px]">
-            Такая страница не нашлась – 404!
-          </h1>
+          <h1 className="text-[#EF4545] gap-4 p-4 py-4 text-[28px]">Такая страница не нашлась – 404!</h1>
         </div>
 
         <div className="h-[48]">

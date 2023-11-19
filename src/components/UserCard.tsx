@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 type User =
   | {
@@ -17,9 +17,7 @@ export default function Card({ user, pagetype }: Props) {
   //console.log(user)
 
   const greeting = user?.name ? (
-    <div className="flex flex-col items-center p-6 bg-white rounded-lg font-bold text-5xl text-black">
-      Привет {user?.name}!
-    </div>
+    <div className="flex flex-col items-center p-6 bg-white rounded-lg font-bold text-5xl text-black">Привет {user?.name}!</div>
   ) : null;
 
   // const emailDisplay = user?.email ? (
@@ -34,7 +32,7 @@ export default function Card({ user, pagetype }: Props) {
       src={user?.image}
       width={200}
       height={200}
-      alt={user?.name ?? "Profile Pic"}
+      alt={user?.name ?? 'Profile Pic'}
       priority={true}
     />
   ) : null;

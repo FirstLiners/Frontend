@@ -1,6 +1,6 @@
-import { setParamsApplyed, unsetParamsApplyed } from "@/redux/features/forecastsSlice";
-import { setStatisticData, clearStatistics } from "@/redux/features/statisticSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { setParamsApplyed, unsetParamsApplyed } from '@/redux/features/forecastsSlice';
+import { setStatisticData, clearStatistics } from '@/redux/features/statisticSlice';
+import { useAppDispatch } from '@/redux/hooks';
 
 type CheckedState = boolean;
 
@@ -35,8 +35,7 @@ export default function useOnOptionsApply(
       store: filterItems1?.filter((item: FilterItem) => item.checked).map((item: FilterItem): string => item.label!) ?? [],
       group: filterItems2?.filter((item: FilterItem) => item.checked).map((item: FilterItem): string => item.label!) ?? [],
       category: filterItems3?.filter((item: FilterItem) => item.checked).map((item: FilterItem): string => item.label!) ?? [],
-      subcategory:
-        filterItems4?.filter((item: FilterItem) => item.checked).map((item: FilterItem): string => item.label!) ?? [],
+      subcategory: filterItems4?.filter((item: FilterItem) => item.checked).map((item: FilterItem): string => item.label!) ?? [],
       sku: filterItems5?.filter((item: FilterItem) => item.checked).map((item: FilterItem): string => item.label!) ?? [],
       uom: filterItems6?.filter((item: FilterItem) => item.checked).map((item: FilterItem): string => item.label!) ?? [],
     };
